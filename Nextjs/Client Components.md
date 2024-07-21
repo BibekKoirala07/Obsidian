@@ -1,0 +1,1 @@
+### We can't define server Action in Client components. What we can do is is Define Server Action in Server Components and pass it as props

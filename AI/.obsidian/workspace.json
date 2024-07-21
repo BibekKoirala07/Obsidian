@@ -1,0 +1,162 @@
+{
+  "main": {
+    "id": "ad1abd86e9d454a1",
+    "type": "split",
+    "children": [
+      {
+        "id": "3cf91b1da6459558",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3fa539c3e304286b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Home.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3859761e5a8e4ff2",
+    "type": "split",
+    "children": [
+      {
+        "id": "aeb35f345f3ae833",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "df4d7a3cee3c13c8",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "69c4d12a61bc409f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "a6f295c7e4983e00",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "right": {
+    "id": "17d460f4cce70ec5",
+    "type": "split",
+    "children": [
+      {
+        "id": "b952a256b3ab083d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "887d8dec8e714c86",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Home.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "3df052cfab76fa52",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Home.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "9fba410a9f67c8e7",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "6dc15e3cfdb1d2a7",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Home.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "3fa539c3e304286b",
+  "lastOpenFiles": [
+    "2024-07-21.md",
+    "Untitled 1.canvas",
+    "Untitled.canvas",
+    "Home.md",
+    "images/Pasted image 20240721102116.png",
+    "images/Pasted image 20240721101750.png",
+    "images",
+    "images/Pasted image 20240721100941.png"
+  ]
+}
