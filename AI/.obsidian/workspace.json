@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "3cf91b1da6459558",
+        "id": "b1ff38b26ce7c0b2",
         "type": "tabs",
         "children": [
           {
-            "id": "3fa539c3e304286b",
+            "id": "3123b0d5b3c5b6f0",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -65,13 +65,11 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "17d460f4cce70ec5",
@@ -148,12 +146,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3fa539c3e304286b",
+  "active": "3123b0d5b3c5b6f0",
   "lastOpenFiles": [
-    "2024-07-21.md",
     "Untitled 1.canvas",
-    "Untitled.canvas",
     "Home.md",
+    "Untitled.canvas",
+    "2024-07-21.md",
+    "images/Pasted image 20240721160903.png",
     "images/Pasted image 20240721102116.png",
     "images/Pasted image 20240721101750.png",
     "images",

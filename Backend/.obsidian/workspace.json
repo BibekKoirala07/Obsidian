@@ -1,0 +1,198 @@
+{
+  "main": {
+    "id": "6d686daf6c68037d",
+    "type": "split",
+    "children": [
+      {
+        "id": "be1b05c1ac895eb2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e097de7f0b35587c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Mongoose/Schema-Models.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f600b0572a0e4845",
+    "type": "split",
+    "children": [
+      {
+        "id": "89075fdbb69e33a2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f3afd1f22e6dca5f",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "16c7ca54b9f5cb96",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "211c03204ea2f8a8",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200
+  },
+  "right": {
+    "id": "65e9d266c5db283c",
+    "type": "split",
+    "children": [
+      {
+        "id": "2a30c2a3db7976cd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "505a58ae7c1e83b5",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Mongoose/Schema-Models.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "9362070c58fc74f5",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Mongoose/Schema-Models.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "6d80b8cbaef7c375",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "980f18336d78f42a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Mongoose/Schema-Models.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
+    }
+  },
+  "active": "e097de7f0b35587c",
+  "lastOpenFiles": [
+    "Mongoose/Transactions.md",
+    "Mongoose/Queries.md",
+    "Mongoose/Schema-Models.md",
+    "Mongoose/Aggregate.md",
+    "Mongoose/Indexing.md",
+    "Mongoose/Middleware.md",
+    "Mongoose/Mongoose.md",
+    "Home.md",
+    "Socket.io/Socket.io.md",
+    "Socket.io/Socket-Cheatsheet.md",
+    "Socket.io/Server-API.md",
+    "Socket.io/NameSpaces.md",
+    "Socket.io/Middleware.md",
+    "Socket.io/Client-API.md",
+    "Risk Managements.md",
+    "Testing.md",
+    "Enhancing Performance.md",
+    "Caching.md",
+    "Best Practices.md",
+    "images/Pasted image 20240525173055.png",
+    "images/Pasted image 20240525175126.png",
+    "images/Pasted image 20240525190153.png",
+    "images/Pasted image 20240525160335.png",
+    "images/Pasted image 20240525150710.png",
+    "images/Pasted image 20240525124543.png",
+    "images/Pasted image 20240525162444.png",
+    "images/Pasted image 20240525164450.png",
+    "images/Pasted image 20240525123536.png",
+    "API/Headers.md",
+    "Redis",
+    "API",
+    "Introduction.md",
+    "[Introduction.md",
+    "Codes/Controllers.md",
+    "Codes/Models.md",
+    "Codes/Routes.md",
+    "Codes/ConnectDB.md",
+    "Codes",
+    "Mongoose/image/Pasted image 20240602151340.png",
+    "Mongoose/image",
+    "Socket.io",
+    "Mongoose/images",
+    "Mongoose",
+    "images"
+  ]
+}

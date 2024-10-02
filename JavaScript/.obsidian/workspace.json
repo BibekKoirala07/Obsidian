@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Strings.md",
+                "file": "JavaScript.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Strings.md",
+                "file": "JavaScript.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Strings.md",
+                "file": "JavaScript.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Strings.md"
+                "file": "JavaScript.md"
               }
             }
           }
@@ -148,17 +148,17 @@
   },
   "active": "605480bb7196fc4d",
   "lastOpenFiles": [
-    "Data Types.md",
-    "Operators.md",
-    "Objects.md",
-    "Number.md",
     "Looping.md",
     "JavaScript.md",
-    "Garbage Collection.md",
-    "Functions.md",
-    "Conditional Branching.md",
+    "Objects.md",
+    "Number.md",
+    "Operators.md",
+    "Type Conversion.md",
     "Strings.md",
     "`this`.md",
-    "Type Conversion.md"
+    "Conditional Branching.md",
+    "Data Types.md",
+    "Functions.md",
+    "Garbage Collection.md"
   ]
 }

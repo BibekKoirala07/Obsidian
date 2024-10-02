@@ -1,0 +1,12 @@
+{
+  "accentColor": "#6305f0",
+  "baseFontSize": 19,
+  "showViewHeader": true,
+  "nativeMenus": false,
+  "translucency": false,
+  "baseFontSizeAction": false,
+  "theme": "obsidian",
+  "enabledCssSnippets": [
+    "footnotes"
+  ]
+}

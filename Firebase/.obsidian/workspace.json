@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "f7d95451514056ed",
@@ -158,8 +157,8 @@
   },
   "active": "2048d73fcafffc19",
   "lastOpenFiles": [
+    "Node.js.md",
     "Firebase.md",
-    "Sign in with Google.md",
-    "Node.js.md"
+    "Sign in with Google.md"
   ]
 }

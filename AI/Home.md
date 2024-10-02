@@ -19,3 +19,7 @@ Instead in AI, we come up with lots of example and computer learn from it like h
 
 #### How does Models works
 At first, divide the data into class so that it can be used. like "Class 1", "Class 2" and many more. e.g. "Rock", "Paper", "Scissors". Upload a data to each class. Train the model. Test it. One of the Model Generator is [Teachable Machine](https://teachablemachine.withgoogle.com/)
+
+#### Application of AI: Computer Vision
+![[Pasted image 20240721160903.png]]
+Computer Vision is one of the key application of AI, in which we can train the machines to identify the content of images. It can be used to extract the health condition of retina as shown above. At first large amount of data is provided. The application then attempts to extract features from the image using **filters**. During the training process, the application learns the best filters that change images such that the **features** that differentiate healthy and diseased retinas emerge. Now it can diagnose unseen retina image. The job of programmer is to make the program to handle all of those filter and algorithm for learning them.
