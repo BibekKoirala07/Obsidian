@@ -1,4 +1,4 @@
-There are number of attacks that can happen in our APIs. Some of them are
+There are number of attacks that can happen in our APIs. Some of them are :
 ### 1. Brute Force Attacks
 This normally means that attacker tries to guess the password by trying millions times. It can be prevented by 
 1. Using `brcyptjs` as it slows down the login process. 

@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Flutter/Flutter.md",
+                "file": "Flutter.md",
                 "mode": "source",
                 "source": false
               }
@@ -99,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Flutter/Flutter.md",
+                "file": "Flutter.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -116,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Flutter/Flutter.md",
+                "file": "Flutter.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -139,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Flutter/Flutter.md"
+                "file": "Flutter.md"
               }
             }
           }
@@ -161,10 +161,13 @@
       "obsidian-importer:Open Importer": false
     }
   },
-  "active": "152e21279509c6e8",
+  "active": "7fa404c47f08f311",
   "lastOpenFiles": [
+    "React.md",
+    "Flutter.md",
+    "CSS/CheatSheet.md",
+    "CSS/CSS.md",
     "CSS/Layout.md",
-    "Flutter/Flutter.md",
     "Flutter",
     "CSS/Typography.md",
     "CSS/Untitled Diagram.svg",
@@ -172,11 +175,8 @@
     "CSS/Hierarchy.md",
     "CSS/Grid.md",
     "CSS/Flexbox.md",
-    "CSS/CSS.md",
-    "CSS/CheatSheet.md",
     "Javascript/Javascript.md",
     "Canvas/Untitled.canvas",
-    "React/React.md",
     "Javascript/Untitled Diagram.svg",
     "Diagram",
     "Diagram/Diagram.svg",

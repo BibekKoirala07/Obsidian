@@ -1,4 +1,4 @@
-### [[[Schema-Models]]]
+### [[Schema-Models]]
 
 ### [[Queries]]
 
