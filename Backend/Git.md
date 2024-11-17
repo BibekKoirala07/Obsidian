@@ -20,8 +20,6 @@ git commit -m "some text"
 ```
 ##### Logs in git
 It provides information about the commits that may be done by different members. It has commitid which is unique to every commit, Author, Date and commit-text.
-
-
 ### Remote Git
 Git automatically refers to remote repo by origin by initialization. origin in git just means the remote repository URL. It is an alias for remote repository URL. At first we add the origin to our project URL.
 ```
@@ -65,7 +63,7 @@ A pull request lets you share your changes with your team. Once approved and mer
 git pull // it pull code from that branch that you are in from remote branch
 ```
 
-### Standard Workflow in Git
+### Standard Workflow in Git that I might follow
 1. Clone the repository from remote repo
 2. Create a additional repo with name `feat` or other name based on `main` branch or other desired branch
 3. Make the changes.

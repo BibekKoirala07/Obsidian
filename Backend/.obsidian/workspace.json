@@ -17,7 +17,9 @@
                 "mode": "source",
                 "backlinks": false,
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Git"
             }
           },
           {
@@ -30,7 +32,9 @@
                 "mode": "source",
                 "backlinks": false,
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Caching"
             }
           },
           {
@@ -39,11 +43,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Git.md",
+                "file": "Mongoose & ORMs.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Mongoose & ORMs"
             }
           }
         ],
@@ -67,7 +73,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -82,7 +90,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -90,7 +100,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
@@ -113,7 +125,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Git.md",
+                "file": "Mongoose & ORMs.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -121,7 +133,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Mongoose & ORMs"
             }
           },
           {
@@ -130,10 +144,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Git.md",
+                "file": "Mongoose & ORMs.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Mongoose & ORMs"
             }
           },
           {
@@ -144,7 +160,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -153,8 +171,10 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Git.md"
-              }
+                "file": "Mongoose & ORMs.md"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Mongoose & ORMs"
             }
           }
         ]
@@ -175,44 +195,44 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "f3afd1f22e6dca5f",
+  "active": "cce00c12c55a85f7",
   "lastOpenFiles": [
-    "images/Pasted image 20241010123346.png",
     "Best Practices.md",
-    "Caching.md",
-    "API/Headers.md",
     "Testing.md",
+    "Caching.md",
+    "Pasted image 20241016180312.png",
     "Security & Risk Managements.md",
-    "ORMs and Mongoose.md",
-    "Mongoose/Schema-Models.md",
-    "Mongoose/Middleware.md",
-    "Mongoose/image/Pasted image 20240602151340.png",
-    "Mongoose/image/Pasted image 20240601105812.png",
+    "Node.md",
     "Git.md",
+    "Mongoose & ORMs.md",
+    "images/Pasted image 20241016165402.png",
+    "images/Pasted image 20241016162305.png",
+    "images/Pasted image 20241016160243.png",
+    "Logging.md",
     "Documentation.md",
-    "Mongoose/Indexing.md",
+    "Mongoose/Middleware.md",
     "Mongoose/Aggregate.md",
-    "Mongoose/Virtuals.md",
+    "Mongoose/Indexing.md",
     "Mongoose/Mongoose.md",
     "Mongoose/Queries.md",
+    "Mongoose/Schema-Models.md",
     "Mongoose/Transactions.md",
-    "[Schema-Models.md",
-    "Node.md",
-    "Logging.md",
-    "Codes/Server.js.md",
+    "Mongoose/Virtuals.md",
+    "Codes/ConnectDB.md",
+    "API/Headers.md",
+    "Mongoose/image/Pasted image 20240602151340.png",
+    "Mongoose/image/Pasted image 20240601105812.png",
     "Enhancing Performance.md",
-    "Socket.io/Socket.io.md",
-    "Socket.io/Socket-Cheatsheet.md",
-    "Socket.io/Server-API.md",
-    "Socket.io/NameSpaces.md",
+    "Databases/Database.md",
+    "Codes/Routes.md",
+    "Codes/Server.js.md",
+    "Codes/RequireAuth.js.md",
+    "Codes/Models.md",
+    "Databases",
+    "images/Pasted image 20241010123346.png",
     "images/Pasted image 20240525173055.png",
     "images/Pasted image 20240525175126.png",
     "images/Pasted image 20240525190153.png",
-    "images/Pasted image 20240525160335.png",
-    "images/Pasted image 20240525150710.png",
-    "images/Pasted image 20240525124543.png",
-    "images/Pasted image 20240525162444.png",
-    "images/Pasted image 20240525164450.png",
     "Redis",
     "API",
     "Codes",

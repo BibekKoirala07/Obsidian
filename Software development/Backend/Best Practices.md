@@ -1,0 +1,51 @@
+Here are the some best practices that should be followed while making API : 
+- Data validation should be done before reaching application controllers by use of `express validator` or `joi`
+- [[Security & Risk Managements#1. Brute Force Attacks | Rate Limiting]] should be implemented as we need to protect our API by making register and login process time longer.
+- Logging should be done using `winston` or `morgan`.
+- `Helmet.js` should be used.
+- Compression can be done using `compression` library available in express. It is a middleware. However it is not done mostly as it is pain in the ass.
+- Always implement [[Logging]]
+- Know the request time taken by each request using request Logger from [[Logging]].
+
+### The best practices for folders are 
+**`/your-project`**
+
+- **`/src`**
+    - **`/controllers`**: [[Controllers]]
+    - **`/models`**: [[Models]]
+    - **`/routes`**: [[Routes]]
+    - **`/middlewares`**: [[middlewares]]
+    - **`/services`**: [[src/services]]
+    - **`/utils`**: [[utils.js]]
+    - **`/socket`**
+        - **`socket.js`**: `[[src/socket/socket]]`
+        - **`socketEvents.js`**: `[[src/socket/socketEvents]]`
+    - **`/advanced`**
+        - **`caching.js`**: `[[src/advanced/caching]]`
+        - **`validation.js`**: `[[src/advanced/validation]]`
+        - **`logging.js`**: `[[src/advanced/logging]]`
+- **`/config`**
+    - **`default.js`**: `[[config/default]]`
+    - **`production.js`**: `[[config/production]]`
+    - **`development.js`**: `[[config/development]]`
+    - **`test.js`**: `[[config/test]]`
+- **`/public`**
+    - **`/css`**: `[[public/css]]`
+    - **`/images`**: `[[public/images]]`
+    - **`/js`**: `[[public/js]]`
+    - **`index.html`**: `[[public/index]]`
+- **`/logs`**
+    - **`app.log`**: `[[logs/app]]`
+    - **`errors.log`**: `[[logs/errors]]`
+- **`/tests`**
+    - **`/unit`**: `[[tests/unit]]`
+    - **`/integration`**: `[[tests/integration]]`
+    - **`/e2e`**: `[[tests/e2e]]`
+- **`/scripts`**
+    - **`deploy.js`**: `[[scripts/deploy]]`
+    - **`migrate.js`**: `[[scripts/migrate]]`
+- **`.env`**: `[[.env]]`
+- **`.gitignore`**: `[[.gitignore]]`
+- **`package.json`**: `[[package.json]]`
+- **`app.js`**: [[app.js]]
+- **`server.js`**: [[server.js]]
