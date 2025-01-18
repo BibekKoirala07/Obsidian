@@ -9,7 +9,12 @@ Todo:
 3. There is no need to know react state management libraries at all. They change from time to time and new one come claiming to solve all problem. We learn it at the time of making projects. At the time some of them are `redux`, `zustand`, etc. 
 4. **Always use ==`Typescript**`== as it makes things easier. It may be harder at first but it will pay off.
 5. **Use tailwindcss**. Later in project the CSS conflict will be some much that You will have to abandon the project. It is me telling now. So, don't repeat the same mistake.
-6. **Use packages like react-query**: try to use data fetching library but it isn't compulsory. because if we don't use it then we have to implement extra states like `loading`, `error` and other states to know the condition of fetch request which is tiresome many times. unless done by some AI. so try to use packages like react-query
+6. **Use packages like react-query**: try to use data fetching library but it isn't compulsory. because if we don't use it then we have to implement extra states like `loading`, `error` and other states to know the condition of fetch request which is tiresome many times. unless done by some AI. so try to use packages like react-query.
+7. **Try to use Framework**: it may be tempting to use just React, but don't do it, just use Next.js or Remix. Even React website says so.
+8. **Use the package which helps in internationalization**: Means which helps in different language.
+9. **Use React Intersectional Observation and Lazy-Loading**: Use the package so that data in bottom of the page which isn't visible for now will not be fetched when we are at the top of the webpage. 
+10. **Use react-ga4**: Use package for analytics.
+11. **Use accessibility package**: Use package for accessibility, it will be pain in the ass later.
 ### When to use package ?
 Everywhere. Remember don't be smart ass and try to make CSS from zero. it is redundant. Everytime you need carousel, toast, need for our project to support multiple language, charts, graphs, etc. you should use `npm` package. Everytime we create from scratch, it is a pain in the ass. I am writing this from experience for the past.
 ## ==Hooks :== 
@@ -46,7 +51,7 @@ Tips:
 > [ Open Link to know more about UseTransition ](./useTransition.mhtml)
 ###### Redux toolkit
 Tips: 
-1. Use `redux-persist`. if you don't use it will cause rendering issues. Like, we will have hard time making automatically redirection. So don't try to implement it using manually. Don't be jerk at all.
+1. Use `redux-persist`. if you don't use it will cause rendering issues. Like, we will have hard time making automatically redirection. So don't try to implement it using manually. Don't be jerk or smartass. just use redux-persist
 
 ## ==npm packages==
 #### Redux-Toolkit

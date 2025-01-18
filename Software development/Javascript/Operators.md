@@ -131,9 +131,8 @@ look below for explanation
 ## Comma Operators
 - extremely low precedence, lower than `=`
 - The comma operator allows us to evaluate several expressions, dividing them with a comma `,`. Each of them is evaluated but only the result of the last one is returned.
-
 ```
-let a = (1 + 2, 3 + 4)
-console.log(a) // 7
+	let a = (1 + 2, 3 + 4)
+	console.log(a) // 7
 ```
 Here, the first expression `1 + 2` is evaluated and its result is thrown away. Then, `3 + 4` is evaluated and returned as the result.

@@ -199,3 +199,135 @@ e.g. It doesn't work with mongoose. So instead of writing `localhost` we should 
 
 
 #### Multi Container Application
+Like said previously, we need to have one docker or image for one service like one for mongo, one for node and one for react. So, make a network with certain name and make the mongo container with that network, also nodejs and Reactjs. and in the same container instead of `localhost` or `host.docker.internal` write the name of the container that you want to connect. Like we want to connect to mongodb container then the connection string is `mongodb://mongodb:27017/demo`. For react, only development server is running in docker, not code. So, we still need to publish that as we need to connect to code running in browser.
+For mongodb data persistence, we need to use volumes like `data:data/lib` while running the container. And we can also add the user and password. just look at website and write the connection string in this format
+```
+	mongodb://user:password:mongodb:27017/demo?authSource=admin
+```
+For nodejs we need to persist logs file and live source code. 
+for that we need to write this. we need to keep using same node_modules from container even when we start the container and we need logs persitence. and use bind mount to use latest code.
+```
+docker run -v absoulte path to backend folder:/app -v logs:/app/logs -v :/app/node_modules
+```
+also use `.dockerignore` also
+```
+node_modules
+Dockerfile
+.git
+```
+
+for react we can use bind mount for react to get latest code. 
+```
+docker run -v 'absolute path':/app/src
+```
+#### Docker Compose
+It works best for multiple container in single host. Service just means container, however names are going to be different. The file `docker-compose.yaml` exist at root meaning sibling to backend and frontend folder.
+```
+version: ""
+services:  // it denotes the services like that
+
+	mongo:
+		image: "mongo" // we have docker run --name mongodb -e MONGO_INIT_ROOT_USER=root -e                                      MONGO_INIT_ROOT_PASSWORD=root123 -v data:/data/db --rm -d --network network-                           name mongo // we don't need to specify --rm as it is already inscirbed in                              yaml means if we stop the yaml, it goes already, and it is already in                                  detached mode
+		volumes: 
+			- data:/data/db
+		environment:
+			MONGO_INIT_ROOT_USER: root
+			MONGO_INIT_ROOT_PASSWORD: root123
+			- MONGO_INIT_ROOT_USER=root  // alternate sytax
+		env_file: 
+			- ./env/.env // direction from yaml
+		network:
+			- networkname // however it is optional, as ddocker componse already make the network when                              creating the yaml file. They all are combined in same network
+		
+	backend:
+		build: ./backend // where is Dockerfile ?
+		build: // another syntax
+			context: ./backend // it is also the path where image in generated after that means we                                       need to ensure that what ever dockerfile point at, context should                                      have it 
+			dockerfile: Dockerfile // optional is Dockerfile is named as such. sometimes it is named                                         as Dockerfile-dev also so
+		port: 
+		 - "80:80"
+	    volumes:
+		    - logs:/app/logs
+		    - .backend:/app // we don't need absolute path at all.
+		    - /app/node_modules
+		env-files: 
+			- ./backend/.env
+		depends_on:
+			- mongodb
+
+
+	frontend:
+		build: ./frontend
+		port:
+			- "3000:3000"
+		volumes:
+			- ./frontend/src:/app/src // it is bind mount
+		depends_on:
+			- backend // it is optional though
+		std_in: true,
+		tty: true,
+			
+
+
+
+volumes:
+	data: // we should make this for named volumes
+	logs:
+```
+To start the docker compose we need to type this
+```
+	docker-compose up -d
+	docker-compose down // stop the services and remove all container as it removing auto happens
+```
+
+> [!NOTE] Thing to Remember
+> Once docker compose is run, at first it build all the images. But once we stop and rerun docker compose, if DC finds that image is already build, it uses that. So, sometimes we need to rebuild the entire docker compose. We can achieve it using `--build`. We can also just build the image and not start the container with `build`. It is different from previous one. Infact, `up` already includes `build`.
+#### Utility Container
+Not an official term at all. just a idea by instructor.
+We can use `docker exec` to run the command inside the container if it is running. At first we can run the node docker container and use exec command in running container to run extra command in that container.
+Like we first initialized the node container
+```
+docker run -it -d node
+```
+Here node container in running and waiting for interaction. However it is running in detached mode. Despite that, it does accept command using `exec` command. `docker exec -it nameofnodecontainer npm init`. `-it` is there as we do need interaction for the `npm init`. Then node project was initialized inside the container. Infact, we can also run `exec` command to replace default command also. We can replace the node initialization command using `exec` command.
+Like we can use Docker to run only npm init here `docker run -it node npm init`. Here the default is node initilazation in interactive mode which enters into repel but we replace that with `npm init`.
+Now we want to install the node program in container and would want to mirror it in local computer. By doing that we avoid the hassle of installing the files in our computer. At first we should create the `Dockerfile`.
+`Dockerfile`
+```
+From node:some version
+Workdir /app
+and we aren't going to write anything after as we would like to give all the control to us We could have wrote CMD ["npm", "init"] but we can use docker run -it nameofimage npm init. What will happen. remember npm init will replace run nameofimage and we can initiliaze the npm project.
+```
+Here is how to mirror the files of container to local computer. 
+```
+docker run -it -v "absolute path":/app nameofimage npm init
+```
+We can see that `package.json` was installed.
+After name of image, if we give the command like `npm init`, it replaces the original command of CMD in `Dockerfile`. And we can make our container extra secure by using executables. Executables just append that thing just besides the name of image in command like. Such as if we have `EXECUTABLES ["npm"]`. Now, we don't need to type the npm now after name of image. By doing this we provided security to the container. Who know we might have deleted something ? as it was mirroring to local computer. so now by typing this `docker run -it -v "absolute path":/app nameofimage init`, npm is appended after name of image. so it becomes `npm init`.
+
+And guess what. We can use Docker Compose to achieve this. Remember it is just the command that open interaction terminal, use bind mount and build.
+Dockerfile
+```
+FROM node:
+Workdir /app
+EXECUTUABLE ["npm"]
+```
+```
+version:
+services:
+	npm:
+		build: ./
+		stdin_open: true
+		tty: true
+		volumes:
+			- ./:/app
+```
+But we can't use use `dokcer-compose up` as it is just meant to really just bring up services defined in `yaml` file. However we also get `dockercompose exec` command to run the command in already running container which were created by `docker componse`.  And that typically means application containers. Then we should run `docker-compose run --rm npm init `. With `run` the container aren't removed automatically. Here npm in about the services and not the random thing. the init is appended to the Docker file executable and not the service. remember this. Here name collision might create a tension. In short it is not services npm that is appended but the executable.
+#### Deploying Containers
+We shouldn't use bind mounts in production. and push the container to ECR and deploy using ECS with tasks and service and load balancer.
+![[Pasted image 20241224132347.png]]
+
+### Summary
+![[Pasted image 20241218181052.png]]
+
+### Main features
