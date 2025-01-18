@@ -124,5 +124,5 @@ export class userAgent implement NestMiddleware {
 We can execute it in App Module just like we did it earlier. or we can make that class component functional and do express style.
 
 ### Interceptors 
-it is inspired from aspect Oriented Programming.
+it is inspired from aspect Oriented Programming. That means whenever interceptors are used, we can transform the data before and after the function is executed.
 ![[Pasted image 20250118134556.png]]
