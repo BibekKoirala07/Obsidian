@@ -37,4 +37,4 @@ This means that hacker does huge amount of request in short amount of time, cras
 **Attack**: Attackers trick a user into submitting a request they did not intend to make.
 **Prevention**:
 - **CSRF Tokens**: Use CSRF tokens for state-changing requests. Verify the token on the server.
-- **SameSite Cookies**: Set cookies with the `SameSite` attribute to prevent them from being sent along with cross-origin requests.
+- **Same Site Cookies**: Set cookies with the `SameSite` attribute to prevent them from being sent along with cross-origin requests.

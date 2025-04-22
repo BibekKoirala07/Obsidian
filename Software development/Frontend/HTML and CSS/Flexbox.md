@@ -1,0 +1,16 @@
+- `display` : `flex || inline-flex` // have no effect on container
+- `flex-direction` : `row column row-reverse column-reverse`
+- `flex-wrap` : `wrap nowrap wrap-reverse`
+- `flex-flow` : `row wrap`
+- `justify-content` : `center space-between space-evenly space-around end start flex-start(involves writing mode) flex-end(involves writing mode)`
+- `align-items` : `center flex-start flex-end stretch baseline`
+- `align-content` :  same as `align-items` //similar to justify content but with cross-axis
+- `gap`: `row column`
+### Flex-Children
+- `order` : ` (0) 1 2 3 `
+- `flex-grow`: `0(default)` //item to grow if necessary
+- `flex-shrink` : `1(default)`
+- `flex-basis` : `(auto) 200px` // specifies the initial width or height of item depending on flex-direction. flex-direction: column -> height. If the height and width is already set, It takes the value from those properties. Lets say we have `auto`, then have `height` and `width` set, that means flex-basis is set from those value. `max-height max-width` , `min-height-width`always overwrite` flex-basis`. as `flex-basis` isn't final
+- `align-self` : same as `align-item` but for individual item
+- `flex: grow shrink basis`, 
+- **Tips** : with `flex: 1`, we get same width children. How? well we are setting `grow: 1` and `basis` to `0`. As, basis is 0, it shrinks as much it can but `grow` again resize it.

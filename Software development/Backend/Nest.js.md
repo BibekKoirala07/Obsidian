@@ -126,3 +126,9 @@ We can execute it in App Module just like we did it earlier. or we can make that
 ### Interceptors 
 it is inspired from aspect Oriented Programming. That means whenever interceptors are used, we can transform the data before and after the function is executed.
 ![[Pasted image 20250118134556.png]]
+### Environment Variables
+We should write this in app module This will look for `.env` in root folder and load it.
+```
+	imports: [Config.Root()]
+``` 
+If we want to use the environment values, then we need to use `ConfigService`. For that to happen, we need to import `ConfigModule` and then only can we use `ConfigService`. Let's say we have `JobsModule` and we need to inject `ConfigService` in `JobService`, then we need to import `ConfigModule` in `JobModule`. Now if we need environment variables in multiple place, we might find it tedious. We can make that module global also with options `isGlobal: true`. then, we don't need to import `ConfigModule` everywhere.

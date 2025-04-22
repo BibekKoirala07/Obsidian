@@ -2,6 +2,9 @@ To know
 - [ ] View in SQL 
 - [ ] Joins in SQL
 - [ ] SQL Injection
+### What can we in Short form / cheat sheet
+We can copy data of one table to another using `SELECT INTO` and 
+
 ### Basic SQL
 Things like ==Data Retrieval==, ==Filtering== , ==Basic Aggregation== and ==Grouping data==. An Aggregate function is a function that performs a calculation on a set of values, and returns a single value. Some of the aggregate functions are `MAX()`, `MIN()`, `COUNT()`, `SUM()`, `AVG()` and other depending on database. It ignores NULL values except `Count()`. It is evaluated after `WHERE` clause. When we use aggregate function, we just get one result and that column name will be not descriptive and random. To solve that we use Alias. It is used as `AS`. We can put multiple column in one column and give it different name through aliasing. Like we have different fields for postal code, city, state and we need all column in same. we can achieve through aliasing.
 

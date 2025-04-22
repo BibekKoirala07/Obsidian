@@ -1,1 +1,0 @@
-[Server API | Socket.IO](https://socket.io/docs/v4/server-api/)

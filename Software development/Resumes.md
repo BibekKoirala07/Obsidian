@@ -1,0 +1,1 @@
+Don't write anything more than required at all. Don't be generalist. always make introduction as less abstract as possible. Don't write something like having a knack for something. Just write "A junior software engineer with "

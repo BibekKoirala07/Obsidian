@@ -1,0 +1,1 @@
+Don't send any token or sensitive information in URL but in query . sending token in URL is dangerous as it may come in history.

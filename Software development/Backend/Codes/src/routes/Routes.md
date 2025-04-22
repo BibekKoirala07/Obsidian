@@ -4,7 +4,7 @@ const express = require("express")
 const Router = express.Router();
 Router.post("/register", register);
 Router.post("/login", login);
-Router.post("/social-register", socialRegister);
+Router.post("/social-register", checkRoles("admin"), socialRegister);
 Router.post("/social-login", socialLogin);
 Router.patch("/update-password/:id", updatePassword);
 Router.delete("/delete-account/:id", requireAuth, deleteAccount);

@@ -7,7 +7,7 @@
 
 ### Event emitters in node.js
 ### Buffers
-Buffers are the way to deal with zeroes and ones in node.js. To connect our technology which is node.js to connect to outside worlds 
+Buffers are the way to deal with zeroes and ones in node.js. To connect our technology which is node.js to connect to outside worlds.
 To understand buffers we need to understand about binary number, hex numbers and character encodings.
 
 Computer use binary however it shows hexadecimal because they are easy to see. Let's say we have 4000 characters in binary. then we will have just 1000 characters in hexadecimal.
@@ -113,7 +113,7 @@ In Transform methods, methods like `_read`, `_write` and others are automaticall
 Until now, what we have seen is that, we have use Buffer in streams. But we can use js objects also. In fact, the package `pg` which connect node.js application to postgre SQL use this to achieve its goal.
 
 They weren't used in javascript. Node.js introduced the concept of Streams and later js also introduced it using Streams API. From meta view, it says every thing in web is transferred using Streams. all the webpage, images or whatever. Even single images also.
-### Networking
+## Networking
 We will learn about Net, path, process, TTY, Read line, DNS and Dgram.
 
 20 years ago, there was no networking to connect to two computer. There also was no Network Card in Computer.
@@ -197,10 +197,205 @@ PORT 22 is for SSH port. This is a port used to make you connect to your server.
 
 ==HTTP and HTTP-2 is built on TCP while HTTP-3 is built on UDP==.
 
-When going to net module docs, we can see TCP transfer protocol and IPC servers. Infact, net module just concerned with communication. And IPC just helps in communication between two process. Like node.js have one process, database have another process. We need to connect those process at Operating System. So, IPC helps in communication between processes. And IPC isn't related to node either. It is facility of Operating System.
+When going to net module docs, we can see TCP transfer protocol and IPC servers. Infact, net module just concerned with communication. And IPC just helps in communication between two process in same computer. Like node.js have one process, database have another process. We need to connect those process at Operating System. So, IPC helps in communication between processes. And IPC isn't related to node either. It is facility of Operating System.
 TCP when different machines needs to talk to each other and IPC servers when two process need in same computer need to communicate with each other. IPC server don't have any port number and IP address. TCP have it. If we see IP socket in node docs, then it is TCP. And Unix domain socket and piping is related to Inter-process communication. They are just way for talking with different process in OS.
+
+when we create client randomly in node.js, it takes the Dynamic PORT which ranges from about 40000 to 65000. you can check this by creating the 
 
 Chat App
 When we have two networking endpoint that are talking with each other, they are called socket in net module.
+Remember TCP connection can happens from computer to computer or between computers in different country also. However IPC happens in same computer only.
 
 ==Listen for socket in node.js ==
+
+### IP and IP address
+IP(Internet Protocol) means network layer(how to get that packets from one endpoint to another). IP and IP address are completely different. Each computer in internet has unique IP address.
+![[Pasted image 20250126180512.png]]
+It is IPV4.
+![[Pasted image 20250126181407.png]]
+Actually IP Address has two parts. One is network portion and other in host portion. Subnet Mask also comes with IP Address. It indicates which portion is for network portion and which for host portion.
+![[Pasted image 20250126181901.png]]
+![[Pasted image 20250126182151.png]]
+Router only understand Network Address. They simply don't understand Host Address at all. They only use Network address to traffic from one address to another. Host is always set to zero.
+
+Internet consists of many network. Each of them have one router. And these router route the traffic from one network to another. Each network has its own network portion. The network (above one) which has 3 portion to network and 1 portion to host means that for that network there are 11111111(255) hosts. Let's say we have 62.37.7 network address for one router. that means it will support 255 devices. There is limitation. And one important thing is that, 255 is assigned for broadcast address. It means if we sent the request to 62.37.7.255(all ones for host), then it means it will send information to all the devices(host) in 62.37.7 network. Also for all zero means network as a whole. So we have to omit all zeroes and all ones. So we can have 254 devices in this case. what if host were just 3 zeroes. it how will omit 000 and 111 and will only have (7 - 1) host. just 6 devices.
+
+One more thing to keep in mind is that there are private and public IP address also.![[Pasted image 20250126191415.png]]
+If we use router, our IP address lies in between these. We can't connect Internet to these private IP address. All ISP block the private IP address if the request is coming from outside. And we can buy a router and assign the address to these IP address as long as our network is in private. The moment we connect it to internet(we go public), Our IP address is converted to Public address. The whole reason we have Private IP address is that we have low space in those 4 billion IP address. Let's say we have 200 people in a company. Instead of assigning 200 IP address to each computer, what we are going to do it we are using private IP address. It saves 200 spaces in 4 billion(not that much but people still did it.) Instead when they connect to that router, we will assign them public IP address, thus saving 200 spaces. When we try to assign Public address to our devices. Then we go online. Then we will face conflict. Our ISP might say that there is conflict. This is the thing that we should care.
+
+We also have Loopback IP address
+![[Pasted image 20250126192835.png]]
+We lost 16 million IP address just cuz one person used this IP address with that masking for Loopback Address.
+
+Let's simulate Two cases. One is if the sender and receiver are at same network
+![[Pasted image 20250126194023.png]]
+Let's say we want to send one packet to another in same network. If the network portion is same, then router don't do that much. rather it will just try to find MAC Address for the devices connected to that IP and use switch to route that package to device in same network.
+
+Another case is if we want to send packets to different network.
+![[Pasted image 20250126194628.png]]
+First that packet goes to router and it immediately knows that that IP address isn't in that network. So, it looks at routing table. All router have routing table which contains network portion and they know this network portion is that router. So packet goes from that router to another router(that first router doesn't care what host it, it is for second router to solve). That second router again look for IP address and it gets that the network is same and it looks for host from there. It does that by sending request to all the devices, figuring out all the IP address, figure out all the MAC address. And the router will say which devices has this IP address with this host portion. one will respond that my host portion is matching and then, router will ask what is your MAC address and that device will give that. And the router using switch will route that packet to that machine. Notice, your MAC address will not go outside the router.
+
+So, How are private IP address route to Public IP address ? 
+remember, we can have same Private IP address but not same Public IP address. So how are private IP address to public Ip address ? We need to do that if we want to connect to internet ? We do that using ==Nat==.It is used by ISP to do so. It stands for Network Address Translation. It translates private IP address to public Ip address.
+![[Pasted image 20250126201555.png]]
+Let's say I have private address and I want to connect to internet then they will run the NAT application on top of router and what they do is they generate Public address. It will end up with public address. ==Video IP4== remained
+
+Every city normally has its own IP address.
+### DNS
+Domain Name server
+You will always be connected to DNS as long as you are connected to Internet.
+![[Pasted image 20250126203719.png]]
+It performs DNS lookups. we can do it using `DNS` module. The port number that dns module uses is 53.
+
+![[Pasted image 20250127113829.png]]
+With IP V6, the only thing that changes is networking layer. The way we code doesn't change if we change the version of IP address. If we use IP V6, now TCP will be built on top of network layer(now IP V6), it will take care of itself.
+
+![[Pasted image 20250127114403.png]]
+Each IP V6 is made up of 16 bits. The things is we can remove all leading zeroes. Like in last portion, we can remove 00 from 006F and just write 6F. IP V6 is written in hexadecimal.
+
+##### About file-uploader app
+Remember we are just using plain TCP. We weren't using any encryption at all. We shouldn't run plain http at all. we should run encryption on top of HTTP. It is called TLS. When we run TLS on top of HTTP, it becomes HTTPS.
+
+### UDP Protocols
+It is in fourth layer. Honestly the protocol like HTTP, FTP and other protocol are built on top of TCP. As a backend developer. we would rarely be working with UDP. Anytime information is important, we work with TCP. However HTT3 is built on top of UDP. There is one more layer called quick which is built on top of UDP, and that handles all these things related to data reliability. We use UDP if speed if our main concern.
+
+UDP as opposed to TCP is connectionless. It means that for a specific endpoint for a specific socket. it doesn't matter whether that socket has endpoint or not. That socket can stand there by itself. In TCP, if we don't fire up server. client can't be connected. But not with UDP. it sends the packets and that is pretty much that. You can send the package and that is pretty much it. There is no guarantee that it is going to be received and also there is no acknowledgement also. And there is no way to get that notice whether the packet is lost or not.
+
+Remember we have TCP and UDP in fourth layer. that means whatever is used in network and below layer are going to be same for both TCP and UDP. Only the way we transmit data is going to be different.
+
+In UDP, there isn't going to be distinct sender and receiver at all. There are two version of UDP6(uses IPV6) and UDP4.
+#### File upload
+The project that I did is exactly how HTTP version one work. 
+
+## HTTPS
+![[Pasted image 20250126212859.png]]
+It is built on top of TCP/UDP layer. HTTP don't establish the connection between two layer. That is the job of TCP/UDP and network layer and below layer. All the Http does is it governs the data that is being transferred using TCP and UDP layer. We just need to specify the data in HTTP. So,  
+
+Each Http request consist of four things. One is methods, URL, headers and body.
+
+The things is we can't access just `req.body` in node at all. Why cuz if we were able to do that then buffers will fill the memory, that will cuz huge pain in the ass. Rather than that node.js gives req as a stream. so `req.body` is a stream and when users sends gigabytes of data in `req.body` and it will handle without creating memory issues as we accept data in chunks.
+
+How are HTTP connection done ? 
+![[Pasted image 20250126223529.png]]
+First we we establish TCP connection between client and server. Then we are going to send first TCP segment. That first TCP segment contains method and URL. After it has passed, client sends the body if there is one in second TCP segment. It sends in chunks in number of segments if required. However at last chunk, it should send the indicator that request has ended. It could be /n or /t or some few bits message. That whole TCP segment is called message. Now the turn is for Server to send the message. It also send the message just like it 
+![[Pasted image 20250126224741.png]]
+For response Server send Code Text at first which indicates whether the request has been successful or not. also header is sent. They both are send in one TCP Segment. and body are send in chunk(stream). That is the reason why it doesn't hangs when we send huge data in body. Just like request, last chunk need to have \t or \n to indicate end of body
+
+What exactly happens when TCP connection is done ?
+We have two options. WE can kill it and we can keep it. In HTTP1, there was no option. But in HTTP 3 there is. we can keep TCP connection alive to make sure that we can use same TCP connection to make sure we use less energy.
+
+###### Understanding Connection Type
+We can do two things after req/res is done. We can reuse that TCP connection and also terminate it. We have one option is that we can keep req/res in caching. This is important concept in HTTP. Let's say client keep sending request for specific CSS files. The best browser can do it to cache the body chunks as CSS file. Later if client wants to  send another request to fetch the exact same CSS file, then client don't need to establish the TCP connection again. 
+
+We can keep TCP connection alive by header `connection: keep-alive`.
+
+Doesn't creating TCP connection just require few millisecond? 
+Well, do simple google search. Go to network tab and see the amount of request. there are probably `100` requests. What if for each request we had to create TCP connection for every request if we need something ? Well may be it requires 20 millisecond and 100 request. calculate yourself. It requires some times. In this cases keeping `connection: keep-alive` is beneficial.
+
+There is options for `keep-alive` in HTTP1 and there isn't that options for HTTP2 and 3 because the connection is persistent.
+
+![[Pasted image 20250202182438.png]]
+Here we also have option for keep-alive: timeout means if there was no second request for 8 second then kill that TCP connection and at one server, only 800 TCP connection can be established. So if we already have 800 connection and new client want to connect, we have to kill one one connection. There are algorithm for that. Another thing to care is that when client goes to another webpage. that TCP connection will be killed automatically. Or if we change the IP address (like changing from mobile data to WIFI, we have changed the IP address,  we are establishing new TCP connection). But for HTTP version two and three, connection are persistent by default. Those two headers are not accessible in HTTP version two or three. If we use, it will be ignored or will create error
+
+###### Building our client and sending a request
+Postman only support HTTP1. Node itself doesn't support HTTP3. But we can create proxy in node.js to support it. We normally create HTTP1 and use proxy to support HTTP2 and 3 to get best out of all world. The main thing to know is that node is just used to send and receive the message in TCP application. Let's say we put random request from postman using form Data or GraphQL. Node.js doesn't do parsing at all. We have to do that. Even when we do request to data
+
+###### Learning Docs
+WE have two things in Http. Either a server or client. 
+![[Pasted image 20250204131243.png]]
+We have two things which are shared between server and client. They are `http.IncomingMessage` and `http.OutgoingMessage`. In server we have `http.Server` and `http.ServerResponse` and latter one is inheriting from `http.OutgoingMessage`. 
+
+We have two more thing that are same to both server and client. They are `http.IncomingMessage` or `http.OutgoingMessage`. Either they are coming to the endpoint or going out of the network.
+
+==Cookies are just header==.
+
+###### When does net becomes http
+When we try to send send request from net module to http server, it doesn't work. It says wrong request format. There is a specific format for https request to be accept. We have to encode the headers like `content length` and other things to be in header and then it will read body. 
+ We can emulate the http module with net module but sending header like in http module. We can do that by encoding that in Buffer as head and body and sending them to http server. It would work.
+
+###### Emulate http using net module
+
+###### understanding media types
+we can specify `content-type: some media type` for request to know what does client need or webbrowser needs.
+![[Pasted image 20250204151750.png]]
+there are two different kinds of media type. ![[Pasted image 20250204151901.png]]
+Discrete means only one file and multipart means multiple file Boundary in multipart is to differentiate between different files which is gotten from files. Without it, we may not be able to differentiate between files if we send multiple files in multipart class.
+###### understanding http methods
+By understanding Idempotent, we will have easier time understanding http methods. We call some function or operation idempotent if doing that operation multiple times will not have any additional effects on server except the very first one and result is same for every time.
+![[Pasted image 20250204153409.png]]
+If we delete File over One GB, we can just do it one times. However ,delete biggest files can be done any amount of times
+![[Pasted image 20250204153736.png]]
+![[Pasted image 20250204153857.png]]
+Well, if we try to create multiple comment in our server. it should create multiple comment in our server. So, No Idempotent
+![[Pasted image 20250204154007.png]]
+![[Pasted image 20250204154241.png]]
+![[Pasted image 20250204154423.png]]
+![[Pasted image 20250204154602.png]]
+It is normally used for caching and sometimes used to download large files also.
+![[Pasted image 20250204155018.png]]
+Options is used to know about things like CORS, headers and other things.
+###### understanding http statusCode
+
+###### creating our first web server
+there is difference between web server, http server and net server and other things. Web server means serving the web. If our server is dealing with HTML, then it is called web server. If we create a Web server, anyone in the world can access it with just a browser. They don't need any technical knowledge about anything like when we made chat and file uploader app. in that app, the client needed to know the way to sending request. In web server, client don't need that at all.
+
+The thing is if we provide html to browser and there we have specified css in html. Browser will try to fetch that also. it is going to access all the document or resources that is linked with that HTML. If the HTML has image, then look at host. if the host is of same server, the browser will request for that image from server. otherwise if the host is other website like unsplash then browser will automatically send HTTP request for those.
+
+==T he main thing to know is that js as a language is small and browser and node.js add their own thing to js and make it work. Browser add document object to js and make it work in browser and node.js add modules in js and make it work+==
+###### understanding http proxies
+Lets say we have three node js server running same application but they could have different IP address or PORT. Image one of them goes down(which is pretty common). Load are distributed among these server rather than one server serving all requests
+
+How can we distribute the traffic evenly ? One thing we can do is http proxy. In this case that proxy is load balancer(has its own IP address). It is not that difficult. All that proxy means is that it will grab the traffic from client and will route that to server or any other endpoint and get a response from that server and will give that to client.  There are many algorithm to set up which server to traffic to. We can also block some user that may be harmful by using proxy. It could also modify the header of request or response. Let's say we have another proxy between Load Balancer and client and it uses HTTP3. means all our client are using HTTP3. But our server may only support HTTP1. Still it will work.
+
+About speed. All these proxies could be on same network. So we don't care about speed between proxy and client. What we care is speed between client and proxy. In some cases proxy could be HTTPS. but we don't need to take care about that in our node code. See how beneficial.
+![[Pasted image 20250205125118.png]]
+We can built proxy in node easily.
+
+###### stateless
+means each request is independent and not related to previous or next request TCP is statefull. However http isn't statefull. How to make ![[Pasted image 20250205130932.png]]
+Let's say client 4 sends request to LB and then to Server 1 and just after that again client 4 sends request to LB and it route to Server 2. then Server 1 will not know if the client sent that request to server 2. also if Server 2 get the request from client 4 after some time even then Server 2 don't know that same client requested something sometime ago. The thing is Can we use TCP to make HTTP statefull. Yes we can. But it is not good at all. why ? TCP connection is made everytime client goes to website. he could change the wifi or revert to mobile data and new TCP connection will be made and session will be new. If client turn wifi off and again on, TCP connection is new. 
+
+How to save that token ? We have to dwell in cookies.
+###### cookies
+Cookies is directly sent from web to server directly.
+![[Pasted image 20250205132129.png]]
+Lets say web is asking for response from server. We want to keep track of user. We need to provide cookie in header of response.
+And the convention is that whenever the data is received from `set-cookie`, the data is being saved in client hard drive by default. It may be somewhere but it is there. That means client can have access to that data even if computer is turned off as they have saved it in hard drive. 
+
+Now they are sent to server by default. 
+![[Pasted image 20250205133018.png]]
+And the convention is semicolon with space. Sometimes we don't want to send the cookie or might want to send cookie to particular path only. There is option for that. But by default, cookies are sent in every single request.
+
+Ideally we don't want client to modify that cookie. Of course javascript does have power to do that. By WE don't want that.
+
+Javascript can access cookie by default but there is option to restrict that. For all those options refers to docs
+
+Cookies aren't the only way to store data in client's browser. we can use local Storage or indexed DB. 
+
+==Normally tokens are saved in Database remember this thing==
+### Unix
+The whole Internet is running in top of Unix.
+![[Pasted image 20250205173223.png]]
+Unix was first written in assembly so, it was problematic as it had assembly code. For assembly, we have to write code for specific hardware. If we write code for specific CPU, we can't run on different CPU. So Unix had same problem. So what Dennis Ritchie did was he wrote C and kept improving C so he can write entirely Unix in C. That made it portable. So for the first time, we could run same OS in different CPU. C is heart of Unix.
+![[Pasted image 20250205180050.png]]
+The derivatives of Unix are BSD, Linux. Linux was made by C. The thing is Linux and Unix are vastly different. Linux is built entirely from scratch however takes it's principle from Unix(not copying).
+Another one is MacOS and its kernel is called Darwin. Apple took BSD and kept improving it. MacOS adheres to Unix principle. So android is also Linux based which is Unix based(took inspiration only not copy)(just like if we built framework like express but we didn't copied that). iOS is also other one .
+
+==When we say Unix, we are referring to an OS that adheres to Unix concepts==. Nowadays, when we say we are building application for Unix, It means we are going to build app for its derivatives. We aren't referring to original OS that was built around 1970s.
+
+For Most cases, if we can do something in Unix, we can also do it in its derivatives(Mac OS) as they follow same principle. 
+
+We specify the Operating System on the basis of how they:
+- they manage users,
+- the file permissions,
+- the way that their file system is structured,
+- system libraries,
+- the way that they communicate between different process,
+- environment variables,
+- process management
+- and many more
+When we say Unix based that means they share some of the principle described above. Unix is more about principle and theories.
+
+Unix philosophy is modular design(as simple as possible) we build different program that do things really well and set up a system between then so that they can work together. (IPC communication) as pipes. also shell scripting means that combine these tools to perform complex workflows. You can see Unix Wikipedia and find that it is more about communication between program to complete the task rather than program itself.
+
+

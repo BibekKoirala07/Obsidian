@@ -42,12 +42,12 @@ const register = async (req, res) => {
 ```
 
 - **Login**
-```
+```js
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await userModel.loginStatics(email, password);
-    const token = createJsonWebToken(user._id);
+    const token = createJsonWebToken(user._id, ,user.name, user.role);
     const { password: hashedPassword, ...rest } = user._doc;
     return res
       .cookie("token", token, { httpOnly: true, secure: false })
@@ -60,7 +60,7 @@ const login = async (req, res) => {
 ```
 
 - **Social Register**
-```
+```js
 const socialRegister = async (req, res) => {
   let { username, email, phone, photo, social } = req.body;
   if (!phone) {

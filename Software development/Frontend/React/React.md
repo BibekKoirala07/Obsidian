@@ -1,3 +1,4 @@
+
 Todo: 
 - [ ] Learn about how react works under the hood and  write about it so I don't need to learn multiple times
 
@@ -15,6 +16,7 @@ Todo:
 9. **Use React Intersectional Observation and Lazy-Loading**: Use the package so that data in bottom of the page which isn't visible for now will not be fetched when we are at the top of the webpage. 
 10. **Use react-ga4**: Use package for analytics.
 11. **Use accessibility package**: Use package for accessibility, it will be pain in the ass later.
+12. Always use redux and rtk query in MERN stack: Let's say we have some number of message that are unread or whatever that needs to be show in sidebar and what will you do after going to the component and let's say user change that message to read. what will you do ? not update that no of message ? .
 ### When to use package ?
 Everywhere. Remember don't be smart ass and try to make CSS from zero. it is redundant. Everytime you need carousel, toast, need for our project to support multiple language, charts, graphs, etc. you should use `npm` package. Everytime we create from scratch, it is a pain in the ass. I am writing this from experience for the past.
 ## ==Hooks :== 
@@ -36,8 +38,8 @@ console.log(state) // the value of state is still oldValue
 ### useCallback
 Sometimes we send functions as props. React treats that function as new prop everytime component re-renders even if function itself hasn't changed. `useCallback` is used to avoid rendering again.
 Tips: 
-1. Don't overuse it
-### useMemo
+1. Don't overuse it.
+### use Memo
 Sometimes when Parent Re-renders but children have same props. then it is no need to render that child component, right ? Exactly. Why does Child Re-renders ? Cuz props is an object and in js no object are same remember ? But we don't need to render that child component. So `useMemo` is used. Another use is we can memoize values also. Like we want to calculate the value of derived variable only if the variable that change the derive variable change. It can be confusing but main use it to memoize component and any value.
 Tips: 
 1. Don't overuse it.
@@ -52,8 +54,3 @@ Tips:
 ###### Redux toolkit
 Tips: 
 1. Use `redux-persist`. if you don't use it will cause rendering issues. Like, we will have hard time making automatically redirection. So don't try to implement it using manually. Don't be jerk or smartass. just use redux-persist
-
-## ==npm packages==
-#### Redux-Toolkit
-###### rtk-query
-
