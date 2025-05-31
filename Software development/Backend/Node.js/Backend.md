@@ -1,4 +1,4 @@
-### [[Best Practices]]
+ ### [[Best Practices]]
 ### [[Node]]
 ### [[ORMs & Mongoose]]
 ### [[Socket.io]]
@@ -78,7 +78,7 @@ There are property in stream to know about the default size and property to know
 
 TLDR is that streams have internal buffer with certain events, properties and what not. Don't push to internal buffer if that is full and wait for it to be empty and then only push the data. Everytime stream in written to file, it is called draining. It emit and event and event is emitted even when stream is ordered to end.
 
-The `res` object in express is writable stream. And for more look at docs.
+The `res` object in node is writable stream. And for more look at docs.
 
 Now Readable stream ![[Pasted image 20250104112556.png]]
 In readable stream, we get data from huge file and get them in chunks. For Readable Stream, the high Watermark is  65kb. We can read and end using `data` and `end`. Hard drive have higher read speed than write speed. And even in readable stream you should always use `drain` event to read. If you don't use it, it will use excessive memory. There is a option to pause the stream and resume it in readable stream. 

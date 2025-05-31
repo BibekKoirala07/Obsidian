@@ -3,7 +3,7 @@ Image are extremely hard to manage. It may look easy. but it is hard. They are o
 Next.js automatically optimizes the image for different devices size and resolution. This ensures fast loading times and a better user experience. And images are only loaded when they come into the viewport thus reducing the initial page load time. next.js optimizes images by serving them in modern format (like webP) and generating multiple sizes for different screen resolution.
 
 It prevents layout shift. It hamper SEO and is big burden in the eye.
-### Props in next.js
+### Props in next.js image component
 ###### width and height
 For local image, we don't need width and height as we already know that. next.js calculate the intrinsic width and height bases on imported file. Thus it determines image ratio. However we need to provide for remote images as next.js doesn't have access to remote files during the build process.
 ###### Layout

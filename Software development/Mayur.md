@@ -5,6 +5,21 @@
 
 Photo haru.
 
+slider section
+CTA ma starting price rakhne starting from 3500, 5000, 4500
+
+
+
+// Our services
+
+// Videos ma
+Youtube videos ma
+ra right ma descirptions haru lekhne
+Our teams ma maximum 3
+
+CTA should lead to Checkout section // later will do payment integration
+
+
 
 Our gallyer remove
 New letter remove
@@ -13,6 +28,7 @@ Add Blog section
 Home About Us  Contact Us Blog Singup Login
 change the logo
 cut the background for the hero section
+blogs ma dropdown garera gallery rakhne
 
 font 
 Looking at the image you shared, the font appears to be a serif font for the main heading "A Space for Your Mind, Body & Soul."

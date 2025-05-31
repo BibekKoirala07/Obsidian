@@ -1,4 +1,3 @@
-[[CSS Cheatsheet.jpg]]
 ## Height/Width
 units: `auto length %`
 - they don't include `padding`, `border`, and `margin`. All these three are extra and should be added to get full-width but it can be bypassed if we apply property of `border-box`: `box-sizing`

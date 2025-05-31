@@ -1,12 +1,25 @@
+- **UI**: React Native + NativeWind (Tailwind for RN)
+- **Navigation**: react-navigation
+- **State**: Redux Toolkit (or Zustand) + React Query
+- **Forms**: react-hook-form
+- **Auth**: Firebase or NestJS JWT
+- **Storage**: MMKV (or AsyncStorage for simple apps)
+- **Testing**: jest, testing-library
+- **AI**: OpenAI or your own NestJS AI APIs
+- **Build & Deploy**: EAS (Expo), or RN CLI + Fastlane
+
 Tips: 
 1. Use `react-native-permissions` for permission management. It is tedious to do it without library
 2. For push notification, use `firebase-cloud-messaging` to solve the issue.
 3. Gestures like pinch and swipe may not work properly in ios so use `react-native-gesture-handler`.
 4. Background fetching is more stricter in ios so use libraries like `react-native-background-fetch` or `react-native-background-task`.
 5. use `react-navigation`, `react-native-paper` and `react-native-vector-icons`. making them normally would be pain in the ass.
+
+### Introduction
+
 #### View/Text and Image
 Use libraries like `react-native-fast-image` for compression for image.
-```
+```js
 <View
   // Styling
   style={} // Style the container (e.g., flex, margins, padding, background color)
@@ -60,7 +73,7 @@ Use libraries like `react-native-fast-image` for compression for image.
 />
 ```
 #### Keyboard Avoiding View
-```
+```js
 <KeyboardAvoidingView
   // Behavior
   behavior={} // Determines how the view behaves when the keyboard appears (e.g., "height", "position", "padding")
@@ -253,7 +266,7 @@ There are alternative like `ScrollView` but but don't use it
 ```
 #### Safe Area
 Use `react-native-safe-area-context`to emulate like ios.
-```
+```js
 <SafeAreaView
   // Styling
   style={} // Styles the safe area view

@@ -1,3 +1,10 @@
+###### How does frontend works
+The main thing to know is Device Pixel ratio also matters. You may thought like it doesn't matter but it really does. All browser tries to help us by adding invisible styles. ==Remove that plainly==. You may look at Kevin Powell video and try to think that it doesn't matter. but it does. Rather than getting stuck later, just remove all the styles plainly. Don't use fixed width or height at all. Text spacing must be in `em/rem` and not in px. Media query should be in `min-wdith`. Don't use it with `max-width`. don't stretch broken image. Don't center with manual margin at all. Don't use manual setup at all. use flexbox grid at all. Use view port width rather than fixed width and height.
+
+###### DPR hell.(Device pixel ratio)
+For normal web developer, 1px is one pixel. However physical pixel is tiny dot in the screen.
+Old laptop use 1.0 DPR. Normal HD laptop uses 1.5. Modern laptop retina display uses 2.0 to 2.5 and expensive smartphone uses 3.0  DPR. 
+
 ###### Error boundaries
 - React components that catch JavaScript errors in child components
 - Use static getDerivedStateFromError() and componentDidCatch() lifecycle methods
