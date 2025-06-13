@@ -836,7 +836,7 @@ bash
 
 CopyEdit
 
-`pwd, cd, ls -la, mkdir, touch, cp, mv, rm -rf cat, less, head, tail, grep, find chmod, chown, du -sh, df -h |, >, >>, tee`
+`pwd, cd, ls -la, mkdir, touch, cp, mv, rm -rf cat, less, head, tail, grep, find chmod, chown, du -sh, df -h |, >, >>, tee man, history, clear`
 
 **🛠️ Practice Tasks**
 
@@ -868,7 +868,7 @@ bash
 
 CopyEdit
 
-`apt update, apt install, apt remove adduser, usermod, passwd, su, sudo -i ssh, scp, ssh-keygen, whoami systemctl start/enable/status`
+`apt update, apt install, apt remove adduser, usermod, passwd, su, sudo -i ssh, scp, ssh-keygen, whoami systemctl start/enable/status id, groups, useradd, userdel, groupadd`
 
 **🛠️ Practice Tasks**
 
@@ -1272,3 +1272,367 @@ Keep a `linux-cheatsheet.md` file where you:
     - Common issues you debugged
         
 - Build your **mental cheatsheet** over time
+
+### Month 1: **Power User & File Mastery**
+
+#### 🎯 Learn:
+
+- Dotfiles (`.bashrc`, `.profile`)
+    
+- Aliases, exports, functions
+    
+- Advanced file manipulation
+    
+- Symbolic links, file descriptors
+    
+- Text processing
+    
+
+#### 🔨 Tools:
+
+bash
+
+CopyEdit
+
+`ls -lah, tree, file, stat, du, df cut, awk, sed, sort, uniq, tr xargs, tee, wc, diff, comm ln -s, find -exec alias, export, source, history, !!`
+
+#### 💡 Practice:
+
+- Make a custom `.bashrc` with aliases & functions
+    
+- Clean temp files older than 7 days with `find`
+    
+- Write a Bash script to rename & move log files
+    
+
+---
+
+### 📅 Month 2: **System Admin + DevOps**
+
+#### 🎯 Learn:
+
+- Systemd (`systemctl`, `journalctl`)
+    
+- Process monitoring & debugging
+    
+- Users, permissions, sudoers
+    
+- SSH, SCP, key management
+    
+- Cron jobs & basic automation
+    
+
+#### 🔨 Tools:
+
+bash
+
+CopyEdit
+
+`ps, top, htop, kill, pkill systemctl, journalctl, uptime, dmesg ssh, scp, ssh-keygen, chmod, chown crontab, at, sleep, nohup, tmux, screen`
+
+#### 💡 Practice:
+
+- Deploy your backend app with `pm2` or `systemd`
+    
+- Schedule daily backups of `.env` & logs with cron
+    
+- SSH into a dev/test server without a password
+    
+- Check service logs using `journalctl -u yourapp`
+    
+
+---
+
+### 📅 Month 3: **Networking, Security, Monitoring**
+
+#### 🎯 Learn:
+
+- Network debugging
+    
+- UFW/iptables basics
+    
+- Port binding
+    
+- Disk and memory profiling
+    
+- Log analysis
+    
+
+#### 🔨 Tools:
+
+bash
+
+CopyEdit
+
+`curl, wget, ping, traceroute, dig, nslookup netstat, ss, lsof, nc, ip a, hostname ufw, fail2ban, rsync, tar, gzip vmstat, iostat, sar, free, watch`
+
+#### 💡 Practice:
+
+- Set up firewall rules to allow only SSH + app port
+    
+- Use `rsync` to mirror a backup folder
+    
+- Monitor your app’s memory/CPU usage
+    
+- Set log rotation for backend app logs
+    
+
+---
+
+## ⚡ Bonus: Dotfile + Alias Setup
+
+Make a `~/.dotfiles` repo to store:
+
+- `.bashrc` or `.zshrc`
+    
+- `.vimrc` or `.nvim/init.vim`
+    
+- `.aliases`, `.functions`
+    
+- Git config (`.gitconfig`)
+    
+- Scripts (log cleanup, deploy, restart services)
+    
+
+---
+
+Would you like a ready-made `bashrc` with powerful aliases for backend + DevOps workflows? Or maybe an install script to set up your laptop from scratch?
+
+### Week 1: **Linux Filesystem Explorer**
+
+📘 **Learn**: `ls`, `cd`, `pwd`, `mkdir`, `touch`, `rm`, `mv`, `cp`, `tree`
+
+🔧 **Project**:  
+Build a CLI "Project Organizer" script:
+
+- Create folders like `src/`, `logs/`, `backup/`
+    
+- Move `.log` and `.tmp` files automatically
+    
+- Time-stamp file backups
+    
+
+📁 Bonus: Add color-coded output using `echo -e`
+
+---
+
+### 📅 Week 2: **Find & Filter Toolkit**
+
+📘 **Learn**: `find`, `grep`, `cat`, `less`, `head`, `tail`, `cut`, `sort`, `uniq`
+
+🔧 **Project**:  
+Make a "Log Analyzer":
+
+- Search log files for errors or specific keywords
+    
+- Find and display IPs with most requests
+    
+- Extract `.env` values from files in a folder
+    
+
+📁 Bonus: Save summary to a report file
+
+---
+
+### 📅 Week 3: **Package Manager & Software Installer**
+
+📘 **Learn**: `apt`, `dpkg`, `which`, `whereis`
+
+🔧 **Project**:  
+Build a `setup.sh` script that:
+
+- Installs tools like `curl`, `git`, `htop`, `nginx`
+    
+- Checks if they’re already installed
+    
+- Logs installation results
+    
+
+📁 Bonus: Let it take a list from a `.txt` file
+
+---
+
+### 📅 Week 4: **User & SSH Manager**
+
+📘 **Learn**: `adduser`, `passwd`, `usermod`, `sudo`, `ssh`, `scp`, `ssh-keygen`
+
+🔧 **Project**:  
+Create a script to:
+
+- Add a new user and set a default password
+    
+- Give them sudo access
+    
+- Copy your public SSH key to a remote server
+    
+
+📁 Bonus: Use `scp` to send config files to the server
+
+---
+
+### 📅 Week 5: **Service Watchdog**
+
+📘 **Learn**: `ps`, `htop`, `kill`, `systemctl`, `journalctl`, `pgrep`, `top`
+
+🔧 **Project**:  
+Build a service monitor:
+
+- Check if your backend app (like NestJS) is running
+    
+- If not, restart it
+    
+- Log every incident to a file
+    
+
+📁 Bonus: Send a Telegram notification using `curl`
+
+---
+
+### 📅 Week 6: **Log Auto-Backup System**
+
+📘 **Learn**: `cron`, `at`, `nohup`, `tar`, `gzip`, `tee`
+
+🔧 **Project**:  
+Create a script + cron job that:
+
+- Archives all `.log` files daily
+    
+- Compresses them with time-stamped names
+    
+- Stores them in a `~/log_backups` folder
+    
+
+📁 Bonus: Rotate logs older than 7 days
+
+---
+
+### 📅 Week 7: **Network Scanner + Firewall Setup**
+
+📘 **Learn**: `ping`, `curl`, `netstat`, `ss`, `ufw`, `iptables`, `hostname`
+
+🔧 **Project**:  
+Build a script to:
+
+- Ping key services (API, DB, Redis)
+    
+- Show which ports are open
+    
+- Enable UFW and allow only required ports
+    
+
+📁 Bonus: Add optional email alert on downtime
+
+---
+
+### 📅 Week 8: **Custom CLI App Launcher**
+
+📘 **Learn**: Bash scripting, `alias`, `.bashrc`, `source`, `$PATH`
+
+🔧 **Project**:  
+Create a CLI shortcut tool:
+
+- `serve-api` → starts your NestJS/Node API
+    
+- `deploy-api` → pulls code & restarts app
+    
+- Add to your PATH or alias it globally
+    
+
+📁 Bonus: Make colored outputs for each step
+
+---
+
+### 📅 Week 9: **Dotfile Setup System**
+
+📘 **Learn**: Git + Bash combo
+
+🔧 **Project**:  
+Make a `dotfiles/` repo that:
+
+- Tracks your `.bashrc`, `.vimrc`, `.gitconfig`
+    
+- Uses a `install.sh` to symlink configs
+    
+- Works across systems
+    
+
+📁 Bonus: Auto-install preferred tools too
+
+---
+
+### 📅 Week 10: **Uptime Tracker**
+
+📘 **Learn**: `uptime`, `vmstat`, `iostat`, `df`, `du`, `watch`
+
+🔧 **Project**:  
+Create a `healthcheck.sh` script that:
+
+- Logs uptime, CPU usage, RAM
+    
+- Alerts if CPU > 80% or RAM > 90%
+    
+- Saves logs to a file
+    
+
+📁 Bonus: Use `watch` for real-time viewing
+
+---
+
+### 📅 Week 11: **Remote Backup Syncer**
+
+📘 **Learn**: `rsync`, `scp`, `cron`, `tar`, `gzip`
+
+🔧 **Project**:  
+Automate backups:
+
+- Daily zip + compress `project/` folder
+    
+- Sync it to a remote server with `rsync`
+    
+- Run it with cron
+    
+
+📁 Bonus: Add bandwidth limiting (`--bwlimit=200`)
+
+---
+
+### 📅 Week 12: **Production App Deployer**
+
+📘 **Learn**: `pm2`, `systemctl`, `.service` files, reverse proxy with Nginx
+
+🔧 **Project**:  
+Deploy your real backend app (NestJS/Node) to a VPS:
+
+- Use `pm2` or `systemctl` for persistent running
+    
+- Nginx as reverse proxy
+    
+- Auto-start on boot
+    
+
+📁 Bonus: Add deployment script with `git pull + restart`
+
+---
+
+## ✅ Final Result:
+
+You’ll have built a full Linux-powered backend environment, complete with:
+
+- Auto deployments
+    
+- Log rotation and alerts
+    
+- Remote backups
+    
+- Service supervision
+    
+- Custom toolkits
+    
+
+---
+
+Would you like this as a downloadable **PDF checklist** or GitHub repo template?
+
+  
+
+Tools
