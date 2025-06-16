@@ -13,13 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Backend/Node.js/Job Scheduling and Queuing.md",
+                "file": "Backend/MongoDB.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "Job Scheduling and Queuing"
+              "title": "MongoDB"
             }
           }
         ]
@@ -80,7 +80,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 265.5
+    "width": 265.5,
+    "collapsed": true
   },
   "right": {
     "id": "46d18bc8e2dc6fa3",
@@ -171,8 +172,15 @@
   },
   "active": "70519ef89342a98a",
   "lastOpenFiles": [
-    "Backend/Nest.js.md",
+    "Pasted image 20250616161655.png",
+    "Backend/Node.js/ORMs & Mongoose.md",
+    "Backend/Node.js/Backend.md",
+    "Backend/Node.js/Caching & Redis.md",
     "Backend/MongoDB.md",
+    "Backend/Node.js interview questions.md",
+    "Backend/Oauth.md",
+    "Backend/Nest.js.md",
+    "Backend/GraphQL.md",
     "Backend/Node.js/Job Scheduling and Queuing.md",
     "Backend/Node.js/Node.js Todo.md",
     "Backend/Node.js/CI-CD Pipelines.md",
@@ -180,7 +188,6 @@
     "Backend/Node.js/Logging.md",
     "Backend/Node.js/Node.md",
     "Backend/Node.js/Npm Packages.md",
-    "Backend/Node.js/ORMs & Mongoose.md",
     "Backend/Node.js/Payment Integration.md",
     "Backend/Node.js/Security & Risk Managements.md",
     "Backend/Node.js/Socket.io.md",
@@ -191,12 +198,6 @@
     "Backend/Codes/src/models/Models.md",
     "Backend/Codes/src/helpers/ConnectDB.md",
     "Backend/Codes/src/helpers/utils.js.md",
-    "Backend/Codes/src/helpers/email.js.md",
-    "Backend/Codes/src/helpers/validator.js.md",
-    "Java/Java.md",
-    "Environment Variables.md",
-    "extension.md",
-    "Git.md",
     "Job Requirements Images/Screenshot 2024-12-05 222629.png",
     "Java/Spring",
     "Tools",

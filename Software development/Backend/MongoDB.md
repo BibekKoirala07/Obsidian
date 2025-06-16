@@ -1,4 +1,10 @@
-This are complex MongoDB things
+This are complex MongoDB things.
+### Aggregation Pipelines Stages
+Aggregation framework is all about building a pipeline of steps that runs on the data that is retrieved from the collection and then gives you the output the form we need. Every stages receives the output of the previous stages.
+
+![[Pasted image 20250616161655.png]]
+
+
 ###### Aggregation Pipelines Stages
 1. `$match`
 2. `$project`
