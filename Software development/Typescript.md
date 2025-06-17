@@ -67,3 +67,6 @@ function throwError(message: string): never {
 ###### undefined and null
 They are already in js. null means the there is nothing in that variable and undefined means the variable isn't defined at all. might have missed to define it.
 ### tsconfig.json
+```tsconfig.json
+	
+```
