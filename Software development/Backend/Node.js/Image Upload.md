@@ -18,4 +18,4 @@ In AWS, the goal is to create IAM which only enable S3 service and nothing else 
 That is done by only enabling user Credentials for Blog Bucket. that is it.
 
 ![[Pasted image 20241222210840.png]]
-I am in video 157
+I am in video 157[[Job Scheduling and Queuing]]

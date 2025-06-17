@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "209e6de1fb142609",
+        "id": "f8eef1c5ed1c7bc1",
         "type": "tabs",
         "children": [
           {
-            "id": "70519ef89342a98a",
+            "id": "3fcb4a8a3398dc28",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -97,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Flutter/State Management.md",
+                "file": "Backend/MongoDB.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -107,21 +107,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for State Management"
-            }
-          },
-          {
-            "id": "e2cd4135cd1104d8",
-            "type": "leaf",
-            "state": {
-              "type": "outgoing-link",
-              "state": {
-                "file": "Flutter/State Management.md",
-                "linksCollapsed": false,
-                "unlinkedCollapsed": true
-              },
-              "icon": "links-going-out",
-              "title": "Outgoing links from State Management"
+              "title": "Backlinks for MongoDB"
             }
           },
           {
@@ -151,8 +137,7 @@
               "title": "Outline of Widgets"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
@@ -170,34 +155,39 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "70519ef89342a98a",
+  "active": "3fcb4a8a3398dc28",
   "lastOpenFiles": [
-    "Pasted image 20250616161655.png",
-    "Backend/Node.js/ORMs & Mongoose.md",
-    "Backend/Node.js/Backend.md",
-    "Backend/Node.js/Caching & Redis.md",
     "Backend/MongoDB.md",
-    "Backend/Node.js interview questions.md",
-    "Backend/Oauth.md",
-    "Backend/Nest.js.md",
-    "Backend/GraphQL.md",
-    "Backend/Node.js/Job Scheduling and Queuing.md",
-    "Backend/Node.js/Node.js Todo.md",
-    "Backend/Node.js/CI-CD Pipelines.md",
-    "Backend/Node.js/Image Upload.md",
-    "Backend/Node.js/Logging.md",
-    "Backend/Node.js/Node.md",
-    "Backend/Node.js/Npm Packages.md",
+    "Backend/Node.js/Backend.md",
+    "C Sharp Images/Pasted image 20250211130607.png",
+    "C Sharp Images/Pasted image 20250211121011.png",
+    "C Sharp Images/Pasted image 20250211120648.png",
+    "C Sharp Images/Pasted image 20250209201004.png",
+    "Things to know.md",
+    "Todo Spring.md",
+    "Todo.md",
+    "Typescript.md",
+    "Frontend/React and Next/Tips.md",
+    "Frontend/React and Next/State Management - Data Fetching.md",
+    "Frontend/React and Next/React Patterns.md",
+    "Frontend/React and Next/React Interview.md",
+    "Frontend/React and Next/React.md",
+    "Frontend/React and Next/Mistakes.md",
+    "Frontend/React and Next/Hooks.md",
+    "Frontend/React and Next/dotenv.md",
+    "Frontend/React and Next/Deployment.md",
+    "Frontend/SEO.md",
+    "Frontend/Solid.js.md",
+    "Frontend/Frontend concepts.md",
+    "Frontend/Framer Motion.md",
+    "Frontend/Astro.js.md",
+    "C Sharp.md",
+    "Backend/Node.js/ORMs & Mongoose.md",
     "Backend/Node.js/Payment Integration.md",
     "Backend/Node.js/Security & Risk Managements.md",
-    "Backend/Node.js/Socket.io.md",
-    "Backend/Codes/src/middlwares/middlewares.md",
-    "Backend/Codes/src/services/services.md",
-    "Backend/Codes/src/app.js.md",
-    "Backend/Codes/src/routes/Routes.md",
-    "Backend/Codes/src/models/Models.md",
-    "Backend/Codes/src/helpers/ConnectDB.md",
-    "Backend/Codes/src/helpers/utils.js.md",
+    "Backend/Node.js/Logging.md",
+    "Backend/Node.js/Node.md",
+    "Pasted image 20250616161655.png",
     "Job Requirements Images/Screenshot 2024-12-05 222629.png",
     "Java/Spring",
     "Tools",
@@ -207,11 +197,6 @@
     "Images/Pasted image 20250418230212.png",
     "Images/Pasted image 20250408223318.png",
     "Images/Pasted image 20250408211036.png",
-    "Images/Pasted image 20250408204352.png",
-    "Images/Pasted image 20250408203610.png",
-    "Images/Pasted image 20250408203505.png",
-    "Images/Pasted image 20250408192021.png",
-    "Images/Grid.png",
     "C Sharp Images",
     "php-images",
     "Backend/Codes/config 1",
