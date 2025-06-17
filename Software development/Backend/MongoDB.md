@@ -145,17 +145,149 @@ Embedding should be done for tightly coupled data. Embedding has faster reads. I
 For referencing, one-many or many-many one is preferred. For frequent updates. Slower reads(requires `$lookup`, don't use populate). May be atomicity can't be achieved(need transactions).  
 #### Schema Design Patterns
 ###### Approximation
+When expensive calculations are done frequently and precision of those calculations isn't highest priority. Like in number of likes, number of comments, etc. 
 ###### Attribute
+What if some fields can store key-value pairs dynamically as attribute. Instead of creating a fixed schema for every possible property, we store attributes as embedded key-value pairs inside the document. Or when attributes are not known upfront or can vary widely. 
 ###### Bucket
+It is about grouping multiple related data points into a single document, rather than storing each one seperately. 
+Like lets say a sensor measure temp or something every 5 min. Do you really want to create document after documents ? Better make one document with name as `Sensor A` and have reading key with all the attributes in `readings`. That increases readability and reduces writes pressure, and also gain performance in bulk reads. 
+Like we can also use bucket patters with computed pattern also 
+```json
+	"sensor": "A",
+	"minTemp": "",
+	"maxTemp": "",
+	"readings": []
+```
+We might see that it is not that intuitive. right ? But it is extremely useful - but only for certain types of problems. But is deeply useful for sensor reading every few seconds, app click stream events, logs every ms, time-series financial prices, IoT data. But for most of our projects, the pattern is over engineered. 
+==It  is just important for analytics events, login data every scheduled time== .
 ###### Computed
+- used to improve read performance by storing pre-calculated values inside docs. It basically involves storing derived or aggregated data inside the docs to avoid expensive computation or aggregation during query time
+- the goal is to not use aggregation as much as possible.
+- We do it for performance, simpler queries, scalability(reduces load on the database by minimizing computation during read operation)
+- The bad thing is we do have some consistency with some trade-offs. Like we need to manage keeping these computed fields up-to-date whenever base data changes. 
+- We normally use it to manage total likes, number of comments, average rating, total sales and other things. 
+- We need to run periodic batch jobs or triggers to recalculate the computed fields. And it is ultra useful when real-time consistency is not mandatory. 
+- We do have data redundancy or data inconsistency if updates aren't handled correctly though. And we do need extra effort to keep computed fields updated. 
+- Always keep updates atomic to prevent race conditions. and always use transaction to handle inconsistencies. 
 ###### Document Versioning
+basically keeping multiple version of document to keep track over time. The things is it can be implemented with separate collections or embedded version arrays. 
+
+Like in separate collections we use version reference. like
+```json
+{
+  "_id": ObjectId("..."),
+  "title": "Current title",
+  "content": "...",
+  "version": 5
+}
+```
+and that points to that collection like `post_versions`. 
+
+or we can put those version in embedded version also.
+```json
+{
+	_id: "",
+	"versions": [
+		{
+			"version": 1,
+		},
+		{
+			"version": 2,
+		}
+	]
+}
+```
+
+We normally use this when app need audit trails or compliance(e.g. finance, legal). Situation where rollback is important and debugging and tracking data lineage is necessary. The main problem with it is storage as MongoDB has 16 MB limit docs size. And we need double the number of writes. 
+
+e.g. Wikipedia. current article is latest version and users can also browser or restore previous versions. 
 ###### Extended Reference
+It is hybrid approach that combines embedding and referencing. It means we embed some related data inside a document(for fast access) while storing the full detailed data separately in another collection and referencing it by ID.
+
+Like for e.g. We can store `username` and `avatar` for quick display and also include `authorId`.
+
+We use this to enhance speed and simplicity of embedded data for frequently accessed fields. We can get benefit of both world(embedding and referencing) in extended reference. Like balancing performance and consistency.
+
+We also have some downsides. But they are common sense. Like need to maintain sync logic. more complex writes, data duplication, potential inconsistency. 
 ###### Outlier
+The Outlier pattern is used when docs has a few large or rarely accessed fields that don't fit well inside the main docs due to large size, accessed rarely or their potential to cause the docs to grow too big. Like lets say we have big bio fields, like biography, a big profile picture, details logs or whatever that is rarely accessed. then we put those in 
+```
+	"bioId": "ObjectId("bioId")"
+```
+and that `bioId` point to that extra collection which has those things. 
 ###### Preallocated
+Nothing that complex, just reserving space in advance to avoid future performance issue when documents grow in size - particularly frequently updated documents. 
 ###### Polymorphic
+Just like name says, it is about handling different types of related data in one collection, even if they have different fields. Now image `notifications` collection that may store email, SMS, and push alerts, each with different fields but they belong to same "family" notifications. What to do ? Do we create separate collection for each notification ? like `email`, `SMS`, or other ? or just create `type` ? When should we do it ? When sub types are similar enough to live together, different enough to need difference fields. Or when we need to query all types together. Or We don't want to overhead of managing multiple collections. 
+
+The problems is that indexing can get messy and might not apply well across all types. Schema validation gets tricky, structure gets violated and more care is needed. 
+
+You can use discriminators to model polymorphic schema properly in mongoose.
 ###### Schema Versioning
+What if schema changes ? Like if at first it was this
+```js
+	{ _id:  , name: }
+```
+and later after 6 months becomes this
+```js
+	{ _id: , name:  , isActive }
+```
+What to do ? What if existing data in DB still uses the old format ? What to do if we want to support the messaging feature later ? or adding events ? 
+
+For that we can use 
+```js
+	"schemaVersion": 1 or 2 or 3
+```
+We can fetch the document and write the script to change it to version 2. 
+
+```js
+function loadUser(id) {
+  let user = db.users.findOne({ _id: id });
+  user = upgradeUserToV2(user);
+  return user;
+}
+```
+
+Let's say we want to update the old format to new format ? We have two choices like Lazy migration(just changing the format when user request the data(not requesting to change as user don't know any schema change)) and write a script. 
+
+It is good because it allow safe evolution like adding, removing , updating fields without breaking old docs, debug able and another logical things. But it does add overhead and code complexity and have multiple shapes which means harder indexing. And good things is that is supports backwards compatibility. 
+
+The best practice is to include a `schemaVersion` in top-level of document. 
 ###### Subset
+Lets say we have too much data in one document. Like we have have `_id username posts(100 arrays)`. It is massive because it contains all the post of users. Now, we may need to show just 3 most recent posts fro profile preview ? why read 100 posts ? We may be pulling too much data into RAM if we pull 100 posts directly and performance for read-heavy use cases also. So we break into two parts, one part with frequently accessed subset and one part with rarely accessed full dataset. So make `latestposts` field and migrate posts to another collection in one way or other. 
 ###### Tree and Graph
+The goal of tree pattern is to model hierarchical data(trees), in a way that's efficient for our access pattern. 
+The common way of doing is to to have `parentId : 1` which may refer to some category or what not. But what if we have four level of documents ? 
+like 
+```js
+{
+	parentId: 1;
+}
+```
+We need to go from child -> parent. so what ? 
+
+But we also do in like this 
+```js
+{
+  _id: 1,
+  name: "Engineering",
+  children: [2, 3, 4]
+}
+```
+You can see it is easy to get immediate children and order or
+
+Think of Reddit comment which can be nested in huge amount ? 
+
+But what about social network where user follow users, friends of friends, music recommendations, tag-based content discovery or whatever, there graph are used ? 
+
+## Failures
+Rollback, Oplog replay, Resyncing replicas manualy, Disaster recovery strategies
+
+## Security Basics
+Role based access, Field-level redaction (`$redact`), encrypted fields
+## Security
+LDAP Authentication, Kerberos Authentication, x.509 Certificate Authentication
+
 ###### Aggregation Pipelines Stages
 1. `$match`
 2. `$project`
@@ -181,28 +313,20 @@ For referencing, one-many or many-many one is preferred. For frequent updates. S
 2. `$filter`
 3. `$map $filter`
 
-###### Performance Optimization
+## Performance Optimization
 `.explain`, covered queries, aggregation pipeline optimization(stage ordering), `$merge`, Hot vs cold data handling
 Understand query plans (IXSCAN, COLLSCAN)
 Query Planner deep dive(how mongoDB chooses indexes)
 Use of `$hint` to manually force index use
 WiredTiger storage engine internals(How Mongodb actually stores on disk)
-###### Data Modeling
-Embedding vs Referencing, Schema design patterns (Bucket pattern, Outlier pattern) etc.
-###### Security Basics
-Role based access, Field-level redaction (`$redact`), encrypted fields
+
 ###### Admin Stuff
 Replication, Sharding
 ###### Cluster and REplication
 Replica set internals, read concern levels, write concern levels
 ###### Sharding(Horizonal Scalling)
 Shard keys, Chunk balancing Mongos vs Config Server roles, Zones(shared key tagging and routing)
-###### Failures
-Rollback, Oplog replay, Resyncing replicas manualy, Disaster recovery strategies
-###### schema Design Patters
-Outlier pattern, Bucket Pattern(for time series), Extended Reference Patter(denormalized joins), subset Pattern
-###### Security
-LDAP Authentication, Kerberos Authentication, x.509 Certificate Authentication
+
 
 Combine MongoDB with Kafka, S3, Data lakes, Microservices
 
