@@ -1,4 +1,4 @@
-This are complex MongoDB things.
+This are complex MongoDB things. MongoDB is basically a whole cloud system pretending to be "just a database".  
 ## Aggregation Pipelines Stages
 Aggregation framework is all about building a pipeline of steps that runs on the data that is retrieved from the collection and then gives you the output the form we need. Every stages receives the output of the previous stages.
 ![[Pasted image 20250616161655.png]]
@@ -284,6 +284,8 @@ But what about social network where user follow users, friends of friends, music
 Rollback, Oplog replay, Resyncing replicas manualy, Disaster recovery strategies
 
 ## Security Basics
+#### RABC
+
 Role based access, Field-level redaction (`$redact`), encrypted fields
 ## Security
 LDAP Authentication, Kerberos Authentication, x.509 Certificate Authentication
@@ -335,4 +337,248 @@ index cardinality and covered queries.
 - Index intersection?
     
 - Index design strategies?
+
+These are must-know skills for any developer using MongoDB.
+
+### 1. Data Modeling
+
+- Embedding vs Referencing
+    
+- Schema design best practices
+    
+- One-to-many, many-to-many in NoSQL
+    
+- Handling large arrays (bucket pattern, etc.)
+    
+
+### 2. CRUD Operations
+
+- `insertOne`, `find`, `updateOne`, `deleteOne`
+    
+- Query operators (`$in`, `$regex`, `$gte`, etc.)
+    
+- Projection, sorting, pagination (`limit`, `skip`)
+    
+
+### 3. Indexing
+
+- Single field, compound indexes
+    
+- Index usage via `.explain()`
+    
+- Unique and sparse indexes
+    
+
+### 4. Aggregation Framework
+
+- `$match`, `$group`, `$project`, `$sort`, `$limit`
+    
+- Pipeline optimization
+    
+- Lookup (joins)
+    
+- `$facet`, `$bucket`, `$redact`
+    
+
+---
+
+## 🟡 LEVEL 2 — Production-Ready Developer
+
+This level ensures you can work safely in live environments.
+
+### 1. Performance
+
+- Read/write patterns
+    
+- Avoiding unbounded queries
+    
+- Covered queries
+    
+- Query profiling with `db.collection.explain()`
+    
+
+### 2. Schema Versioning & Migrations
+
+- Evolving documents over time
+    
+- Using `updateMany`/`bulkWrite` for migrations
+    
+- Mongoose or native driver migration strategies
+    
+
+### 3. Security Basics
+
+- Role-Based Access Control (RBAC)
+    
+- Field-level redaction (`$redact`)
+    
+- Client-side field-level encryption (FLE)
+    
+
+### 4. Transactions (if using replica sets)
+
+- Multi-document transactions
+    
+- Use cases & limitations
+    
+
+---
+
+## 🟠 LEVEL 3 — Tech Lead Basics (Infrastructure-Aware)
+
+This is where you move into leadership territory.
+
+### 1. Replication
+
+- How replica sets work
+    
+- Oplog, elections, failover
+    
+- Read & Write Concerns (`w`, `j`, `readConcern`)
+    
+- Read preferences (primary, nearest, etc.)
+    
+
+### 2. Sharding (Horizontal Scaling)
+
+- What is a shard key and how to choose it
+    
+- Mongos vs Config servers
+    
+- Chunk migration and balancing
+    
+- Zones (shard tagging)
+    
+- Shard key immutability
+    
+
+### 3. Monitoring and Metrics
+
+- `mongostat`, `mongotop`
+    
+- MongoDB Atlas metrics
+    
+- Query profiler, slow query logs
+    
+
+### 4. Indexing at Scale
+
+- Wildcard indexes
+    
+- Partial indexes
+    
+- TTL indexes
+    
+- Text and Geospatial indexes
+    
+
+---
+
+## 🔴 LEVEL 4 — Enterprise-Ready MongoDB
+
+This is often DevOps or advanced backend territory — but you should **understand** it.
+
+### 1. Authentication
+
+- LDAP, Kerberos, x.509 Certificate Authentication
+    
+- MongoDB internal auth (SCRAM)
+    
+
+### 2. Authorization
+
+- Custom roles
+    
+- Built-in roles
+    
+- Fine-grained access control per DB/collection
+    
+
+### 3. Backup and Restore
+
+- `mongodump` / `mongorestore`
+    
+- `mongoexport` / `mongoimport`
+    
+- Point-in-time recovery with replica sets
+    
+- Atlas snapshots
+    
+
+### 4. Resilient Architecture
+
+- Multi-region deployments
+    
+- Write retries, failover awareness
+    
+- Retryable writes and idempotency
+    
+
+---
+
+## 🟣 LEVEL 5 — MongoDB Architect / Tech Lead Mastery
+
+This is **strategic decision-making** and leadership.
+
+### 1. Schema Design at Scale
+
+- Workload-based modeling
+    
+- Hybrid models (embedding + referencing)
+    
+- Pre-aggregated and computed fields
+    
+- Event-sourced schemas
+    
+
+### 2. Cost Optimization (esp. Atlas)
+
+- Cold vs hot storage
+    
+- Index cost
+    
+- Query cost & tuning
+    
+- Data tiering strategies
+    
+
+### 3. Tradeoffs and Patterns
+
+- CAP theorem in MongoDB context
+    
+- Denormalization vs consistency
+    
+- Write-heavy vs read-heavy strategies
+    
+- Eventual vs strong consistency
+    
+
+### 4. Team Leadership Skills
+
+- Reviewing schema and query performance in PRs
+    
+- Educating team on anti-patterns
+    
+- Setting up proper staging/prod environments
+    
+- Creating MongoDB usage guidelines/playbooks
+    
+
+---
+
+## ✅ How to Use This
+
+You can think of it like this:
+
+|Level|Role Target|Focus|
+|---|---|---|
+|1|Junior/Mid Dev|Fundamentals|
+|2|Senior Dev|Production safety & performance|
+|3|Tech Lead|Architecture + cluster awareness|
+|4|Lead / DevOps|Security, reliability|
+|5|Principal / Architect|Strategic leadership|
+
+---
+
+Would you like this as a checklist or mind map format? Or want me to build a learning plan around this for the next 4–6 weeks?
 
