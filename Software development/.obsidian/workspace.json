@@ -13,13 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "MicroService/MicroService.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "MongoDB"
+              "title": "MicroService"
             }
           }
         ]
@@ -173,5 +173,40 @@
     }
   },
   "active": "e93ce3333b1eea10",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "Pasted image 20250619163638.png",
+    "Pasted image 20250619163422.png",
+    "Pasted image 20250619163058.png",
+    "Pasted image 20250619163034.png",
+    "Pasted image 20250619162851.png",
+    "Pasted image 20250619161700.png",
+    "Pasted image 20250619161208.png",
+    "Pasted image 20250619160953.png",
+    "Pasted image 20250619153931.png",
+    "Backend/Node.js/Node.js Todo.md",
+    "MicroService/MicroService.md",
+    "Backend/Node.js/Job Scheduling and Queuing.md",
+    "Backend/Node.js/Caching & Redis.md",
+    "Todo.md",
+    "Backend/Nest.js.md",
+    "Backend/MongoDB.md",
+    "Backend/GraphQL.md",
+    "Programming Terms.md",
+    "Backend/Go/Go.md",
+    "Linux/Linux.md",
+    "Github Actions.md",
+    "AWS.md",
+    "AI Tools.md",
+    "Tools/VS Code.md",
+    "Authentication Workflow.md",
+    "C Sharp.md",
+    "Cloud Computing.md",
+    "Docker.md",
+    "Dev Ops.md",
+    "Testing.md",
+    "Resumes.md",
+    "SHH.md",
+    "Python.md",
+    "Playwright.md"
+  ]
 }

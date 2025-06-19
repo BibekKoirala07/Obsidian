@@ -10,7 +10,7 @@ Combine compilation and interpretation. Some of the examples are Java, Python, e
 ###### Static Typing
 Types are checked at compile time. e.g. C, Java, Go. That means types should be written when writing the code or they have to be inferred. And normally types can't change afterwards, at least without Type Conversion
 ###### Dynamic Typing
-Types are checked at runtime. e.g. Python, Javascript. Have more runtime errors.
+Types are checked at runtime. e.g. Python, JavaScript. Have more runtime errors.
 ###### Weak Typing
 Allows implicit type conversion, meaning that one type can be automatically converted to another during operation. eg. Js, PHP. In Js, we can add two different types and js will compute the resulting value and types automatically. This should be avoided.
 ###### Strong Typing

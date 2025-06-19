@@ -2,6 +2,26 @@ This are complex MongoDB things. MongoDB is basically a whole cloud system prete
 ## Aggregation Pipelines Stages
 Aggregation framework is all about building a pipeline of steps that runs on the data that is retrieved from the collection and then gives you the output the form we need. Every stages receives the output of the previous stages.
 ![[Pasted image 20250616161655.png]]
+## Transactions
+Basically How to execute multiple operations atomically. A sequence of read and write operations that are treated as single atomic unit. It helps to upheld ACID principles.
+It is extremely useful in things related to finance, inventory deduction, order creations etc.
+
+Requirement for using Transactions: Replica set or sharded cluster. And also driver support like Mongoose, native Node.js driver etc. 
+
+There are two types of transaction. Single-document(enforced by default in MongoDB) and Multi-document transactions(explicitly started using sessions)
+
+For transactions we need sessions and sessions means all the request are grouped together 
+logically and behind the scene store in a constant. 
+```js
+	// THIS IS FOR DEFAULT NODE.JS DRIVER AND NOT MONGOOSE
+	const session = db.getMongo().startSession()
+	session.startTranaction()
+
+	await session.abortTransaction()
+
+	await session.endSession();
+```
+The writes allowed per transaction are `insert`, `update` and `delete`. However, `createIndex` isn't allowed.
 ## Indexing
 just a special data structure that MongoDB uses to quickly locate data without scanning every docs in the collections. Instead of flipping through every page to find a term, we just jump straight to it. 
 
@@ -25,9 +45,9 @@ let's say we have `users` collections that looks like this.
   { _id: 3, name: "Charlie",email: "c@c.com" }
 ]
 ```
-MongoDB reads every document in `users`. For each document, it extracts the value of `email` field. and `_id` of the document. It build the intermediate structure
+MongoDB reads every document in `users`. For each document, it extracts the value of `email` field. and `_id` of the document. It build the intermediate structure.
 ```js
-email  -> id
+   email  -> id
 "a@a.com"  -> 1
 "b@b.com"  -> 2
 "c@c.com"  -> 3
@@ -282,10 +302,12 @@ But what about social network where user follow users, friends of friends, music
 
 ## Failures
 Rollback, Oplog replay, Resyncing replicas manualy, Disaster recovery strategies
-
+## Performance
+#### Capped Collection
+It just means that we can only have certain amount of document in a collection. Means when creating a database, we can say that only this amount of document should be in database. and whenever we try to push the document when the cap is full then it automatically deletes the most previous doc. Like if 3 was cap, we can't push more than 3 docs. 
+#### 
 ## Security Basics
 #### RABC
-
 Role based access, Field-level redaction (`$redact`), encrypted fields
 ## Security
 LDAP Authentication, Kerberos Authentication, x.509 Certificate Authentication
@@ -578,7 +600,4 @@ You can think of it like this:
 |4|Lead / DevOps|Security, reliability|
 |5|Principal / Architect|Strategic leadership|
 
----
-
-Would you like this as a checklist or mind map format? Or want me to build a learning plan around this for the next 4–6 weeks?
 
