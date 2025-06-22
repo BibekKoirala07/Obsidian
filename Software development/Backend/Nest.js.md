@@ -6,7 +6,6 @@ We can have two types of modules. They are modules without controllers and modul
 
 ### Headers and Header
 One is Request Header and one is Response Header.
-
 ### Providers Types 
 ![[Pasted image 20250113171237.png]]
 ![[Pasted image 20250113171331.png]]

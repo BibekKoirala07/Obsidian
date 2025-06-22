@@ -13,6 +13,51 @@
             "state": {
               "type": "markdown",
               "state": {
+                "file": "Linux/Linux.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Linux"
+            }
+          },
+          {
+            "id": "7cb7020ae9eb68fb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/File Operations.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "File Operations"
+            }
+          },
+          {
+            "id": "8fa91f8f8e33cd44",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Text Editors.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Text Editors"
+            }
+          },
+          {
+            "id": "22a7c20d64b71624",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
                 "file": "Backend/MongoDB.md",
                 "mode": "source",
                 "source": false,
@@ -21,8 +66,69 @@
               "icon": "lucide-file",
               "title": "MongoDB"
             }
+          },
+          {
+            "id": "c7bfcc71da336cc8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/User Environments.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "User Environments"
+            }
+          },
+          {
+            "id": "31ec493b34da529d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Manipulating Text.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Manipulating Text"
+            }
+          },
+          {
+            "id": "9279ef1b17d24b4a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Linux Todo.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Linux Todo"
+            }
+          },
+          {
+            "id": "391edb293b84776c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/The Bash Shell and Basic Scripting.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "The Bash Shell and Basic Scripting"
+            }
           }
-        ]
+        ],
+        "currentTab": 7
       }
     ],
     "direction": "vertical"
@@ -79,8 +185,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "3246b3c4e25bb046",
@@ -96,7 +201,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "Backend/Node.js/Backend.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -106,7 +211,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for MongoDB"
+              "title": "Backlinks for Backend"
             }
           },
           {
@@ -115,12 +220,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "Backend/Node.js/Backend.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from MongoDB"
+              "title": "Outgoing links from Backend"
             }
           },
           {
@@ -144,13 +249,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "Backend/Node.js/Backend.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of MongoDB"
+              "title": "Outline of Backend"
             }
           }
         ]
@@ -172,8 +277,43 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "9fb5f9c46fb360eb",
+  "active": "44ff72e2228f3e18",
   "lastOpenFiles": [
-    "Backend/MongoDB.md"
+    "Linux/Linux Todo.md",
+    "Linux/The Bash Shell and Basic Scripting.md",
+    "Linux/Network Operations.md",
+    "Linux/Manipulating Text.md",
+    "Pasted image 20250622133933.png",
+    "Pasted image 20250622133845.png",
+    "Pasted image 20250622132750.png",
+    "Linux/User Environments.md",
+    "Linux/Linux.md",
+    "Backend/Go/Go.md",
+    "Pasted image 20250622123532.png",
+    "Pasted image 20250622123419.png",
+    "Pasted image 20250622123356.png",
+    "Pasted image 20250622113729.png",
+    "Todo.md",
+    "Backend/MongoDB.md",
+    "Linux/Text Editors.md",
+    "Pasted image 20250621222316.png",
+    "Linux/File Operations.md",
+    "Pasted image 20250621203157.png",
+    "Pasted image 20250621203103.png",
+    "Todo Spring.md",
+    "Backend/Node.js/Backend.md",
+    "Backend/Node.js/Logging.md",
+    "Backend/Node.js/Npm Packages.md",
+    "Backend/Node.js/Node.md",
+    "Backend/Node.js/Node.js Todo.md",
+    "Backend/Node.js/Payment Integration.md",
+    "Backend/GraphQL.md",
+    "Backend/Backend Concept.md",
+    "Backend/Oauth.md",
+    "Backend/Node.js interview questions.md",
+    "Backend/Nest.js.md",
+    "Java/Java.md",
+    "Java/Java Expression, Code Blocks and Method Overloading.md",
+    "Javascript/`this`.md"
   ]
 }

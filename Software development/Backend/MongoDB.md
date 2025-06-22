@@ -2,6 +2,9 @@ This are complex MongoDB things.
 ## Aggregation Pipelines Stages
 Aggregation framework is all about building a pipeline of steps that runs on the data that is retrieved from the collection and then gives you the output the form we need. Every stages receives the output of the previous stages.
 ![[Pasted image 20250616161655.png]]
+## Transactions
+## MongoDB
+
 ## Indexing
 just a special data structure that MongoDB uses to quickly locate data without scanning every docs in the collections. Instead of flipping through every page to find a term, we just jump straight to it. 
 
