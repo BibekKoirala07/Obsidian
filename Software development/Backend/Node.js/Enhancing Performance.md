@@ -2,7 +2,6 @@
 ##### Multiple Instance, One Program
 - It is a type to run multiple copy of node that are running single server inside them
 - It is tricking node to have multiple threads
-
 ##### nodemon doesn't work with clustering properly
 When we start clustering in our node application, we are gonna start multiple node processes. There is always going to be one parent process called Cluster Manager which monitoring the health of individual instance of node application that we are gonna launch.
 Cluster Manager is responsible for seeing health of each instance. When we start cluster in node program, we start multiple node instance. The Cluster Manager doesn't actually execute any application program. The Cluster Manager isn't responsible for handling incoming and outgoing request or querying the database and other things. Rather each node instance is responsible for that.

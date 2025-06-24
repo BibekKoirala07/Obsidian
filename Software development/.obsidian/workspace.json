@@ -4,25 +4,146 @@
     "type": "split",
     "children": [
       {
-        "id": "2aabc14859e92126",
+        "id": "1f333cbf7bfb387f",
         "type": "tabs",
         "children": [
           {
-            "id": "e93ce3333b1eea10",
+            "id": "1027ab8c0683da65",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Backend/Nest.js.md",
+                "file": "Linux/Linux.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "Nest.js"
+              "title": "Linux"
+            }
+          },
+          {
+            "id": "ef122398ba4f4dba",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Processes.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Processes"
+            }
+          },
+          {
+            "id": "e0c0c25c97e51f69",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Finding Linux Documentations.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Finding Linux Documentations"
+            }
+          },
+          {
+            "id": "80e1428a0908b328",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Command Line Operations.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Command Line Operations"
+            }
+          },
+          {
+            "id": "b3ee0040e88613fe",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Common Applications.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Common Applications"
+            }
+          },
+          {
+            "id": "d68c3b7d87948a39",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/System Configuration from the Graphical Interface.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "System Configuration from the Graphical Interface"
+            }
+          },
+          {
+            "id": "f3d06f90a106ceee",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Graphical Interface.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Graphical Interface"
+            }
+          },
+          {
+            "id": "77102996c1a48b01",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Linux Basics and System Startup.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Linux Basics and System Startup"
+            }
+          },
+          {
+            "id": "1e8b2cab14d7d9e6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Linux/Graphical Interface.md",
+                "mode": "source",
+                "source": false,
+                "backlinks": false
+              },
+              "icon": "lucide-file",
+              "title": "Graphical Interface"
             }
           }
-        ]
+        ],
+        "currentTab": 8
       }
     ],
     "direction": "vertical"
@@ -79,7 +200,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "7152b9e0b22f3ca2",
@@ -95,7 +216,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "Backend/Node.js/Backend.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +226,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for MongoDB"
+              "title": "Backlinks for Backend"
             }
           },
           {
@@ -114,12 +235,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "Backend/Node.js/Backend.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from MongoDB"
+              "title": "Outgoing links from Backend"
             }
           },
           {
@@ -143,13 +264,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Backend/MongoDB.md",
+                "file": "Backend/Node.js/Backend.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of MongoDB"
+              "title": "Outline of Backend"
             }
           }
         ]
@@ -171,42 +292,43 @@
       "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
-  "active": "e93ce3333b1eea10",
+  "active": "1e8b2cab14d7d9e6",
   "lastOpenFiles": [
-    "Backend/MongoDB.md",
-    "Backend/GraphQL.md",
-    "MicroService/MicroService.md",
-    "Frontend/React Native/React Native.md",
-    "Frontend/React and Next/Hooks.md",
-    "Frontend/React and Next/Mistakes.md",
-    "Frontend/React and Next/React Interview.md",
-    "Frontend/React and Next/React.md",
-    "Frontend/React and Next/React Patterns.md",
-    "Frontend/React and Next/State Management - Data Fetching.md",
-    "Frontend/React and Next/Tips.md",
-    "Frontend/React and Next/Todos in react.md",
-    "Backend/Oauth.md",
-    "Backend/Node.js/Security & Risk Managements.md",
-    "Backend/Node.js/Socket.io.md",
-    "Backend/Node.js/Node.js Todo.md",
-    "Backend/Node.js/Npm Packages.md",
-    "Backend/Node.js/Node.md",
-    "Backend/Backend Concept.md",
-    "Pasted image 20250619163638.png",
-    "Pasted image 20250619163422.png",
-    "Pasted image 20250619163058.png",
-    "Pasted image 20250619163034.png",
-    "Pasted image 20250619162851.png",
-    "Pasted image 20250619161700.png",
-    "Pasted image 20250619161208.png",
-    "Pasted image 20250619160953.png",
-    "Pasted image 20250619153931.png",
-    "Backend/Node.js/Job Scheduling and Queuing.md",
-    "Backend/Node.js/Caching & Redis.md",
-    "Todo.md",
-    "Backend/Nest.js.md",
-    "Programming Terms.md",
+    "Linux/Linux.md",
+    "Linux/System Configuration from the Graphical Interface.md",
+    "Linux/Linux Basics and System Startup.md",
+    "Linux/File Operations.md",
+    "Linux/Common Applications.md",
+    "Linux/Linux Philosophy and Concepts.md",
+    "Linux/Command Line Operations.md",
+    "Linux/Finding Linux Documentations.md",
+    "Linux/Processes.md",
+    "Linux/Printing.md",
+    "Linux/Graphical Interface.md",
+    "Linux/Linux Todo.md",
+    "Linux/Local Security Principles.md",
+    "Pasted image 20250623203840.png",
+    "Pasted image 20250623203615.png",
+    "Pasted image 20250623203044.png",
+    "Linux/Manipulating Text.md",
+    "Pasted image 20250623202429.png",
+    "Pasted image 20250623201746.png",
+    "Pasted image 20250623201548.png",
+    "Pasted image 20250623201510.png",
+    "Pasted image 20250623201430.png",
+    "Pasted image 20250623201350.png",
+    "Pasted image 20250623201326.png",
+    "Linux/The Bash Shell and Basic Scripting.md",
+    "Linux/Network Operations.md",
+    "Linux/User Environments.md",
     "Backend/Go/Go.md",
-    "Linux/Linux.md"
+    "Todo.md",
+    "Backend/MongoDB.md",
+    "Linux/Text Editors.md",
+    "Todo Spring.md",
+    "Backend/Node.js/Backend.md",
+    "Backend/Node.js/Logging.md",
+    "Backend/Node.js/Npm Packages.md",
+    "Backend/Node.js/Node.md"
   ]
 }

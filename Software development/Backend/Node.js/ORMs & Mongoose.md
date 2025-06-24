@@ -5,8 +5,7 @@ Just type give me mongoose schema with this or that and it will give you that.
 By definition there are two types of hook. they are `pre` and `post` hook. 
 ![[Pasted image 20240602151340.png]]
 Use AI to generate code rather than to write here.
-### Aggregate
-### Queries
+
 ###### Query Operators
 ```javascript
 // Find users with age greater than 10
@@ -52,6 +51,3 @@ await Person.find().sort({ age: 1 }); // ascending
 
 await Person.find().sort({age: 1, weight: -1}) // return sorting with age but when age is same, it sorts by weight
 ```
-###### Regex
-### Indexing
-### Transactions
