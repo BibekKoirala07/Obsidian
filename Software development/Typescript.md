@@ -1,4 +1,3 @@
-
 ### Simple types (Primitive types in js)
 There are two ways of write types. Explicit and Implicit way. Explicit way `let name: string = "Bibek"`. Implicit way `let name = "Bibek"`. In implicit way, type is guessed based on assigned value. The process is called inferring. Implicit assignment forces TypeScript to **infer** the value. Sometimes typescript is unable to infer the value. That time it infer to any type. This behavior can be disable using tsconfig.json by adding `noImplicitAny`
 ### All types
@@ -59,7 +58,7 @@ It disable type checking and effectively allows any type to be used. Mostly, avo
 just like any type but we need to write its type later to change that value. Prevents careless mistakes like calling a method that doesn't exist for the actual type. However, it is not unsafe like any type. It forces us to declare type for that variable before doing manipulation. For example there is a content inside box and we want to interact. First we need to know the type of that content. So type narrowing is necessary. This is achieved using unknown type. It is used for ==API calls ==.
 ###### never type
 It represent the value that should **never happen**. Just like function never returning. You can't assign any value to **never** type. It is for the condition where we denote something shouldn't happen at all. It is used in situation which shouldn't happen at all. It is more confusing. Lets say we have three type such as dog, cat and cow. If we get fish, then we must get error. right ? it is achieved using never type.
-```
+```ts
 function throwError(message: string): never {
   throw new Error(message); // This function doesn't return anything. It just throws an error.
 }
