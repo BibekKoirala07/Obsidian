@@ -1,10 +1,10 @@
-In Mono Lithic server we have 
+In Mono Lithic server we have.
 ![[Pasted image 20250619153931.png]]
 A monolith contains all the routing middlewares, business logic, database access to implement all the features of our app. But a single microservice contains routing, middlewares, business logic and database access for ==one features== of our app.
 
 Below is the figures of micro services. In monolithic repo we would have single code base, but not in micro services. Here we have software divided into different service with each team solving different problems. Like What if Service B, C and D fails. ? Well Service A does work. 
 ![[Pasted image 20241213203845.png]]The biggest problem in microservices  is data management. There are some conditions for microservice to functions:
-1. Every service gets its own database. or Database per service. Who know devs at one service may decide to change the schema of other service and other will be unknown. There is conflict and will disturb both service. In another case, may be different database are good for different service like one service may be good for NOSQL and other for SQL. If we use only one database, then that database will have huge load which isn't desirable at all. ![[Pasted image 20250619161700.png]]
+1. Every service gets its own database. or Database per service. Who know devs at one service may decide to change the schema of other service and other devs will be unknown. There is conflict and will disturb both service. In another case, may be different database are good for different service like one service may be good for NOSQL and other for SQL. If we use only one database, then that database will have huge load which isn't desirable at all. ![[Pasted image 20250619161700.png]]
 2. Under no condition, One service will use the database of another service. ![[Pasted image 20250619160953.png]]rather just use service of another microservice for easy access of data. Why ? There are various reason.
 #### Big Problems with Data
 So why do we have problem ? Lets build the basic ecommerce app which has features to Sign Up, List Product and Buy Products. ![[Pasted image 20250619162851.png]]

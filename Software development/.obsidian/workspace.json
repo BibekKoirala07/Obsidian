@@ -13,13 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Docker.md",
+                "file": "MicroService/MicroService.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": false
               },
               "icon": "lucide-file",
-              "title": "Docker"
+              "title": "MicroService"
             }
           }
         ]
@@ -79,7 +79,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "7152b9e0b22f3ca2",
@@ -173,19 +174,22 @@
   },
   "active": "ece2c049d85b34de",
   "lastOpenFiles": [
+    "Linux/Linux Todo.md",
+    "Git.md",
+    "Linux/Command Line Operations.md",
+    "-file",
+    "Linux/Common Applications.md",
+    "Linux/File Operations.md",
+    "Linux/Linux.md",
+    "Docker.md",
     "Backend/Go/Go.md",
     "Linux/Graphical Interface.md",
-    "Linux/Linux.md",
     "Linux/System Configuration from the Graphical Interface.md",
     "Linux/Linux Basics and System Startup.md",
-    "Linux/File Operations.md",
-    "Linux/Common Applications.md",
     "Linux/Linux Philosophy and Concepts.md",
-    "Linux/Command Line Operations.md",
     "Linux/Finding Linux Documentations.md",
     "Linux/Processes.md",
     "Linux/Printing.md",
-    "Linux/Linux Todo.md",
     "Linux/Local Security Principles.md",
     "Pasted image 20250623203840.png",
     "Pasted image 20250623203615.png",
@@ -206,8 +210,6 @@
     "Linux/Text Editors.md",
     "Todo Spring.md",
     "Backend/Node.js/Backend.md",
-    "Backend/Node.js/Logging.md",
-    "Backend/Node.js/Npm Packages.md",
-    "Backend/Node.js/Node.md"
+    "Backend/Node.js/Logging.md"
   ]
 }

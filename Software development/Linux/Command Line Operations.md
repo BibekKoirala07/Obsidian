@@ -234,4 +234,3 @@ The package is a compressed file that contains the actual software binaries or s
 Some handle dependencies automatically - use `apt` or `dnf` for that
 ###### Package Managers: Two levels
 We have two package management systems. Low level and High level package. High level tools calls low-level behind the scenes. Always be cautious as High level packages may install hundreds of dependencies.  ![[Pasted image 20250619204049.png]]
-###### Working with different Package Management systems
