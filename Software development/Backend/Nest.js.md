@@ -53,6 +53,7 @@ For Global Module, we don't need to import. but we need to import it in App Modu
 > Let's say we have child module job-application module in Job module then we don't need to write job-application module in App Module. Nestjs graph dependency will solve it. and Let's say Job application module have provider as Job application Service and it exports it. Now Job Module import Job application module. Now what can be done  ? Well, Job Module can use Job Application Service right ? The thing is that Now it can export that Job Application Module and other will also be able to use Job Application Service. No need to import Job Application Module directly.
 ### Dynamic Module
 
+
 ### We can pass routing to Module also / Router Module
 Let's say we have three controller in jobs module. They may be `jobs/application`, `jobs/review` and `jobs/route`. Let's say we have these route in each of the controller in one module. If you look at those route then we can see that it is redundant to write `jobs`. So, there is a option for that in module also. We can do routing module for all modules but it is not feasible. try to avoid it as it isn't not maintainable. 
 

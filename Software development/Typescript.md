@@ -2,7 +2,7 @@
 There are two ways of write types. Explicit and Implicit way. Explicit way `let name: string = "Bibek"`. Implicit way `let name = "Bibek"`. In implicit way, type is guessed based on assigned value. The process is called inferring. Implicit assignment forces TypeScript to **infer** the value. Sometimes typescript is unable to infer the value. That time it infer to any type. This behavior can be disable using tsconfig.json by adding `noImplicitAny`
 ### All types
 The types are Array, Tuples, Objects, Aliases and Interface, Enums, Union Type, Functions, Casting, e.t.c
-```
+```ts
 	// Casting // normally casting is done to unknown value. don't do other types as it may cause error
 	let x : unknown = "Bibek"
 	console.log((x as string).length) // rather than memorizing lot of things, just do it on unknown 
@@ -66,6 +66,8 @@ function throwError(message: string): never {
 ###### undefined and null
 They are already in js. null means the there is nothing in that variable and undefined means the variable isn't defined at all. might have missed to define it.
 ### tsconfig.json
-```tsconfig.json
-	
+```ts
+{
+
+}
 ```
