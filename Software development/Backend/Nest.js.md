@@ -1,22 +1,25 @@
-![[Pasted image 20250113161735.png]]
-Any request first comes at middleware and then guard and then interceptor and later pipe. They can be used in global scope or in controller scope and in request scope. Interceptor works when the response is being sent also. Interceptors works on request and response time while middleware just works on request time. Pipes works in data validations and data transformation.
 ### Theory
-We can have two types of modules. They are modules without controllers and module with controller. Everything that can be injected or that is ought to be injected should be made providers. For something to be injected, it should be imported in module. If something is to be made as injectable, it should be exported. Like here in Album Module, Album Service uses Users Service. That means we need to import User Module in Album Module.
-![[Pasted image 20250117121853.png]]
-
-### Headers and Header
-One is Request Header and one is Response Header.
-### Providers Types 
-![[Pasted image 20250113171237.png]]
-![[Pasted image 20250113171331.png]]
-
-### Dependency Injection
-In imperative approach. Lets say we have User class and Account class. For User class to run, we need Account class. In Imperative approach, we would have to pass Account in User class. We would have to do this.
+###### Application Context and Execution Context
+Application Context is the runtime container that holds and manages all the providers, controllers, modules and injected dependencies of application. It is built when the app starts using `NestFactory` and it becomes responsible for resolving dependencies across the app.
+```js
+	const app = await NestFactory.create(AppModule)
 ```
+The `app` is application context. WE can use it to get instance of service and other things also. Nest uses Application Context to do IOC means it creates and manages instances of our classes. 
+
+Execution Context is a wrapper around the details of an incoming request(could be HTTP, Web Socket, GraphQL). It gives us the context of current request such as Request and Response Object, The type of request(HTTP, RPC, GraphQL). method(handler), class(controller), arguments passed to the route handler. etc. We should use it to access request-specific data(like headers, user info). implement custom guards, etc. It basically means that know the context of a single incoming request. Middle ware doesn't have access to Execution Context.
+Middle ware is the first layer in the request life cycle - it gives use raw access to request and response before anything else happens. 
+
+Application context means what kind of application we are running ? 
+![[Pasted image 20250117231107.png]]
+
+![[Pasted image 20250117230118.png]]
+
+###### Dependency Injection
+In imperative approach. Lets say we have User class and Account class. For User class to run, we need Account class. In Imperative approach, we would have to pass Account in User class. We would have to do this.
+```ts
 const account  = new Account();
 const user = new User(account)
 ```
-
 in Declarative Approach, we use Dependency Injection. DI works on IOC principle. It just means that we give control of managing dependency to framework.
 ![[Pasted image 20250117125929.png]]
 In IOC container, we put class instance(dependencies instance) that can be used as dependencies. Any thing that can be used as dependencies is called providers. In above figure. Account, Wallet etc. are providers.
@@ -30,6 +33,17 @@ If I want to put instance of providers in IOC container, first we have to regist
 We can inject class and normal value in any provider we want.
 For async value injection we need to use `useFactory : async` Till the use Factory doesn't resolve, any controller which use that value in its constructor will not run at all.
 
+
+![[Pasted image 20250113161735.png]]
+Any request first comes at middleware and then guard and then interceptor and later pipe. They can be used in global scope or in controller scope and in request scope. Interceptor works when the response is being sent also. Interceptors works on request and response time while middleware just works on request time. Pipes works in data validations and data transformation.
+### Theory
+We can have two types of modules. They are modules without controllers and module with controller. Everything that can be injected or that is ought to be injected should be made providers. For something to be injected, it should be imported in module. If something is to be made as inject able, it should be exported. Like here in Album Module, Album Service uses Users Service. That means we need to import User Module in Album Module.
+![[Pasted image 20250117121853.png]]
+### Headers and Header
+One is Request Header and one is Response Header.
+### Providers Types 
+![[Pasted image 20250113171237.png]]
+![[Pasted image 20250113171331.png]]
 ### Injection Scope
 There are three scope in Injection Scoping. The default one is `DEAFULT`. which say wherever that provider is used, the instance is same. you can use see it by using `console.log` in constructor in that provider. it just happens only one time. you can see it. But we also have option for `REQUEST`. for this the instance is create whenever new request comes in. and wherever that comes in new instance is created and is destroyed once response is sent. it happens for every request. 
 
@@ -60,10 +74,6 @@ Let's say we have three controller in jobs module. They may be `jobs/application
 ### Pipes
 ParseIntPipe, ParseFloatPipe
 ### Application Context and Execution Context 
-Application context means what kind of application we are running ? 
-![[Pasted image 20250117231107.png]]
-
-![[Pasted image 20250117230118.png]]
 
 ### Application Lifecycle
 There are three phases in application lifecycle. One is Initializing phase, Running phase and Terminating phase.
@@ -91,7 +101,6 @@ export const Module implement NestModule {
 	}
 }
 ```
-
 Now for class based middleware
 ```js
 export class userAgent implement NestMiddleware {
@@ -100,7 +109,7 @@ export class userAgent implement NestMiddleware {
 	}
 }
 ```
-and we can implement it in module just like functional middleware and nestjs will solve whether that thing in functional or class based
+and we can implement it in module just like functional middleware and Nest will solve whether that thing in functional or class based
 
 But if you look at it, then they look just the same, right ? Class based middleware actually can accept some parameters. Let's say we have `ADMIN` and `USER`. only `ADMIN` was allowed. Now functional middleware can't take any parameter but class based can. For that to happen, we have to inject from providers. So, that we need to write in Module
 ```js
@@ -132,3 +141,93 @@ We should write this in app module This will look for `.env` in root folder and 
 	imports: [Config.Root()]
 ``` 
 If we want to use the environment values, then we need to use `ConfigService`. For that to happen, we need to import `ConfigModule` and then only can we use `ConfigService`. Let's say we have `JobsModule` and we need to inject `ConfigService` in `JobService`, then we need to import `ConfigModule` in `JobModule`. Now if we need environment variables in multiple place, we might find it tedious. We can make that module global also with options `isGlobal: true`. then, we don't need to import `ConfigModule` everywhere.
+
+### Todo
+- **prod** configs
+    
+#### 3. **Validation Pipes with DTOs**
+
+- Refine usage with:
+    
+    - `@IsOptional()`, `@IsEnum()`, `@Transform()`
+        
+    - Global pipe: `app.useGlobalPipes(new ValidationPipe({ ... }))`
+        
+
+#### 4. **Testing (Optional for now)**
+
+- Unit tests for services and controllers
+    
+- Use `TestingModule`, `jest-mock`, etc.
+    
+
+#### 5. **Asynchronous Programming**
+
+- Explore RxJS more deeply (since Nest uses it internally)
+    
+
+#### 6. **Request lifecycle diagram**
+
+- Understand the order:  
+    `Middleware → Guard → Interceptor (Before) → Pipe → Controller → Service → Interceptor (After) → Response`
+    
+
+#### 7. **GraphQL (you’ve started already)**
+
+- Add decorators like `@ResolveField`, `@Mutation`, `@Subscription`
+    
+- Use `code-first` or `schema-first` approach
+    
+
+#### 8. **Database Management**
+
+- Use Mongoose or Prisma with **repository pattern** abstraction
+    
+- Implement transactions, population, and validation
+    
+
+#### 9. **File Uploads**
+
+- With `@nestjs/platform-express` & `multer`
+    
+- Handle file type, size, etc.
+    
+
+#### 10. **WebSockets (if needed)**
+
+- Use Gateway, `@SubscribeMessage()`, and server/client event flow
+    
+
+#### 11. **Scheduling / Cron Jobs**
+
+- Use `@nestjs/schedule` for background jobs
+    
+
+#### 12. **Caching**
+
+- Use `@nestjs/cache-manager` or Redis for caching queries
+    
+
+#### 13. **Rate Limiting / Throttling**
+
+- Install `@nestjs/throttler`
+    
+
+#### 14. **API Docs**
+
+- Add Swagger support: `@nestjs/swagger`
+    
+- Auto-generate DTO schemas & response types
+    
+
+---
+
+### 🔥 Optional: Production Practices
+
+- Setup CORS, helmet, and CSRF protection
+    
+- Enable logging (Winston, Morgan)
+    
+- Add health check endpoint
+    
+- Dockerize the app

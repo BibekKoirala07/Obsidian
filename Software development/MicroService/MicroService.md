@@ -1,4 +1,4 @@
-In Mono Lithic server we have.
+  In Mono Lithic server we have.
 ![[Pasted image 20250619153931.png]]
 A monolith contains all the routing middlewares, business logic, database access to implement all the features of our app. But a single microservice contains routing, middlewares, business logic and database access for ==one features== of our app.
 
