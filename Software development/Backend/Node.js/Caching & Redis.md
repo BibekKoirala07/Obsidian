@@ -395,12 +395,12 @@ const cleanHastWithMiddleware = async (req, res, next) => {
 
 ## 🧠 Redis Core Concepts to Learn (No Big Project Needed)
 
-|Concept|Learn With…|
-|---|---|
-|TTL & Expiry|Token cache or session store|
-|Strings|Store token or short-term data|
-|Lists|Chat messages|
-|Sets|Unique users for an event|
-|Sorted Sets|Leaderboard|
-|Hashes|Store user session or cart details|
-|Pub/Sub|Real-time notifications|
+| Concept      | Learn With…                        |
+| ------------ | ---------------------------------- |
+| TTL & Expiry | Token cache or session store       |
+| Strings      | Store token or short-term data     |
+| Lists        | Chat messages                      |
+| Sets         | Unique users for an event          |
+| Sorted Sets  | Leaderboard                        |
+| Hashes       | Store user session or cart details |
+| Pub/Sub      | Real-time notifications            |
