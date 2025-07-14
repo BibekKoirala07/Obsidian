@@ -337,3 +337,70 @@ const cleanHastWithMiddleware = async (req, res, next) => {
 		clearHash();
 }
 ```
+### To do 
+## You Can Learn Redis with Small Projects Like:
+
+### 1. **Authentication Token Store**
+
+- Store refresh tokens per user.
+    
+- Invalidate sessions on logout.
+    
+- Learn: strings, TTL, key expiration, token rotation.
+    
+
+### 2. **Simple Caching**
+
+- Cache DB queries or external API results.
+    
+- Learn: caching strategies, TTL, cache invalidation.
+    
+
+### 3. **Rate Limiting**
+
+- Limit requests per user/IP using Redis counters.
+    
+- Learn: increment operations, expiry, atomic commands.
+    
+
+### 4. **Pub/Sub**
+
+- Chat app or notification system.
+    
+- Learn: channels, pub/sub events, scaling across processes.
+    
+
+### 5. **Job Queue with Bull or BullMQ**
+
+- Background jobs (e.g. email sending).
+    
+- Learn: queues, retries, workers, concurrency.
+    
+
+### 6. **Leaderboard**
+
+- Build a game leaderboard using sorted sets.
+    
+- Learn: ZADD, ZRANGE, scores, ranking.
+    
+
+### 7. **Session Store**
+
+- Store user session data in Redis (e.g. shopping cart).
+    
+- Learn: hash type, session expiration.
+    
+
+---
+
+## 🧠 Redis Core Concepts to Learn (No Big Project Needed)
+
+|Concept|Learn With…|
+|---|---|
+|TTL & Expiry|Token cache or session store|
+|Strings|Store token or short-term data|
+|Lists|Chat messages|
+|Sets|Unique users for an event|
+|Sorted Sets|Leaderboard|
+|Hashes|Store user session or cart details|
+|Pub/Sub|Real-time notifications|
