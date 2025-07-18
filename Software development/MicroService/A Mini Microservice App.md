@@ -70,8 +70,109 @@ you can use `k get pods` instead of `kubectl get pods`. You can actually do it b
 
 ###### Deployments
 Deployment is Kubernetes Object. 
-We don't' create pods with the style above mentioned. Rather than creating the pods directly, We are going to use Deployments. It is the Kubernetes Object which is intended to manage the set of pods(1 or 10). Each of these pods will be identical in nature. 
+We don't' create pods with the style above mentioned. Rather than creating the pods directly, We are going to use Deployments. It is the Kubernetes Object which is intended to manage the set of pods(1 or 10). Each of these pods will be identical in nature. The deployment has two jobs. Lets say one pod automatically disappear. The Deployment will recreate one.
 ![[Pasted image 20250718135938.png]]
+In anther case is updation of code.  Let's say we have version one of code and We need to update it to version two. Then deployment takes care of that. Overall, Deployments acts like a manager of Pods. 
+###### Create a Deployment
+Inside k8 directory, create a `posts-depl.yaml`. `depl` means deployment. Inside that, we write config, we want to run some number of pods of posts image. 
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+	name: posts-depl
+spec: // how the deployment should behave
+	replicas: 1 // no of pods
+	selector:
+		matchLabels:
+			app: posts
+	template:
+		metadata:
+			labels:
+				app: posts
+		spec: 
+			containers:
+				- name: posts
+				- image: stephengrinder/posts:0.0.1
+```
+Now apply it to clusters. How ? `kubectl apply -f that.yaml`
+###### Common Commands Around Deployments
+ When we delete the pods created by deployments, then deployment will automatically make it appear again. ![[Pasted image 20250718152503.png]]
+ So if anything starts to go wrong, Kubernetes will handle that thing. In simple words. start deployments -> pods are started -> they can't be deleted(which is nice thing) -> delete deployment -> pods are gone
+==this way is optimum way of doing things==
+###### Updating Deployments. 
+Remember we can update the code/version ?  ![[Pasted image 20250718160114.png]]
+There are two different ways. 
+First way is this
+![[Pasted image 20250718160443.png]]
+We don't do this often. Here we change the source code, and rebuild the image to new container and in `posts.dep.yaml`. we rebuild the deployment also. This is how it is done.  
+==not used that often==. the reason being `image: stephengirder/posts:0.0.5`. You see that 0.0.5. We would like to avoid that. It may cause error right ? So we go to second one. Simple way is to tell kubernetes to updates itself everytime we create a image right ? 
+
+Second is better
+![[Pasted image 20250718161325.png]]
+You see that version. We would like to avoid that. 
+###### Preferred method for Updating Deployments
+![[Pasted image 20250718161424.png]]
+We would like to remove that version then docker assume that we are using the `:latest` version. 
+
+###### Networking with services
+How to we make the request to that application which is hidden behind docker and again kubernetes ? We creates services using config files just like pods and deployments right ? Service is another kinds of object like pod or deployments. We are going to set up services to setup communication between the pods or to get access to our pods outside our services. 
+![[Pasted image 20250718162641.png]]
+Every pod or deployments will have matching services associated with it. 
+Behind the scenes there are different kinds of services
+![[Pasted image 20250718163011.png]]
+We only use Cluster IP and Load Balancer Service in daily basis. 
+
+Tricks Question ? 
+What if we want communication between pods ? We use Cluster Ip
+What if we want to communicate from browser(From browser) ? We may use Node Port or Load Balancer. 
+![[Pasted image 20250718163409.png]]
+== We will use Cluster and Load Balancer ==
+###### Creating A Node Port Service
+Remember we said we aren't using Node Port That much right ? 
+We are just making things for demo. 
+We can create `posts-srv.yaml.
+![[Pasted image 20250718163700.png]]
+`srv` means service
+```yml
+apiVersion: v1
+kind: Service
+metaData: 
+	name: posts-srv
+spec:
+	type: NodePort
+	selector:
+		app: posts
+	ports: 
+		- name: posts
+		- protoco: TCP
+		- port: 4000 (remember posts run at 4000)
+		- targetPort: 4000
+```
+
+![[Pasted image 20250718164132.png]]
+the port and targetPort doesn't have to be identical. 
+###### Accessing NodePort Services
+When we do `kubectl get services`, we might get something that starts with `3****`. thirty thousand. It is nodePort.  It is randomly assigned port which is used to access the pod from outside the Cluster. 
+
+We can access it by
+```
+	localhost:30402/posts
+```
+this entire node port thing is just for deployments. 
+###### Setting Up Cluster IP Services
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Kubernetes will automatically figure out communication. 
 ![[Pasted image 20250716112238.png]]
