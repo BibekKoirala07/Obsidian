@@ -152,7 +152,7 @@ spec:
 ![[Pasted image 20250718164132.png]]
 the port and targetPort doesn't have to be identical. 
 ###### Accessing NodePort Services
-When we do `kubectl get services`, we might get something that starts with `3****`. thirty thousand. It is nodePort.  It is randomly assigned port which is used to access the pod from outside the Cluster. 
+When we do `kubectl get services`, we might get something that starts with `3****`. thirty thousand something. It is nodePort.  It is randomly assigned port which is used to access the pod from outside the Cluster. 
 
 We can access it by
 ```
@@ -160,18 +160,110 @@ We can access it by
 ```
 this entire node port thing is just for deployments. 
 ###### Setting Up Cluster IP Services
+The goal of Cluster IP is to expose the pod to other pod in the cluster. In out things, we have many services like posts, comments, event bus and other. The goal ? It is simply to communicate. 
+
+The thing is we could have one node with two pod and these two needs to communicate. But they can't communicate for now. Well they technically can by doing something like `http://Ip/events`.
+![[Pasted image 20250723111525.png]]
+We how are we going to know the IP ? We never know what IP address the Pod is going to be assigned. It will n't be assigned ahead of time. It isn't going to be `localhost`. So, How are other services going to communicate to event bus. So Cluster IP Service will govern the access to Event Bus Pod. So We do this 
+![[Pasted image 20250723112117.png]]
+Just communicate through IP Service. So, the goal is 
+![[Pasted image 20250723112259.png]]
+###### Adding Cluster IP Services
+We can create Cluster IP Service directly is yaml file. It is choice of people but we will do it this way.
+```yaml
+// We have that making pod yaml here. 
+---
+ApiVersion: v1
+kind: Service
+metadata:
+	name: event-bus-srv
+spec: 
+	selector:
+		app: event-bus //it is in above in yaml
+	type: ClusterIp
+	ports:
+		- name: event-bus
+		- protocol: TCP
+		- port: 4005
+		- targetPort: 4005
+```
+Now we can do `kubectl get services`.
+Remember You need to take care of Name collision.
+###### How to communicate between services
+Now after so much hustle, Remember we still have 
+```ts
+await axios.post("http://localhost:4005")
+```
+So what is new url  ?
+![[Pasted image 20250723115627.png]]
+The exact name is going to be name of Cluster IP service. We can get name by `kebectl get service`. In this context, it is `event-bus-srv`. So the URL is going to be 
+```ts
+await axios.post("http://event-bus-srv/4005")
+```
+Here we are communicating from event bus to posts.![[Pasted image 20250723115944.png]]So just like that we can update the service addresses.
+###### Verifying Communication
+ We can verify it using different medium.
+###### Adding Query, Moderation and Comments. 
+###### Testing Communication
+###### Load Balancer Services
+It is about React App. ![[Pasted image 20250723160920.png]]
+The goal is to make the react app working in pod. There are two options. 
+We aren't going to do this 
+![[Pasted image 20250723161003.png]]
+
+But we are doing this one![[Pasted image 20250723161134.png]]
+The goal of that load balancer is to provide one single entry points to our entire cluster. The React application is going to load balancer service and route to appropriate pod or Cluster IP Service. 
+
+###### Load Balancer and Ingres
+![[Pasted image 20250723161552.png]]
+Technically Ingres or Ingres Controller are two different things. 
+
+The goal of load balancer is to get traffic into single pod. 
+
+On the Other Ingres(they are different but for the sake or learning, here they are assumed to be same).
+
+The goal of LoadBalancer Service is to tell the Cloud Provider to put Load Balancer outside the cluster with the goal of providing route to pod. 
+
+![[Pasted image 20250723162639.png]]
+Load Balancer just get request to cluster and later ingress controller handles it
+
+###### Installing Ingress-Nginx
+The project is `ingress-nginx`. 
+![[Pasted image 20250723162948.png]]
+We are using `kubernetes/ingress-nginx` and not other.
+
+##### Installing Ingress-Nginx
+![[Pasted image 20250723163703.png]]
+make the ingress-srv.yaml and write the yaml there
+
+![[Pasted image 20250723164111.png]]
+
+###### Hosts File Tweak
+When we use kubernetes to host one single application at one single domain. But we can also host multiple application with multiple domain in one single cluster. But with kubernetes we can host ton of infrastructure. We can have some app tied to `my-app.com`, some other app tied to `post-tracker.com`. The infra for all of those domain can be hosted in one single kubernetes cluster
+![[Pasted image 20250723165129.png]]
+
+Here for development purpose, we should be able to tweak in such a way that we can route `posts.com` to our device. Go to `etc/host` and add the line
+```
+127.0.0.1 posts.com
+```
+and we don't need to go directly to pod. and just type 
+```
+posts.com/posts 
+```
+Instead we wrote number URL and take the URL and ingress-nginx is going to take the request to appropriate service and it is going to take it to appropriate pod anyway. 
+
+###### Deploying the React App
+So we make container and push to docker hub and create yaml to create deployment and make service and pod. That is it. 
+
+Ingress Controller has no idea that the method(method like GET, POST) exists. Just path exists for for Ingress Controller.  
 
 
+==We don't have to re-build the docker image every time we change the code==. 
 
+###### Unique Route Paths
 
-
-
-
-
-
-
-
-
+###### Introducing Skaffold. 
+We will be using skaffold. It would be  
 
 
 Kubernetes will automatically figure out communication. 

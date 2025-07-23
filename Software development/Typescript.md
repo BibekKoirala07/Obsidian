@@ -1,3 +1,99 @@
+### Basics (if not already strong)
+- Learn `string`, `number`, `boolean`, `null`, `undefined`
+- Learn `any`, `unknown`, `never`
+- Learn `interface` vs `type`
+- Learn function type annotations
+- Learn array and tuple types
+- Learn enums
+
+### 🟡 Intermediate
+
+- Learn union and intersection types
+    
+- Learn type narrowing and control flow analysis
+    
+- Learn optional properties and optional chaining (`?.`)
+    
+- Learn `readonly` and `const` assertions
+    
+- Learn literal types (`"success" | "error"`)
+    
+- Learn type aliases and recursive types
+    
+- Learn `typeof`, `keyof`, `in` operators
+    
+- Learn `as` casting and type assertions
+    
+- Learn type guards and custom type guards
+    
+
+---
+
+### 🔵 Advanced
+
+- Learn generics (`<T>`)
+    
+- Learn generic constraints (`<T extends X>`)
+    
+- Learn `Partial<T>`, `Required<T>`, `Readonly<T>`, `Pick<T, K>`, `Omit<T, K>`
+    
+- Learn `Record<K, T>` and `Exclude<T, U>`, `Extract<T, U>`, `NonNullable<T>`
+    
+- Learn `ReturnType<T>`, `Parameters<T>`, `ConstructorParameters<T>`, `InstanceType<T>`
+    
+- Learn conditional types (`T extends U ? X : Y`)
+    
+- Learn distributive conditional types
+    
+- Learn infer keyword (`infer U`)
+    
+- Learn mapped types
+    
+- Learn template literal types (`${T}-id`)
+    
+- Learn function overloads
+    
+- Learn declaration merging
+    
+- Learn discriminated unions
+    
+
+---
+
+### 🧰 Tooling & Ecosystem
+
+- Learn `tsconfig.json` deeply
+- Learn strict mode (`strict`, `strictNullChecks`, etc.)
+- Learn module resolution
+- Learn how declaration files (`.d.ts`) work
+- Learn how to write ambient types
+- Learn working with DefinitelyTyped (`@types/*`)
+- Learn how to use and author types for libraries
+- Learn advanced editor tooling with VS Code + TypeScript
+    
+
+---
+
+### 🧠 Design & Architecture
+
+- Learn type-safe API clients (e.g., Axios with generics)
+    
+- Learn schema validation + type inference (e.g., `zod`)
+    
+- Learn safe pattern design (e.g., builder pattern with types)
+    
+- Learn complex DTOs and contracts (e.g., GraphQL/NestJS)
+    
+- Learn how to model domain logic with types
+    
+- Learn exhaustive type checking
+    
+- Learn how to structure large TS codebases
+    
+- Learn dependency injection typing (e.g., NestJS)
+    
+- Learn how to avoid overengineering with types
+
 ### Simple types (Primitive types in js)
 There are two ways of write types. Explicit and Implicit way. Explicit way `let name: string = "Bibek"`. Implicit way `let name = "Bibek"`. In implicit way, type is guessed based on assigned value. The process is called inferring. Implicit assignment forces TypeScript to **infer** the value. Sometimes typescript is unable to infer the value. That time it infer to any type. This behavior can be disable using tsconfig.json by adding `noImplicitAny`
 ### All types
