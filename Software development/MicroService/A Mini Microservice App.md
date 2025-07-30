@@ -262,8 +262,30 @@ Ingress Controller has no idea that the method(method like GET, POST) exists. Ju
 
 ###### Unique Route Paths
 
+###### Final Route Config
+
 ###### Introducing Skaffold. 
-We will be using skaffold. It would be  
+This are the steps that we will go through anytime we change the code of our deployment. 
+![[Pasted image 20250724135554.png]]
+You see, it is a hassle, right ? 
+We will be using skaffold. It would be 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Kubernetes will automatically figure out communication. 
