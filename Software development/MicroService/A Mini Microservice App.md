@@ -268,13 +268,44 @@ Ingress Controller has no idea that the method(method like GET, POST) exists. Ju
 This are the steps that we will go through anytime we change the code of our deployment. 
 ![[Pasted image 20250724135554.png]]
 You see, it is a hassle, right ? 
-We will be using skaffold. It would be 
+We will be using skaffold. It is a command line tools which we will use to automate kubernetes.
+![[Pasted image 20250806112945.png]]
+When skaffold is installed, we need to write another config file also. That config file is used to tell the skaffold how to manage sub project inside our cluster
+![[Pasted image 20250806113821.png]]
+The config we write inside `skaffold.yaml` is rather similar to config written to setup `kubernetes` cluster. Everything we write in `skaffold.yaml` isn't  applied to kubernetes. Instead it is consumed by skaffold. skaffold is the tool that runs outside of our cluster. A lot of skaffold we are going to write are going to be identical. So just learn it once and use it everywhere. 
+```yaml
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+	kubectl:
+		manifests:
+			- ./infra/k8s/*
+build:
+	local:
+		push: false
+	artifacts: 
+		- image: bibekdockerId/client
+		- context: client
+		- docker:
+			- dockerfile: Dockerfile
+		sync: 
+			manual:
+				- src: "src/**/*.js"
+				- dest: .
+```
+That `manifests` tells skaffold to let us watch the kubernetes config file inside infra folder named `infra/k8s`. Any times we make change to those files, skaffold is automatically reapply the changes to our kubernetes cluster. skaffold will create all the object and delete when it is run and stopped.  
 
+That local one means we aren't going to push our project to docker hub automatically at all and artifacts means that there are something inside our project that it needs to maintain. Like there is some pod that is running code out of client directory(context) inside our project. 
 
+So whenever we make change to js file in that client folder, skaffold will try to update our pod. It does by two ways. Let's say if we change the `js` file as mentioned in `manual` the skaffold is going to take that file and directly going to throw it in pod(copy). And whenever we change the code that doesn't belong to the path described by `manual`, skaffold is going to rebuild the image. 
 
-
-
-
+Now, do it for other docker file like comments, posts, event-bus
+###### First time skaffold startup
+Now we have fully scrabled skaffold app
+```
+skaffold dev
+```
+###### Few Notes on Skaffold
 
 
 
