@@ -1200,6 +1200,4 @@ You’ll have built a full Linux-powered backend environment, complete with:
 
 Would you like this as a downloadable **PDF checklist** or GitHub repo template?
 
-  
-
 Tools

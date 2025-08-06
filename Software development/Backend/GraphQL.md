@@ -1,4 +1,9 @@
+Graphiql
+understand relay and relay spec
 It is a Query Language. It is not a database, rather a query language.
+
+Microservice graphql is the greatest thing that has happened in an enterprise context. Consistency, robustness, responsibility
+
 |   |   |
 |---|---|
 |**sign around endpoints**|➤ Design around **types and data relationships**|
