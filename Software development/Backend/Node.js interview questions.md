@@ -1,12 +1,14 @@
 ###### What is node.js
 It is cross-platform js runtime environment used for executing js code outside the browser. It is single-threaded, Non-blocking asynchronous I/O, Cross-platform, Real-time Data handling.
 
-##### You remember there are 3 ways to do same thing in node.js ?
+###### - Understand how **CPU-bound** vs **I/O-bound** tasks behave
+###### You remember there are 3 ways to do same thing in node.js ?
 ###### cors issue.
 ###### TLS and SSL
 ###### What is cluster in node.js
 ###### Global installation of dependencies
-###### What makes node.js different
+###### What makes node.js different ? 
+Unlike apache or java, Node.js uses a single-threaded event loop. This makes Node.js non -blocking and efficient for I/O heavy application. 
 ###### What can we build with node.js in IT ?
 ###### Exit Code in node.js 
 ###### How does this work in node
