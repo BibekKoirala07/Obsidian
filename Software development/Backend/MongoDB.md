@@ -1,7 +1,5 @@
 This are complex MongoDB things. MongoDB is basically a whole cloud system pretending to be "just a database".
-
 ## Aggregation Pipelines Stages
-
 Aggregation framework is all about building a pipeline of steps that runs on the data that is retrieved from the collection and then gives you the output the form we need. Every stages receives the output of the previous stages.
 ![[Pasted image 20250616161655.png]]
 
