@@ -66,13 +66,13 @@
 
 📦 **Goal**: Learn how to add jobs, delay them, and process them reliably.
 
-|✅ Topics|Why it matters|
-|---|---|
-|Queues, Jobs, Workers|Core concepts|
-|Delayed Jobs|"Send email 30 minutes before"|
-|Retries, backoff, failure handling|Real-world resilience|
-|Job cleanup & TTL|Prevent memory growth|
-|Queue events (e.g. completed, failed)|Monitoring and debugging|
+| ✅ Topics                              | Why it matters                 |
+| ------------------------------------- | ------------------------------ |
+| Queues, Jobs, Workers                 | Core concepts                  |
+| Delayed Jobs                          | "Send email 30 minutes before" |
+| Retries, backoff, failure handling    | Real-world resilience          |
+| Job cleanup & TTL                     | Prevent memory growth          |
+| Queue events (e.g. completed, failed) | Monitoring and debugging       |
 
 📝 Obsidian Note Topics:
 
