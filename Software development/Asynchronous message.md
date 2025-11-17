@@ -95,7 +95,9 @@ Thus no persistence, no queue, just instant broadcast, If subscriber was offline
 
 It is used for real-time updates(chat-rooms, live dashboard, notification, signals, cache invalidation) or things that matter right now. 
 
-It is very bad for historical data processing, critical jobs(if missed, gone forever)
+It is very bad for historical data processing, critical jobs(if missed, gone forever).
+
+It is usually transient unless backed by redis stream. 
 ##### Event Stream - "Record everything so anyone can catch up later"
 Event Stream = Pub/Sub + Storage + time. Like Events are published to a stream and stored durably so that consumer can replay or process them later in order. So It is both a message delivery system and data log. 
 

@@ -44,10 +44,53 @@ gemini = OPENAI(model="gemini", ) // while it write OPENAI but it is gemini call
 And guess what, we can do that with locally running model also. That is cool. 
 
 ### Understanding LLM Types
-Base Type, Chat Type and Reasoning/Thinking Type and We also have Hybrid Type also(like Chat and Reasoning combo)
+Base Type(predicting next words when users types), Chat Type and Reasoning/Thinking Type and We also have Hybrid Type also(like Chat and Reasoning combo)
 
 Budget Forcing
 S1 thinking
 
 ![[Pasted image 20251116214258.png]]
-Do you know about o model of chat. that is reasoning model while Chat GPT 4.1 was chat model only. GPT 4.1 is thus much more interactive  
+Do you know about o model of chat. that is reasoning model while Chat GPT 4.1 was chat model only. GPT 4.1 is thus much more interactive. 
+### Limitation of Frontier Models
+LLM are trained to be confident. and they do it with so much conviction. They perform best under supervision.   
+![[Pasted image 20251117113445.png]]
+
+### Testing ChatGPT-5 and frontier LLMs
+You can ask question like "What is Jealousy" and "How many numbers of words are there is in answer to this question". ? Sometimes, you can see that models overthink for simple questions. 
+Deep Research(Telling the LLM to go work from my behalf and come back later).
+### Agentic AI in Action
+
+### Frontier Models Showdown
+
+## Day 4
+### Understanding Transformers
+Generative Pre-trained Transformers
+The extraordinary rise of the Transformer. 
+
+![[Pasted image 20251117161436.png]]
+It is not the requirement but just a optimization. 
+
+Before the transformer, it was LSTM
+
+Along the way, we got this
+![[Pasted image 20251117162714.png]]Need to watch video 26 again. 
+
+### Parameters
+
+
+![[Pasted image 20251117165133.png]]
+
+### Token
+Neural Networks were trained at the character level. predict the next character in this sequence. Small vocab but expects too much from network. 
+![[Pasted image 20251117170117.png]]
+https://platform.openai.com/tokenizer
+
+### Breaking Tokenization : Breaking Words into Tokens
+
+![[Pasted image 20251117170939.png]]
+
+### Understanding the tik token and illusion of memory. 
+Everytime we do request to LLM, it is stateless. and we would like to do this when we do it. 
+![[Pasted image 20251117172132.png]]
+
+### Context Windows, API Costs, and Token Limits in LLMs
