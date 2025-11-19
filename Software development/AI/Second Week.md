@@ -82,6 +82,29 @@ IN last day for Week 1, an adversarial conversation between Chatbot.
 
 ### Day 2
 We will learn about Gradio(Open source library from Hugging Face. )
+response API. it enables the things like running browser in remote and running code in remote. But sadly it is paid functionality.  
 
+and one more things to care. When we call model directly then we get wrong information in things like `What is the today's date ?` or things like that. It get exposed. but I may be thinking like `Well, this doesn't happen in ChatGPT` but I remember that ChatGPT is a product not model. We are talking about model. 
+### Day 3
+Hugging Face is GitHub for AI Models, npm for AI tools and cloud hosting fro AI inference
 
-responsive API. 
+How LLM Tool calling really works ? 
+What does it mean to give the model tools ? It means allowing the LLM to connect to external function to be able to call a function a bit of code. Since LLM get access to extra knowledge, it allows the model to get deeper responses. It could be tool to retrieve something from database or carry out applications, perhaps it can book a ticket or enhance activities or even executing python code or run a test case. All of it are tools that we can equip the model to do. 
+
+So you may be thinking how exactly does it run the code in my computer ? Does OPENAI reach out to my computer and run the code ? Hell no
+In theory we think that LLM Decides to run code on my computer but it is not true. It may sound intuitive but that isn't true at all.  
+![[Pasted image 20251119121640.png]]
+But the above image is false. Why cause LLM just generates token right ? but here we are telling the LLM to use a tool. That can't be true. (in terms of model, not ChatGPT)
+
+In practice this is what happens.
+![[Pasted image 20251119121719.png]]
+ At first LLM get the request which says I want to do this and this and send the response from LLM comes and it says in order to that, we need to do this. And the code is the thing that goes out, do that thing (python) call and comes back with the answer, and then code call the LLM a second time with answer and say Hey this is the conversation history and I said that and You responded and said, please call a tool. I called the tool and here is the answer to that. Now please answer the question. and based on that conversation history and nothing else, LLM answer the question. 
+
+Write the prompt 
+![[Pasted image 20251119141037.png]]
+You see it asks for tools rather than giving the answers.
+
+Common Use Case for Tools  
+![[Pasted image 20251119141813.png]]
+
+n 
