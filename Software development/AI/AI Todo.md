@@ -254,15 +254,15 @@ A portfolio project that _looks like a startup product_, not a tutorial.
 
 ## ⚙️ Example 3-Month Skill Ladder
 
-|Week|Focus|Output|
-|---|---|---|
-|1|FastAPI basics + setup|Hello world API + JSON validation|
-|2|LLM API integration|Endpoint calling GPT for summaries|
-|3|Embeddings + Vector DB|Text search API using FAISS|
-|4|Build RAG chatbot|Chat with local docs (PDFs, markdown)|
-|5–6|Add auth, database, deploy|Real backend with users & logs|
-|7–8|Frontend integration|React UI + streaming responses|
-|9–12|Product polish + monetization|Demo product + GitHub portfolio|
+| Week | Focus                         | Output                                |
+| ---- | ----------------------------- | ------------------------------------- |
+| 1    | FastAPI basics + setup        | Hello world API + JSON validation     |
+| 2    | LLM API integration           | Endpoint calling GPT for summaries    |
+| 3    | Embeddings + Vector DB        | Text search API using FAISS           |
+| 4    | Build RAG chatbot             | Chat with local docs (PDFs, markdown) |
+| 5–6  | Add auth, database, deploy    | Real backend with users & logs        |
+| 7–8  | Frontend integration          | React UI + streaming responses        |
+| 9–12 | Product polish + monetization | Demo product + GitHub portfolio       |
 
 ---
 
