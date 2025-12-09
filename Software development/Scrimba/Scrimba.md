@@ -654,8 +654,31 @@ The Protocol in MCP tells how models should receive and use context.
 ![[Pasted image 20251201202542.png]]
 Context are important
 
-It solves two major issues. Lack of latest data and limited context windows 
-MCP is the new standard for building APIs. 
+It solves two major issues. Lack of latest data and limited context windows . MCP is just like USB C for AI. If I want my LLM Model to access A weather API, A local folder of PDFs, Google Search or calendar, We can just plug those in the models using MCP.
+
+![[Pasted image 20251208203828.png]]
+MCP follows Client Server Architecture. If we use the host LLM app with IDE like Claude, IDE and others, MCP Client resides inside the host app, we can connect one or more MCP server to those. 
+
+
+MCP is the new standard for building APIs. and it works very differently from traditional APIs. Lets have a look at core MCP Concept and Architecture. 
+![[Pasted image 20251208204352.png]]
+From High level, We can see that there is Host and MCP client lives insides the Host app and talks one to one with server. And Server provides tools, resources and prompt that is context and all the communication happens at transport layer. For MCP Server development, first we need to understand 3 core primitives.
+![[Pasted image 20251208204653.png]]
+Resources are similar to HTTP GET Requests. They helps us to expose data or content from an MCP server to an LLM. They are just mean to retrieve and return data and don't perform complex calculation.(not process it). Their job is to make context available to the model and nothing more. Where does that data comes from ? 
+![[Pasted image 20251208204952.png]]
+In short, resources is any structured data source that your MCP server want to make accessible to connected LLM client. 
+
+Let's talk about Tools. Tools are like HTTP POST Requests. They perform action. They are the executable functions that your server make it accessible for the LLM to "take action". Like it could make the function to send the email(Like automate the process of composing and sending an email).
+![[Pasted image 20251208205535.png]]
+Let's understand with example. Let's say we are creating the Agent to book the hotel rooms. So we can create a set of MCP tool to ![[Pasted image 20251208205700.png]]So This tools gives you access to outside world and even perform actions also. 
+
+Here are the difference. ![[Pasted image 20251208205747.png]]
+Now Let's talk about Prompt. They are reusable prompt template(Need to look more here, I immediately went to Transport)
+
+Now let's talk about MCP Transport
+There are two built-in MCP transport. ![[Pasted image 20251208205940.png]]
+
+We can create MCP Server in any language. In `Js`, We should use MCP SDK. 
 
 ### Multi-Modality
 It is about getting image from text or querying about image and getting answer about the query of image. Urls exists just for 1 hour. We can provide `respons_format` to `b64_json`. 
