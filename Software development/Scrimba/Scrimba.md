@@ -648,16 +648,26 @@ const contextMessages = messages.slice(-10)
 ### Vercel AI SDK
 
 ### MCP
-It's an open protocol that allows AI models to securely and flexibly connect to tools, APIs and other resources. We need a way to manage how models access tools and data. It solves the limitation of LLMs and is different from APIs. 
+It's an open protocol that allows AI models to securely and flexibly connect to tools, APIs and other resources. With MCP, we can easily build AI agents who don't just respond to query but take meaningful action like booking the flight, checking the weather or checking the weather. or anything else all through one consistent interface.
+
+We need a way to manage how models access tools and data. It solves the limitation of LLMs and is different from APIs. 
 
 The Protocol in MCP tells how models should receive and use context.
 ![[Pasted image 20251201202542.png]]
-Context are important
+Context are important but LLM has two major issues.
+Lack of latest data and limited context windows . MCP is just like USB C for AI as USB C allows us to charge phone or headphones or what not. MCP allow us to plug in any tools or data source into a application in a standard way.
 
-It solves two major issues. Lack of latest data and limited context windows . MCP is just like USB C for AI. If I want my LLM Model to access A weather API, A local folder of PDFs, Google Search or calendar, We can just plug those in the models using MCP.
+If I want my LLM Model to access A weather API, A local folder of PDFs, Google Search or calendar, We can just plug those in the models using MCP.
 
 ![[Pasted image 20251208203828.png]]
 MCP follows Client Server Architecture. If we use the host LLM app with IDE like Claude, IDE and others, MCP Client resides inside the host app, we can connect one or more MCP server to those. 
+
+Let say I have multiple data sources(or files) locally or some data stored in internet database. What is I want my MCP Client(which is inside the Host app) chat with internet database(data source) ? But by default, the host app don't have access to it, right ?
+
+To do that, we should create MCP server in between Client and Data source and connect the server to Host. So, this MCP Server knows how to fetch and read the data from data source and also it know how to package that information as context to send it back to the model running inside the Host. 
+![[Pasted image 20251210144414.png]]
+
+And great thing is we aren't limited to one server but we can create huge amount of server each connected to different kinds of data source or tools. I can connect one MCP server that connect to Weather Updates, another one that reads local files, another that does google searches or even private APIs. Once created, we can all registered those MCP server inside those MCP Client. Thus our Host app is able to connect to outside world. And each MCP server is able to bring the right amount of context without overloading the model. Overall, it acts as a window between external data and model context. 
 
 
 MCP is the new standard for building APIs. and it works very differently from traditional APIs. Lets have a look at core MCP Concept and Architecture. 
@@ -669,7 +679,8 @@ Resources are similar to HTTP GET Requests. They helps us to expose data or cont
 In short, resources is any structured data source that your MCP server want to make accessible to connected LLM client. 
 
 Let's talk about Tools. Tools are like HTTP POST Requests. They perform action. They are the executable functions that your server make it accessible for the LLM to "take action". Like it could make the function to send the email(Like automate the process of composing and sending an email).
-![[Pasted image 20251208205535.png]]
+![[Pasted image 20251208205535.png]] and MCP server exposes this action as tools, LLM can make informed decisions and also trigger them based on context.
+
 Let's understand with example. Let's say we are creating the Agent to book the hotel rooms. So we can create a set of MCP tool to ![[Pasted image 20251208205700.png]]So This tools gives you access to outside world and even perform actions also. 
 
 Here are the difference. ![[Pasted image 20251208205747.png]]
@@ -677,8 +688,108 @@ Now Let's talk about Prompt. They are reusable prompt template(Need to look more
 
 Now let's talk about MCP Transport
 There are two built-in MCP transport. ![[Pasted image 20251208205940.png]]
-
 We can create MCP Server in any language. In `Js`, We should use MCP SDK. 
+
+So the program goes like this
+```ts
+import { MCPServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import {z} from "zod";
+
+// Create MCP server instance
+const server =  new MCPServer({
+	name: "Weather Data Fetched",
+	version: '1.0.0'
+}) // this is base MCP server ready to be scaled with tools, resources and prompts
+
+// let's add the tools
+server.tool(
+	// Name of the tools
+	"trackPackages",
+	// short description of what this tool does
+	"Track Delivery status using tracking number",
+	{
+		trackingNumber: z.string().describe("Package tracking number)
+	},
+	// define the async function that will run when the tool is called
+	async ({trackingNumber}) => {
+		// you could connect to real api here but for now we are simulating it.
+		return {
+			content: [
+				{
+					type: "text",
+					text: `Checking delivery status for : ${trackingNumber}`
+				}
+			]
+		}  
+	}
+)
+
+// A helper function to simulate fetching weather data
+async function getWeatherByCity(city: string) {
+	if(city.toLowerCase() == "new york) {
+		return { temp: "22c", forecase: "Partly cloudy with a breeze" }
+	}
+	
+	if(city.toLowerCase() == "london") {
+		return { temp: "16C", forecast: "Rainy and overcase" }
+	}
+	
+	return { temp: null, error: "Weather data not available for this city" }
+}
+
+// another tool called getWeatherDataByCityName
+server.tool(
+	"getWeatherByCityName",
+	"Get weather data for New Your or London"
+	{
+		city: z.string().describe("Name of the city to get weather for")
+	},
+	async ({city}) => {
+		const weatherData = await getWeatherByCity(city);
+		return {
+			content: [
+				{
+					type: "text",
+					text: JSON.stringify(weatherData)
+				}
+			]
+		}
+	}
+)
+
+// let's register the static resource on the MCP Server
+server.resource(
+	// URI: A unique indentifier for this resource
+	"flights://airports",
+	// Description: Explains what this resources provides
+	"List of supported airpot codes",
+	// NIME Type: Describe the format of the data being returned
+	"text/plain",
+	// Data function: An async function that return the actual content of the resource
+	async => {
+		return `Supported Airports:
+			- JFK (New York)
+			- LHR (London Heathrow)
+			- SFO (San Francisco)
+		`
+	}
+)
+
+server.resource(
+	"weather://cities",
+	"List of supported cities",
+	"text/plain",
+	async () => {
+		return `Supported Cities:
+			- London (UK)
+			- New York (USA)
+		`;
+	}
+)// returns a static list of cities
+
+```
+In MCP server, The "agent" typically refers to the MCP Client - It is an LLM-powered system. 
+
 
 ### Multi-Modality
 It is about getting image from text or querying about image and getting answer about the query of image. Urls exists just for 1 hour. We can provide `respons_format` to `b64_json`. 
