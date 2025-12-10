@@ -789,7 +789,8 @@ server.resource(
 
 ```
 In MCP server, The "agent" typically refers to the MCP Client - It is an LLM-powered system. 
-
+left in 
+## Run the MCP Server
 
 ### Multi-Modality
 It is about getting image from text or querying about image and getting answer about the query of image. Urls exists just for 1 hour. We can provide `respons_format` to `b64_json`. 
