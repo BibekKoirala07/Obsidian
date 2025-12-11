@@ -44,6 +44,25 @@ for image, we get blob from Dalle E.
 ### Deployment
 We need to create Cloudflare workers to handle API request securely. shift API request from client side to server side. and set up cloudflare AI gateway to make the app robust.  
 
+Instead of making the request from frontend with API keys, we make request from Cloudflare worker(It is a serverless environment which lets us to build and deploy apps with robust backend service without having to worry about setting up and maintaining the backend infra). It does all the heavy lifting of making the API Call using our API key and managing the request from client and sending back a response that in the secure way
+![[Pasted image 20251211143451.png]]
+Go to Workers & Pages section in dashboard. Since our worker involves installing OPEN AI js dependency. We must use Cloudflare CLI. It helps quickly setup up and deploy worker in cloudflare.
+
+The commands used to make the workers in our local device is
+`npm create cloudflare@latest` and it will ask for directory in which we want to create an application. We can select the worker types(Select Hello world worker). and after that it will ask whether we want to deploy or not. Select yes and it will use built in cloudflare tool like Wrangler to deploy the worker.  and as we get that URL, it will now server as the middleman to make the request to OPENAI API. 
+
+Now open the `src` which will have hello world worker written in ES module syntax. Whenever we change that response, we should run `npx wrangler deploy`. 
+
+![[Pasted image 20251211145540.png]]
+Install all the dependencies and do whatever you need to do. 
+![[Pasted image 20251211150522.png]]
+
+Now since the worker is deployed. the goal is to move the OPENAI request from client side to worker side. 
+ Make fetch request to  that URL to make it work
+
+Cloudflare AI Gateway. 
+![[Pasted image 20251211152351.png]]
+
 ### Open source Models
 In the world of AI, OS means three things. One is Dataset(usually closed source), code and models. It is called Open source if models are open source. 
 
@@ -637,14 +656,10 @@ await agent("What's the current weather in my current location?")
 `ipapi`
 ### Context Engineering
 Well, AI lose context after messaging it for long time. 
-
 Slide the messages array sent back to AI. Like just send last 10 messages only and things like that. 
-
 ```ts
 const contextMessages = messages.slice(-10)
 ```
-
-
 ### Vercel AI SDK
 
 ### MCP
@@ -788,12 +803,69 @@ server.resource(
 )// returns a static list of cities
 
 ```
-In MCP server, The "agent" typically refers to the MCP Client - It is an LLM-powered system. 
-left in 
-## Run the MCP Server
 
+Now the goal is running the MCP server, right ? 
+
+In MCP server, The "agent" typically refers to the MCP Client - It is an LLM-powered system. 
+We know that MCP has 3 core parts. Tools, Resources and Prompts. But Prompts are optional. It is instruction that tell AI agent what task to do, using the input from the user and any data fetched through tools or resources. The good things is that agents auto-generate prompts on the basis of question, available tolls and registered resources. 
+
+Building the intelligent MCP clients. (You can still build the clients with fine grained control but common who does it nowadays. there are resources for that"https://modelcontextprotocol.io/specification/2025-06-18/server/prompts")
+
+
+But to use that weather server we created previously, we need to connect it to ==transport==. 
+So for that, the updated code is 
+```ts
+import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js"
+
+// define a asyn function to define our transport
+async function init() {
+	const transport = new StdioServerTransport();
+	await server.connect(transport)
+	console.error("Weather MCP Server Started") // we are using console.error as in Stdio Transport MCP communicates using standard input or output and console.log writes to standard output. If used, then it might interfere with protocol messages being sent betweent the server and MCP platform. console.error writees a seperates stream. 
+	console.error("Tool: getWeatherDataByCityName")
+	console.error("Resource: weather://cities")
+}
+
+init().catch(console.error) // any error caught in intialization will be caught in catch block
+```
+This transport will listen to the incoming messages from client and will respond through standard input or output.
+
+Transport
+We will look at the built in transport MCP offers. 
+![[Pasted image 20251211112534.png]]
+
+Previously we used Stdio Transport. 
+![[Pasted image 20251211112632.png]]
+![[Pasted image 20251211112703.png]]
+![[Pasted image 20251211112646.png]]
+
+Now Streamable HTTP Transport.
+![[Pasted image 20251211112742.png]]
+![[Pasted image 20251211112802.png]]
+
+![[Pasted image 20251211112817.png]]
+
+Now let's talk about MCP Clients
+Mostly we need pre built clients are secure, well-supported and integrate easily with AI apps. So no need to make it from bottom. 
+So what is MCP Client ? Just a smart connected inside host app that talks to the MCP server.
+![[Pasted image 20251211113142.png]]
+Simply, the MCP Server is a tool box and MCP client is the helper that fetches the right tool for the job.
+
+And Team MCP have designed the MCP client that we can use for testing, debugging and inspecting MCP Servers. It is called MCP inspector. It functions as a interactive MCP Client with a Graphical Web UI that allows developers to connect to their MCP server instance, explore available tools, resources and prompts, send test request and view response in real time. 
+
+The command to run inspector in terminal is 
+`npx @modelcontextprotocol/inspector@latest` This will open the local web UI that looks something like this. 
+![[Pasted image 20251211114500.png]]
+Now we can see it in AI host app. 
+Now let's open Claude Desktop. Open `claude_desktop_config.json` from Developer Tab and we need to edit the configuration file
+![[Pasted image 20251211115220.png]]
+That `Users/mahancodes` is the full path to the code. Save it and restart the Claude Desktop and simply query about the weather in London and MCP Client will talk to your server and will call the function `getWeatherDataByCityName` tool that we created and will return the result from our weather MCP Server. And we can connect same AI to Windsurf, Claude Code, Cursor AI, ChatGPT and other AI application.
+https://modelcontextprotocol.io/examples -  to see MCP Client examples. 
 ### Multi-Modality
 It is about getting image from text or querying about image and getting answer about the query of image. Urls exists just for 1 hour. We can provide `respons_format` to `b64_json`. 
+
+
+### LangChain.js
 
 
 

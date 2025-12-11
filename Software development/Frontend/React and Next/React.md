@@ -20,3 +20,19 @@ Effects are bottom-up.
 ###### Lazy Loading
 Do everything lazy load if user don't need it
 ###### Async & Concurrent Rendering
+
+###### Higher Order Component
+###### Pure function/Impure function
+###### virtualization
+###### DOM Reconciliation
+###### Strict Mode
+###### Component life cycle
+###### Tree shaking
+###### How to you handle big data in react ?
+###### Virtual Dom
+###### Hooks System
+###### React Lifecycle methods
+###### Flux concept
+###### Synthetic Events
+
+### React Patterns
