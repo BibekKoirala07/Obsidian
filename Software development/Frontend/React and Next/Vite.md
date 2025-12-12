@@ -1,0 +1,2 @@
+It is a build tools. 
+When we make the vite project, if we put static assets in `/src/assets` folder, then that static assets is optimized. If we put static assets in `/public` folder, then there is no optimization.  

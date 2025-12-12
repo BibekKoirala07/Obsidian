@@ -62,7 +62,11 @@ Now since the worker is deployed. the goal is to move the OPENAI request from cl
 
 Cloudflare AI Gateway. 
 ![[Pasted image 20251211152351.png]]
+It is just a separate endpoints that is created in Cloudflare and then connect your app to it by including the endpoint URL. There is the option for AI gateway in cloudflare. 
 
+We can also make tons of worker for who ever has API key attached directly from frontend. 
+
+We can also deploy to github and use Cloudflare pages. 
 ### Open source Models
 In the world of AI, OS means three things. One is Dataset(usually closed source), code and models. It is called Open source if models are open source. 
 
