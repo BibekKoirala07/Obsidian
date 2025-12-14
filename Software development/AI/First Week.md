@@ -1,5 +1,5 @@
 ### Ollama
-There are lots of free Models
+There are lots of free Models. You can use any of those 
 ###  System vs User Prompt
 The system prompt tell the LLM who it is, how it should behave and what rules to follow like the personality, boundaries etc. and user prompt is the actual question like input, task ,etc. 
 
