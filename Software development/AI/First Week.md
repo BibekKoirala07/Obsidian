@@ -1,5 +1,8 @@
 ### Ollama
-There are lots of free Models. You can use any of those 
+There are lots of free Models. You can use any of the model from there. 
+gemma3 = 270 million of parameters
+
+We are going to use uv. instead of anaconda. 
 ###  System vs User Prompt
 The system prompt tell the LLM who it is, how it should behave and what rules to follow like the personality, boundaries etc. and user prompt is the actual question like input, task ,etc. 
 
