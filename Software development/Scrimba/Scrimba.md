@@ -665,7 +665,134 @@ Slide the messages array sent back to AI. Like just send last 10 messages only a
 const contextMessages = messages.slice(-10)
 ```
 ### Vercel AI SDK
+```ts
+import {SIMILARITY_MATCH_COUNT, EMBEDDING_MODEL_NAME, ANSWERING_MODEL} from "./constants.js"
 
+import {openai, supabase} from "./config.js"
+
+import {getRagPrompt, combineDocuments} from "./utils.js"
+
+  
+  
+
+/*
+
+Challenge: Build a basic retrieval system
+
+1. Use OpenAI embeddings to embed the query.
+
+2. Create the supabase rpc logic to retrieve relevant documents based on the embeddings.
+
+3. Construct the prompt based on the query and retrieved documents as context.
+
+4. Send the prompt to the model to generate a final response.
+
+*/
+
+  
+
+const query = "How many houses were damaged during the great fire of london?"
+
+  
+  
+
+async function main(){
+
+  
+
+//retrieve docs that contain content relevant to the query
+
+const retrievedDocs = await retrieveSimilarDocs(query)
+
+console.log(retrievedDocs)
+
+  
+
+const contextString = combineDocuments(retrievedDocs);
+
+  
+
+/* create a prompt using `getRagPrompt` including contextString */
+
+const prompt = getRagPrompt(contextString, query)
+
+  
+  
+
+/* Implement logic to send the prompt to model to generate response and log the `output_text` */
+
+const aiResponse = await openai.responses.create({
+
+model: ANSWERING_MODEL,
+
+input: prompt
+
+})
+
+  
+
+console.log(aiResponse.output_text);
+
+}
+
+  
+
+main()
+
+  
+  
+  
+  
+
+export async function retrieveSimilarDocs(query){
+
+  
+
+/* 1. Create openai vector embeddings based on the query */
+
+const embeddingResponse = await openai.embeddings.create({
+
+model: EMBEDDING_MODEL_NAME,
+
+input: query,
+
+});
+
+  
+
+const embedding = embeddingResponse.data[0].embedding;
+
+  
+  
+
+/* 2. Retrieve relevant documents based on embeddings from supabase */
+
+const {data: documents, error: matchError } = await supabase.rpc(
+
+'match_documents',
+
+{
+
+query_embedding: embedding,
+
+match_count: SIMILARITY_MATCH_COUNT,
+
+}
+
+);
+
+  
+  
+
+/* 3. Return the retrieved documents */
+
+  
+
+return documents
+
+}
+```
+the whole point behind RAGs is to ability to fetch context outside of model's training data so we can pass it back to the model so that we can generate more context relevant answers
 ### MCP
 It's an open protocol that allows AI models to securely and flexibly connect to tools, APIs and other resources. With MCP, we can easily build AI agents who don't just respond to query but take meaningful action like booking the flight, checking the weather or checking the weather. or anything else all through one consistent interface.
 
