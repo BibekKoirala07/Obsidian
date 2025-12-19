@@ -25,7 +25,7 @@ console.log('Session changed:', session);
 
 anon is jwt as it is first thing that says yes that user is correct
 
-that anon key means anoymous. and that anon means supabase client makes request as a anonymous person and that payload in anon token contains roles. They are anon and authenticated. Like this is public request or this is full blown authenticated request
+that anon key means anoymous. and that anon means supa base client makes request as a anonymous person and that payload in anon token contains roles. They are anon and authenticated. Like this is public request or this is full blown authenticated request
 
 anon key 
 
