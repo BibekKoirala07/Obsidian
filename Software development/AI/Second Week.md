@@ -3,7 +3,6 @@ just Connecting to multiple frontier models with APIs like OPENAI, Claude, Gemin
 
 Training vs Inference time scaling
 
-
 Testing on Brain Teaser
 Not so important. Classic Prisoners dilemma was asked to different models. 
 
@@ -107,4 +106,3 @@ You see it asks for tools rather than giving the answers.
 Common Use Case for Tools  
 ![[Pasted image 20251119141813.png]]
 
-n 
