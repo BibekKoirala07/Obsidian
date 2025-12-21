@@ -75,7 +75,7 @@ Distillation
 One is popular way. Like with User interface. Like how we use Chatgpt and Claude. We know they calll API but with data which we provide to ChatGPT right ? 
 
 
-We also have managed service which means there is some service which is running the AI in the cloud and we can call those servies. 
+We also have managed service which means there is some service which is running the AI in the cloud and we can call those services. 
 
 And we at last, we can download the open source in our device and run the model and use it. 
 
@@ -96,7 +96,7 @@ gemini = OPENAI(model="gemini", ) // while it write OPENAI but it is gemini call
 And guess what, we can do that with locally running model also. That is cool. 
 
 ### Understanding LLM Types
-Base Type(predicting next words when users types), Chat Type and Reasoning/Thinking Type and We also have Hybrid Type also(like Chat and Reasoning combo)
+Base Type(predicting next words when users types), Chat Type and Reasoning/Thinking Type and We also have Hybrid Type also(like Chat and Reasoning combo).
 
 Budget Forcing
 S1 thinking
@@ -109,14 +109,14 @@ They are "raw engine". They are trained on huge amount of text.
 - No extra specialization
 - Predict the next token in a sequence. 
 
-Like "I know everything I've read but I don't know how to follow instruction or reason well". They sometimes answer in gibberish because they don't know how to follow instruction cosistently
+Like "I know everything I've read but I don't know how to follow instruction or reason well". They sometimes answer in gibberish because they don't know how to follow instruction consistently. One example is when we write message in our phone, we can see it can gives us autocomplete/predictive text. Before ChatGpt, it was mostly base models all in the internet. Even previous version of  chatGPT also.  
 
 Use Cases:
 - Embedding,
 - Generating raw text
 - Fine-tuning for my purpose
 ###### Chat/Instruct Models
-Base Model fined tune to follow human instructions. Trained with RLHF. They follow prompts, answer politely, stay on topic, avoid unsafe answers.
+Base Model fined tune to follow human instructions. Trained with RLHF. They follow prompts, answer politely, stay on topic, avoid unsafe answers. It is extension of base model. After base models. engineer thought, why not train base models more and data structured in one message and response and one message and response and so on. And the idea was that one message should give overall information of the overall chat that will happen. It is called System Prompt.  
 
 Use Case: 
 - Chat bots, 
@@ -131,6 +131,8 @@ They are good at thinking carefully before answering, even if slower or more exp
 
 Budget Forcing
 Some models do “**budget forcing**” — meaning the model is forced to **spend more computation steps** internally to reason carefully, even if it costs more tokens or compute.
+
+Budget forcing is related to adding wait in prompt. It forces the model to think. So. You need to learn more about this. 
 
 Use case:
 - Coding assistants
@@ -218,11 +220,14 @@ Everytime we do request to LLM, it is stateless. and we would like to do this wh
 ### Context Windows, API Costs, and Token Limits in LLMs
 Context Window is maximum amount of tokens that LLM can see at one time. Like short-term memory. Everything we send to the models like system prompt, user input, history, tools, code, documents plus everything the model takes as input. If it doesn't api throw the error or model forgets earlier part of the questions. 
 
+should look at context windows. like we know input is context window but in each prediction that input is again put. Need to understand this phenomenon. 
+
 So Big Context windows for LLM are huge deal. as with Larger Window, an LLM can read entire books, process codebase, ingest PDF, CSVs, logs, maintain long conversation state, perform long reasoning tasks and do RAG with fewer steps. It becomes closer to an agent that can "remember" everything in the tasks. 
 
 Context Window  = how much the model can see now
 
 So larger window = more "memory"
 ![[Pasted image 20251118090052.png]]
+Streming means that typewriter like feeling coming from the chat gpt response. 
 
 ## Day 5

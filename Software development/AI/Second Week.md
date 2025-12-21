@@ -1,4 +1,4 @@
-### Day 1
+u### Day 1
 just Connecting to multiple frontier models with APIs like OPENAI, Claude, Gemini. That is it
 
 Training vs Inference time scaling
@@ -59,7 +59,7 @@ response = llm.invoke(tell_a_joke)
 display(response.content)
 ```
 
-But by contrast to Lang Chain, in the opposite end there is the Abstraction Layer called Light LLM
+But by contrast to Lang Chain, in the opposite end there is the Abstraction Layer called Lite LLM
 ```python
 from litellm import completion
 response = completion(model="", messages=tell_a_joke)
@@ -69,6 +69,8 @@ print(f"Input tokens: {response.usage.prompt_tokens}")
 print(f"Output tokens: {respnse.}")...
 ```
 Light LLM also let's you connect with everything. It also tells you about input token, output tokens, total token and total costs also. It is quite helpful. We get them in response.
+
+Lite LLM vs LangChain 
 
 It also has prompt caching. means if we put entire hamlet to AI and do it first time. it will cost huge amount but do it second time and use same context. It will pay less. sometimes even 5* less. 
 
@@ -81,7 +83,7 @@ IN last day for Week 1, an adversarial conversation between Chatbot.
 
 ### Day 2
 We will learn about Gradio(Open source library from Hugging Face. )
-response API. it enables the things like running browser in remote and running code in remote. But sadly it is paid functionality.  
+openai response API vs openai chat api. it enables the things like running browser in remote and running code in remote. But sadly it is paid functionality.  
 
 and one more things to care. When we call model directly then we get wrong information in things like `What is the today's date ?` or things like that. It get exposed. but I may be thinking like `Well, this doesn't happen in ChatGPT` but I remember that ChatGPT is a product not model. We are talking about model. 
 ### Day 3
@@ -106,3 +108,12 @@ You see it asks for tools rather than giving the answers.
 Common Use Case for Tools  
 ![[Pasted image 20251119141813.png]]
 
+### Day 5
+Agents - The system in which LLM control the workflow or runs tools  in a loop to achieve goal. 
+
+Some of the common tools are 
+- Memory/Persistence
+- Planning capacity
+- Autonomy
+- LLM Orchestration Tools
+- Functionality via tools
