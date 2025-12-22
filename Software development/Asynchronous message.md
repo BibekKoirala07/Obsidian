@@ -101,13 +101,13 @@ It is usually transient unless backed by redis stream.
 ##### Event Stream - "Record everything so anyone can catch up later"
 Event Stream = Pub/Sub + Storage + time. Like Events are published to a stream and stored durably so that consumer can replay or process them later in order. So It is both a message delivery system and data log. 
 
-Some of the examples are Apache Kafka, Redpanda, Pulsar, etc. 
+Some of the examples are Apache Kafka, Red panda, Pulsar, etc. 
 
 Pub/sub isn't re-playable while Event Stream is. 
 
 "Let's record everything that ever happened, so any consumer can catch up later".  
 
-Here we don't broadcast events - we just store them in an ordered log so consumer can read, replay or reprocess whenever they want. Like a CCTV recording, even if we weren't there when it happened, you can rewind and see it later. 
+Here we don't just broadcast events(i mean we do but we do more than just broadcast) - we just store them in an ordered log so consumer can read, replay or reprocess whenever they want. Like a CCTV recording, even if we weren't there when it happened, you can rewind and see it later. 
 
 Messages are stored for days or forever. Consumers can reprocess old events. Within a partition, events are ordered. and message are stored on disk, and could be replicated across brokers. 
 
