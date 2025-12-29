@@ -1,3 +1,4 @@
+## Next Auth
 ###### next-auth
 Setup api route which is in 
 1. `app/api/auth/[...nextauth]`
@@ -6,9 +7,9 @@ import NextAuth from "next-auth";
 const handler = NextAuth({}); // it takes some options. but we need those configuration in multiples places
 export { handler as GET, handler as POST };
 ```
-We are going to create `auth.ts` in config folder somewhere. As NextAuth takes somes configuration options, we are going to define it in different files. and reuse that later
+We are going to create `auth.ts` in config folder somewhere. As Next Auth takes somes configuration options, we are going to define it in different files. and reuse that later
 2. We are going to use OAuth here and  that is it. The goal is to get the code(id) from providers sections. Go to `Google Console` -> `Api and Services` -> `Credetianls` -> `create credentaisl` -> `OAuth Client Id` -> `Configure Consent Screen`(the screen that user will see) -> `External` -> Fill everything and -> and when you choose the scope![[Pasted image 20250418230212.png]]
-and this is minimum that is required. that `email `and `openid` field is minimum. If you are using google services and using the user info and accessing the access token on their behalf, then you need to do more.  -> create test users also -> Create a client id, choose web application and put callback url, that call back URl is provided in next-auth providers sections. -> Copy the client Id and Client secret. That is it
+and this is minimum that is required. that `email `and `openid` field is minimum. If you are using google services and using the user info and accessing the access token on their behalf, then you need to do more.  -> create test users also -> Create a client id, choose web application and put callback url, that call back URI is provided in next-auth providers sections. -> Copy the client Id and Client secret. That is it
 ```js
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
@@ -63,3 +64,6 @@ const options: NextAuthOptions = {
   ],
 };
 ```
+
+## Auth.js
+## Better Auth
