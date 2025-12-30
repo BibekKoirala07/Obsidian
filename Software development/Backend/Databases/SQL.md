@@ -184,9 +184,9 @@ A sequence of SQL operation that PG treats as one atomic unit. If all operation 
 
 MVCC + WAL + backend process all exists to make transaction possible, safe and fast. 
 
-# Step-by-step Explanation
+#### Step-by-step Explanation
 
-### 1️⃣ Node Client starts a transaction
+#### 1️⃣ Node Client starts a transaction
 
 `BEGIN;`
 
@@ -199,7 +199,7 @@ MVCC + WAL + backend process all exists to make transaction possible, safe and f
 
 ---
 
-### 2️⃣ Queries are executed
+#### 2️⃣ Queries are executed
 
 `UPDATE users SET balance = balance - 100 WHERE id = 1; UPDATE users SET balance = balance + 100 WHERE id = 2;`
 
@@ -212,7 +212,7 @@ MVCC + WAL + backend process all exists to make transaction possible, safe and f
 
 ---
 
-### 3️⃣ COMMIT or ROLLBACK
+#### 3️⃣ COMMIT or ROLLBACK
 
 - **COMMIT**
     
@@ -233,7 +233,7 @@ MVCC + WAL + backend process all exists to make transaction possible, safe and f
 
 ---
 
-### 4️⃣ Why this is important
+#### 4️⃣ Why this is important
 
 - Ensures **atomicity** → either all updates succeed or none
     
@@ -264,12 +264,110 @@ It is central Brain.
 Let's say we have some query like `SElECT * FROM users WHERE age > 30`. Now we can fetch the data in many different ways. And Not all ways are equally fast. Like PG can scan the entire table. Use an index or Combine multiple tables via JOINs in different orders. The query planner decides the fastest way based on statistics and costs. 
 
 When we are talking about cost-based ? Means PG assign a cost to each possible plan. How many rows it expects to scan. How much CPU/memory it will use, Disk I/O. Then it will picks the plan with lowest cost. It is very good at picking efficient plan automatically. SQL = `What you want`, Planner = `How Postgres will get it`.  At last, It is more about How PostgreSQL will run queries. 
+### Installation
+At minimum, we must install 3 components. They are
+- PostgreSQL Server(postgre/postmaster). The old name is `postmaster`. It is still used conceptually. It listens on port `5432` also spawns backend processes on demand `fork()`. and also manages WAL, Shared buffers, Locks, Transaction, Query execution. Without this nothing works. 
+- Client tools(psql, pg_dump, etc.)
+- Data directory(where actual DB file live), PG doesn't store data inside the binary. It stores everything in a data directory often called `PGDATA`. Inside this directory, there are table files, Index files, WAL Logs, System catalogs, Configuration state. It is situated typically in `/var/lib/postgresql/v/main`. If this directory is deleted -> database is gone. 
 
-## 6️⃣ Why Postgres does this (ONE sentence only)
+Everything else is just add-ons or optional
 
-> Because databases must isolate work and failures more strongly than application servers.
+PG uses plain text config files 
+`postgresql.conf` -> controls port, memory, max_connections, WAL settings, Logging
+`pg_hba.conf` -> It controls who can connect and how. 
 
-# Why Postgres does this (ONE reason only, for now)
+And PG has its own users. They live inside PostgreSQL. Always remember that OS users != PG users. 
+
+Among some optional tools some are frequently used like
+- pgAdmin -> GUI for PostgreSQL
+- Backups(`pg_dump) -> Safety
+- Monitoring -> Production
+
+Here’s the **correct next order**, not random tutorials:
+
+1. PostgreSQL **roles, databases, schemas**
+    
+2. What happens when you run a SQL query internally
+    
+3. Transactions (`BEGIN / COMMIT / ROLLBACK`)
+    
+4. Indexes (B-tree, why they matter)
+    
+5. Query planner (EXPLAIN)
+    
+6. Locks & isolation levels
+    
+7. When PgBouncer breaks things (prepared statements, session state)
+#### 🔟 What is REQUIRED vs OPTIONAL
+
+### Authentication and Authorization
+For PostgreSQL, it decides "Who are you ? " and "What can you do?". PG protects four main things. They are
+- the server(Who can connect)
+- A database
+- Objects inside a database like table, views, functions, schemas
+- and actions like SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, etc. 
+From common sense we can know that PG must answer two question for every connection and query. They are "Who are you ? " and 'What are you allowed to do ? ' By simple logic, Authentication and Authorization. 
+
+==There is no real difference between users and roles==. Historically there were users and groups. Modern PG unified everything under roles. 
+
+PG just has exactly one concepts for identity: ==roles==. A role is just a record with some flags.
+Two flags matter right now. 
+- **LOGIN** -> Can this role connect to the DB ? 
+- **PRIVILEGES** -> What can this role do ? 
+
+So Let's say we have first role with `LOGIN=TRUE`(It is called user). It means that the role can communicate with PG. For example
+```
+ROLE: app
+LOGIN: YES
+PRIVILEGES: none
+```
+Now let's say we have second role with`LOGIN=FALSE`(It is called group). It means that the role can't connect at all. It can only hold permissions which is used by roles with `LOGIN=TRUE`.
+For example:
+```
+ROLE: read
+LOGIN: NO
+PRIVILEGES:
+	- SELECT on users
+	- SELECT on comments
+```
+
+And the main thing is in PG, one role can inherit another role. It is the gist. 
+So, if `app` is inheriting `read`, you can act like the permission of `read` is also being checked. 
+
+So, first client comes in as `app`. PG looks for `LOGIN` whether it is `TRUE` or `FALSE`. If that value is negative, query doesn't move forward. But if that value is positive, then PG looks which permission(group) does that `app` has. but before looking for group, It does look for direct permission if that `app` has it or not. If not it inherit from `read`. And does that permission exists on `read`(group). And it does. so query is allowed. 
+
+And one thing to realise is Authentication happens at connection time
+It users password, certificates, OS users, trust and is controlled by `pg_hba.conf`. When client connects to PostgreSQL
+```
+Client -> TCP -> PG
+```
+First PG checks `pg_hba.conf` and match connection type(local/host), database, user and client IP. It decides ==auth method==, verify credentials, and thus allow or reject connection. Let's say for example, we have `pg_hba.conf` 
+```
+host mydb app 0.0.0.0/0 md5
+```
+host - > TCP connection
+mydb -> database name
+app -> POSTGRESQL role
+0.0.0.0/0 -> any IP
+md5 -> password auth
+
+If this blocks the connection, then nothing else matter. 
+
+For common auth methods, we have
+trust(no password), md5(password), scram-sha-256(mosts popular, modern secure password), peer(OS user), cert(TLS certificate)
+
+and Authorization happens after connection. It checks roles and privileges and is controlled by `GRANT/REVOKE`. PostgreSQL objects live inside schemas:
+```
+database
+|--schema public
+|   |----table users
+|   |----table posts
+|--schema private
+```
+We need permission on schema and permission on object inside it to get it. 
+
+And Superusers can bypass all permission checks, can read any data and can change system. It shouldn't be used. 
+#### Why Postgres does this (ONE reason only, for now)
 
 Because databases:
 
@@ -1358,51 +1456,7 @@ Everything else is a detail of these.
 
 ---
 
-## 1️⃣ Database ≠ Code (this is the root shift)
 
-Most NoSQL users think:
-
-> “The database stores what my code tells it to store.”
-
-PostgreSQL thinks:
-
-> “The database is the authority. Your code must obey.”
-
-### Why this matters
-
-- Rules live in the DB, not just in code
-    
-- The DB protects data **even if your app is buggy**
-    
-- Multiple services can safely share one database
-    
-
-If you don’t accept this, Postgres will feel “strict” and “annoying”.
-
----
-
-## 2️⃣ Time exists inside the database (MVCC intuition)
-
-Postgres is **time-aware**.
-
-Not in a sci-fi way — in a _consistency_ way.
-
-### Simple idea
-
-Different users can see **different versions of the same row** at the same time — and _both are correct_.
-
-That’s it. That’s MVCC.
-
-### Why this matters
-
-- Reads don’t block writes
-    
-- “What you see” depends on _when_ you started your transaction
-    
-- The database is not a single global truth at every instant
-    
-
-This is extremely unintuitive at first — but incredibly powerful.
 
 ---
 

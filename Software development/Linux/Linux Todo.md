@@ -131,12 +131,12 @@
 
 🔹 Combine everything in real use:
 
-|Task|Tools|
-|---|---|
-|Set up a Node.js/NestJS/Java app on VPS|SSH, `scp`, `nginx`, `systemctl`, `pm2`|
-|Secure it|`ufw`, `fail2ban` (optional), SSH keys|
-|Automate deployment|Bash + Git hooks or cron|
-|Create a backup script|`tar`, `scp`, cron|
+| Task                                    | Tools                                   |
+| --------------------------------------- | --------------------------------------- |
+| Set up a Node.js/NestJS/Java app on VPS | SSH, `scp`, `nginx`, `systemctl`, `pm2` |
+| Secure it                               | `ufw`, `fail2ban` (optional), SSH keys  |
+| Automate deployment                     | Bash + Git hooks or cron                |
+| Create a backup script                  | `tar`, `scp`, cron                      |
 
 ---
 
