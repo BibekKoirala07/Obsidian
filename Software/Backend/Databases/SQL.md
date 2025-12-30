@@ -267,10 +267,13 @@ When we are talking about cost-based ? Means PG assign a cost to each possible p
 ### Installation
 At minimum, we must install 3 components. They are
 - PostgreSQL Server(postgre/postmaster). The old name is `postmaster`. It is still used conceptually. It listens on port `5432` also spawns backend processes on demand `fork()`. and also manages WAL, Shared buffers, Locks, Transaction, Query execution. Without this nothing works. 
-- Client tools(psql, pg_dump, etc.)
-- Data directory(where actual DB file live), PG doesn't store data inside the binary. It stores everything in a data directory often called `PGDATA`. Inside this directory, there are table files, Index files, WAL Logs, System catalogs, Configuration state. It is situated typically in `/var/lib/postgresql/v/main`. If this directory is deleted -> database is gone. 
+- Client tools(psql, pg_dump, etc.). We can make our own client which is able to talk to PG in postgres protocol but common who does it right ? while `psql` seems to be optional, it is kinda cumpolsory. 
+- Data directory(where actual DB file live), PG doesn't store data inside the binary. It stores everything in a data directory often called `PGDATA`. Inside this directory, there are table files, Index files, WAL Logs, System catalogs, Configuration state. It is situated typically in `/var/lib/postgresql/version/main`. If this directory is deleted -> database is gone. 
 
-Everything else is just add-ons or optional
+Everything else is just add-ons or optional.
+
+==A cluster is one PostgreSQL Server tied to single Data Directory==. One cluster shares everything inside it like Databases, background worker process, one postmaster/server process and One Data Directory(`PGDATA`). all the WALs, configs, processes and databases inside one data directory run in one cluster for all the database. However one machine can have multiple cluster. It should have different postmaster, Data directory and its sets of databases. Two cluster are completely separate.  All operation like background workers, transactions, WAL, connections are scoped to one cluster.
+==Each Database in cluster has unique Object Id (OID) assigned by PG==. 
 
 PG uses plain text config files 
 `postgresql.conf` -> controls port, memory, max_connections, WAL settings, Logging
@@ -3297,7 +3300,7 @@ ps aux | grep postgres
 
 ---
 
-## 2️⃣ Data directory inspection
+#### 2️⃣ Data directory inspection
 
 **Exercise: Explore the cluster’s data directory**
 
@@ -3467,7 +3470,7 @@ By the end of Step 1, **you should be able to answer these without cheat sheets*
     
 6. If Postgres dies unexpectedly, how would you verify which cluster/data directory is safe?
     
-7. How would you observe connections spawned by a Node.js/NestJS app?
+7. How would you observe connections spawned by a Node.js NestJS app?
     
 
 ---
@@ -3503,6 +3506,17 @@ By the end of Step 2, you should **confidently understand how clients connect, h
 **Goal:** Understand how connections work, how Postgres handles them internally, and how clients (psql, Node.js apps) interact with the server.
 
 ---
+You **can confidently move on** to the **connection model and client-level operations**:
+
+- How a client connects to the cluster
+    
+- How backends are forked
+    
+- How queries are executed
+    
+- How sessions work
+    
+- How sockets and ports are used
 
 #### 1️⃣ Observe the connection lifecycle
 
@@ -3851,7 +3865,7 @@ GRANT dev TO app_user;
 
 ---
 
-## 2️⃣ AUTHENTICATION (Proving who you are)
+##### 2️⃣ AUTHENTICATION (Proving who you are)
 
 **Concept:**  
 Authentication is **done before SQL executes**. Postgres checks:
@@ -3892,7 +3906,7 @@ less /var/log/postgresql/postgresql-16-main.log
 sudo systemctl restart postgresql
 ```
 
-### Questions
+#### Questions
 
 1. What is the difference between `peer`, `trust`, and `scram-sha-256`?
     
@@ -3903,7 +3917,7 @@ sudo systemctl restart postgresql
 
 ---
 
-##### 3️⃣ AUTHORIZATION (Permissions)
+###### 3️⃣ AUTHORIZATION (Permissions)
 
 **Concept:**  
 Once authenticated, Postgres checks **what you can do**.
@@ -3976,7 +3990,7 @@ DELETE FROM tasks WHERE id=1; -- should fail
 
 ---
 
-## 5️⃣ Optional deeper topics (stretch)
+#### 5️⃣ Optional deeper topics (stretch)
 
 - Default privileges for schemas and tables
     
@@ -3989,7 +4003,7 @@ DELETE FROM tasks WHERE id=1; -- should fail
 
 ---
 
-#### 6️⃣ Confidence questions (exam-ready)
+##### 6️⃣ Confidence questions (exam-ready)
 
 By the end of Step 3, you should confidently answer:
 
@@ -4014,7 +4028,7 @@ By the end of Step 3, you should confidently answer:
 
 ---
 
-#### ✅ Expected outcome after Step 3
+##### ✅ Expected outcome after Step 3
 
 - You can create and manage roles confidently.
     
@@ -4032,20 +4046,20 @@ By the end of Step 3, you should confidently answer:
 If you want, we can next do **Step 4**, which includes **WAL, crash recovery, transactions**, and also a **practical Node + NestJS experiment** showing durability — this is a game-changer for production readiness.
 
 Do you want me to move to Step 4 now?
-## STep 5
+### Step 5
 Perfect. Step 4 is where PostgreSQL starts to **really show its power and robustness**. This is critical if you want to build **production-grade, US remote-level backend apps**. Step 4 focuses on **transactions, WAL (Write-Ahead Logging), crash recovery, and durability guarantees**.
 
 We’ll do it like before: practical exercises, conceptual understanding, and exam-level questions. Since your goal is NestJS + Node, I’ll include practical experiments where useful.
 
 ---
 
-# STEP 4 — Transactions, WAL, and Durability
+##### STEP 4 — Transactions, WAL, and Durability
 
 **Goal:** Understand how PostgreSQL ensures **data integrity and durability**, even in crashes, and how to work with it safely in apps.
 
 ---
 
-## 1️⃣ Transactions
+##### 1️⃣ Transactions
 
 **Concept:**  
 A transaction is a **unit of work** that is either fully applied or fully discarded. It ensures **ACID properties**:
@@ -4059,7 +4073,7 @@ A transaction is a **unit of work** that is either fully applied or fully discar
 - **Durability** — committed changes survive crashes
     
 
-### Exercises
+#### Exercises
 
 1. Connect as `app_user`:
     
@@ -4096,7 +4110,7 @@ COMMIT;
 SELECT * FROM tx_test;  -- should show 'test3'
 ```
 
-### Questions
+#### Questions
 
 1. What happens if a crash occurs **after COMMIT** but before data files are updated?
     
@@ -4107,7 +4121,7 @@ SELECT * FROM tx_test;  -- should show 'test3'
 
 ---
 
-## 2️⃣ Write-Ahead Logging (WAL)
+#### 2️⃣ Write-Ahead Logging (WAL)
 
 **Concept:**  
 Postgres writes **changes to WAL first**, then applies them to data files. This ensures **durability** even if the system crashes.
@@ -4144,7 +4158,7 @@ sudo systemctl start postgresql
 - Verify that committed transactions persist, rolled-back transactions do not.
     
 
-### Questions
+#### Questions
 
 1. Why does Postgres write to WAL before updating data files?
     
@@ -4155,7 +4169,7 @@ sudo systemctl start postgresql
 
 ---
 
-## 3️⃣ Checkpoints
+#### 3️⃣ Checkpoints
 
 **Concept:**  
 Checkpoints flush **dirty data pages** from memory to disk. They reduce recovery time after a crash.
@@ -4180,7 +4194,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 - You should see `checkpoint` entries periodically
     
 
-### Questions
+#### Questions
 
 1. What is a checkpoint and why is it necessary?
     
@@ -4191,7 +4205,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 4️⃣ Practical NestJS / Node.js experiments
+#### 4️⃣ Practical NestJS / Node.js experiments
 
 - Simulate multiple concurrent transactions from Node:
     
@@ -4217,7 +4231,7 @@ await client.end();
 - Kill Node process mid-transaction → verify rollback behavior.
     
 
-### Questions
+#### Questions
 
 1. How does Node client behavior interact with WAL and transactions?
     
@@ -4228,7 +4242,7 @@ await client.end();
 
 ---
 
-## 5️⃣ Optional deeper topics (stretch)
+#### 5️⃣ Optional deeper topics (stretch)
 
 - **Point-in-time recovery (PITR)**
     
@@ -4243,7 +4257,7 @@ await client.end();
 
 ---
 
-## 6️⃣ Confidence questions (exam-level)
+#### 6️⃣ Confidence questions (exam-level)
 
 1. Explain the full lifecycle of a transaction from `BEGIN` → `COMMIT` → WAL → data files.
     
@@ -4260,7 +4274,7 @@ await client.end();
 
 ---
 
-### ✅ Expected outcome after Step 4
+#### ✅ Expected outcome after Step 4
 
 - You can **explain WAL, transactions, and checkpoints** confidently.
     
@@ -4285,13 +4299,13 @@ We’ll follow the same structure: **practical exercises, mental models, and exa
 
 ---
 
-# STEP 5 — Advanced Topics: Performance, Maintenance, Failure Recovery, and High Availability
+##### STEP 5 — Advanced Topics: Performance, Maintenance, Failure Recovery, and High Availability
 
 **Goal:** Understand how Postgres behaves under load, how it maintains data integrity long-term, and how to design resilient production systems.
 
 ---
 
-## 1️⃣ Autovacuum and Table Maintenance
+#### 1️⃣ Autovacuum and Table Maintenance
 
 **Concept:**  
 Postgres **does not automatically reclaim space** from deleted/updated rows in tables. `autovacuum` handles cleanup to prevent bloat.
@@ -4332,7 +4346,7 @@ SELECT relname, n_dead_tup FROM pg_stat_user_tables;
 VACUUM ANALYZE vac_test;
 ```
 
-### Questions
+#### Questions
 
 1. Why does Postgres need autovacuum?
     
@@ -4343,7 +4357,7 @@ VACUUM ANALYZE vac_test;
 
 ---
 
-## 2️⃣ Indexing and Query Performance
+### 2️⃣ Indexing and Query Performance
 
 **Concept:**  
 Indexes improve SELECT performance but can slow down INSERT/UPDATE/DELETE. Understanding **when and how to use them** is key.
@@ -4367,7 +4381,7 @@ EXPLAIN ANALYZE SELECT * FROM vac_test WHERE val='x';
 3. Observe query plan changes when indexes exist vs absent.
     
 
-### Questions
+##### Questions
 
 1. How does Postgres choose which index to use?
     
@@ -4389,7 +4403,7 @@ Two main types:
 - **Logical replication** (per table, per change)
     
 
-### Exercises (conceptual + optional practical)
+##### Exercises (conceptual + optional practical)
 
 1. Observe WAL in use for replication:
     
@@ -4417,7 +4431,7 @@ ls -lh /var/lib/postgresql/16/main/pg_wal
 
 ---
 
-## 4️⃣ Backup and Restore
+#### 4️⃣ Backup and Restore
 
 **Concept:**
 
@@ -4426,7 +4440,7 @@ ls -lh /var/lib/postgresql/16/main/pg_wal
 - Use `pg_basebackup` or WAL archiving for physical backups
     
 
-### Exercises
+#### Exercises
 
 1. Take a logical backup:
     
@@ -4445,7 +4459,7 @@ psql -U postgres -d appdb_restored -f appdb_backup.sql
 3. Observe WAL usage during backup operations.
     
 
-### Questions
+#### Questions
 
 1. What is the difference between logical and physical backups?
     
@@ -4456,7 +4470,7 @@ psql -U postgres -d appdb_restored -f appdb_backup.sql
 
 ---
 
-## 5️⃣ Crash Recovery and Failover
+#### 5️⃣ Crash Recovery and Failover
 
 **Concept:**  
 Postgres guarantees durability via WAL and checkpoints. After a crash:
@@ -4468,7 +4482,7 @@ Postgres guarantees durability via WAL and checkpoints. After a crash:
 3. Discards uncommitted changes
     
 
-### Exercises
+#### Exercises
 
 1. Simulate crash (stop service abruptly):
     
@@ -4488,7 +4502,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 3. Verify committed transactions persist, uncommitted ones do not.
     
 
-### Questions
+#### Questions
 
 1. How does Postgres detect crash recovery?
     
@@ -4499,7 +4513,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 6️⃣ Node/NestJS Practical Integration
+#### 6️⃣ Node/NestJS Practical Integration
 
 - Use **transactions, inserts, and deletions** in Node/NestJS while simulating multiple concurrent users.
     
@@ -4508,7 +4522,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 - Optional: Test what happens if Node crashes mid-transaction or if the DB restarts.
     
 
-### Questions
+#### Questions
 
 1. How would you ensure **atomic operations** in your NestJS services?
     
@@ -4519,7 +4533,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 7️⃣ Optional Deeper Topics
+#### 7️⃣ Optional Deeper Topics
 
 - **Row-Level Security (RLS)** for per-user permissions
     
@@ -4534,7 +4548,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 8️⃣ Confidence Questions (Exam-Ready)
+#### 8️⃣ Confidence Questions (Exam-Ready)
 
 1. Explain how autovacuum prevents table bloat.
     
@@ -4553,7 +4567,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-### ✅ Expected Outcome after Step 5
+#### ✅ Expected Outcome after Step 5
 
 - You can **explain advanced Postgres internals**: WAL, checkpoints, autovacuum, replication.
     
@@ -4577,11 +4591,11 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-# **Bibek’s 5-Step Postgres Mastery Roadmap**
+##### **Bibek’s 5-Step Postgres Mastery Roadmap**
 
 ---
 
-## **STEP 1 — PostgreSQL as a System Owner**
+#### **STEP 1 — PostgreSQL as a System Owner**
 
 **Goal:** Understand the OS-level Postgres setup, processes, clusters, and data directories.
 
@@ -4639,7 +4653,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 2 — Connection Model & Client Interaction**
+#### **STEP 2 — Connection Model & Client Interaction**
 
 **Goal:** Understand how clients connect, backend processes are spawned, and connection limits.
 
@@ -4677,7 +4691,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 3 — Roles, Authentication & Authorization**
+#### **STEP 3 — Roles, Authentication & Authorization**
 
 **Goal:** Learn identity, authentication, and permissions.
 
@@ -4721,7 +4735,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 4 — Transactions, WAL & Durability**
+#### **STEP 4 — Transactions, WAL & Durability**
 
 **Goal:** Understand ACID, WAL, checkpoints, and crash recovery.
 
@@ -4764,7 +4778,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 5 — Advanced Topics: Performance, HA, Backup & Recovery**
+#### **STEP 5 — Advanced Topics: Performance, HA, Backup & Recovery**
 
 **Goal:** Build production-grade Postgres knowledge for remote jobs.
 
@@ -4815,7 +4829,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-### ✅ Suggested Learning Path
+#### ✅ Suggested Learning Path
 
 - **Step 1–2:** ~2–3 days, focus on system + connection experiments.
     
