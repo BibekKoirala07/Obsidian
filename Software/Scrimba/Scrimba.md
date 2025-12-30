@@ -667,13 +667,8 @@ const contextMessages = messages.slice(-10)
 ### Vercel AI SDK
 ```ts
 import {SIMILARITY_MATCH_COUNT, EMBEDDING_MODEL_NAME, ANSWERING_MODEL} from "./constants.js"
-
 import {openai, supabase} from "./config.js"
-
 import {getRagPrompt, combineDocuments} from "./utils.js"
-
-  
-  
 
 /*
 
@@ -746,15 +741,13 @@ main()
 
 export async function retrieveSimilarDocs(query){
 
-  
-
 /* 1. Create openai vector embeddings based on the query */
 
 const embeddingResponse = await openai.embeddings.create({
 
 model: EMBEDDING_MODEL_NAME,
 
-input: query,
+input: query, "is sick leave available in monday ?" ?  
 
 });
 
@@ -762,6 +755,7 @@ input: query,
 
 const embedding = embeddingResponse.data[0].embedding;
 
+[0.1, 023432423, 0.343748, 0.234889723, ... another 1576]
   
   
 
@@ -792,7 +786,7 @@ return documents
 
 }
 ```
-the whole point behind RAGs is to ability to fetch context outside of model's training data so we can pass it back to the model so that we can generate more context relevant answers
+the whole point behind RAGs is to ability to fetch context outside of model's training data so we can pass it back to the model so that we can generate more context relevant answers.
 ### MCP
 It's an open protocol that allows AI models to securely and flexibly connect to tools, APIs and other resources. With MCP, we can easily build AI agents who don't just respond to query but take meaningful action like booking the flight, checking the weather or checking the weather. or anything else all through one consistent interface.
 

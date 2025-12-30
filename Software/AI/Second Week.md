@@ -1,4 +1,4 @@
-u### Day 1
+### Day 1
 just Connecting to multiple frontier models with APIs like OPENAI, Claude, Gemini. That is it
 
 Training vs Inference time scaling
