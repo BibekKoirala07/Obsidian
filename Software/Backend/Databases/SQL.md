@@ -386,7 +386,7 @@ Because databases:
 Threads make this _much harder_.
 
 Processes make this **boringly safe**.
-### Basic SQL - Data Retrieval, Filtering, Aggregate Function, Grouping Data
+### Basic SQL - Data Retrieval, Filtering, Aggregate Function, Grouping Data, Windows Function, Joins, Sub queries, Procedures and Much More
 #### 🔹 Data retrieval patterns
 
 - `WHERE` vs `HAVING` (filter before vs after aggregation)
@@ -548,6 +548,16 @@ Interviewers LOVE this.
 - Cascades (delete/update dangers)
     
 - Check constraints vs application validation
+### Views and Materialization
+If you know:
+
+- Joins
+    
+- Window functions
+    
+- CTEs
+    
+- Indexing + EXPLAIN
 ### Scaling and Operation SQL Knowledge
 ##### **SQL at Scale**
 
