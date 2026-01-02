@@ -280,7 +280,7 @@ And PG has its own users. They live inside PostgreSQL. Always remember that OS u
 
 Among some optional tools some are frequently used like
 - pgAdmin -> GUI for PostgreSQL
-- Backups(`pg_dump) -> Safety
+- Backups(`pg_dump`) -> Safety
 - Monitoring -> Production
 
 Here’s the **correct next order**, not random tutorials:
@@ -352,6 +352,7 @@ app -> POSTGRESQL role
 md5 -> password auth
 
 If this blocks the connection, then nothing else matter. 
+==pg_hba.conf is checked for authentication for first time, after that no query need to hit that file ever until that connection is terminated== and authentication check happens for each connection in pool. 
 
 For common auth methods, we have
 trust(no password), md5(password), scram-sha-256(mosts popular, modern secure password), peer(OS user), cert(TLS certificate)
