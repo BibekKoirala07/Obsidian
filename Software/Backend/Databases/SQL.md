@@ -267,10 +267,13 @@ When we are talking about cost-based ? Means PG assign a cost to each possible p
 ### Installation
 At minimum, we must install 3 components. They are
 - PostgreSQL Server(postgre/postmaster). The old name is `postmaster`. It is still used conceptually. It listens on port `5432` also spawns backend processes on demand `fork()`. and also manages WAL, Shared buffers, Locks, Transaction, Query execution. Without this nothing works. 
-- Client tools(psql, pg_dump, etc.)
-- Data directory(where actual DB file live), PG doesn't store data inside the binary. It stores everything in a data directory often called `PGDATA`. Inside this directory, there are table files, Index files, WAL Logs, System catalogs, Configuration state. It is situated typically in `/var/lib/postgresql/v/main`. If this directory is deleted -> database is gone. 
+- Client tools(psql, pg_dump, etc.). We can make our own client which is able to talk to PG in postgres protocol but common who does it right ? while `psql` seems to be optional, it is kinda cumpolsory. 
+- Data directory(where actual DB file live), PG doesn't store data inside the binary. It stores everything in a data directory often called `PGDATA`. Inside this directory, there are table files, Index files, WAL Logs, System catalogs, Configuration state. It is situated typically in `/var/lib/postgresql/version/main`. If this directory is deleted -> database is gone. 
 
-Everything else is just add-ons or optional
+Everything else is just add-ons or optional.
+
+==A cluster is one PostgreSQL Server tied to single Data Directory==. One cluster shares everything inside it like Databases, background worker process, one postmaster/server process and One Data Directory(`PGDATA`). all the WALs, configs, processes and databases inside one data directory run in one cluster for all the database. However one machine can have multiple cluster. It should have different postmaster, Data directory and its sets of databases. Two cluster are completely separate.  All operation like background workers, transactions, WAL, connections are scoped to one cluster.
+==Each Database in cluster has unique Object Id (OID) assigned by PG==. 
 
 PG uses plain text config files 
 `postgresql.conf` -> controls port, memory, max_connections, WAL settings, Logging
@@ -384,12 +387,201 @@ Because databases:
 Threads make this _much harder_.
 
 Processes make this **boringly safe**.
-## One sentence to lock in
+### Basic SQL - Data Retrieval, Filtering, Aggregate Function, Grouping Data, Windows Function, Joins, Sub queries, Procedures and Much More
+#### 🔹 Data retrieval patterns
+
+- `WHERE` vs `HAVING` (filter before vs after aggregation)
+    
+- `IN` vs `EXISTS` (performance & semantics)
+    
+- `JOIN` vs subquery (readability vs planner optimization)
+    
+- `LEFT JOIN` + `WHERE` pitfalls (turning it into INNER JOIN)
+    
+- Anti-joins (`NOT EXISTS`)
+    
+
+#### 🔹 Aggregation & grouping (why it matters)
+
+- Grouping cardinality explosion
+    
+- Aggregates on indexed columns
+    
+- `COUNT(*)` vs `COUNT(column)`
+    
+- Partial aggregates vs full scans
+    
+
+#### 🔹 Ordering & limiting
+
+- `ORDER BY` cost
+    
+- Index-backed ordering
+    
+- `LIMIT + OFFSET` problems at scale
+    
+- Cursor-based pagination (keyset pagination)
+### Normalization and Schema Design
+Let's talk about Normalization first.
+Good Database can't protect bad data. But there are some case of bad data that some good database design can protect. Like this value can't be logically be true. Like one customer with 2 DOB is logically not possible. It is called failure of data integrity. Like data can't be trusted because it disagree with itself. 
+
+Normalization is like safety assessment.
+
+Let's say we want to write the height of beatle band members in order. We may write with their name in only one column. For us, it represent the order of height of beatle band member. But does database understand it ? No. Even if there was a way to put it, then it shouldn't be done. Rather make two column with one being Name of member and another being Height ranking or Height. ![[Pasted image 20251231205742.png]]Another way of violating 1 NF is having different data types in same column. In fact DB platform won't let us do it anyway. Another way of violating 1 NF is designing table without Primary Key. If a table don't have PM, then that table doesn't fulfil 1 NF. Another way is to repeating group. Let's say we have online game with this database design. ![[Pasted image 20251231210402.png]] What do you think is wrong ? Repeating group of data items on a single row violates 1 NF. What could be right ? Well, we could make the DB with `players_id` and `item1(shields)`, `item 2(arrow)`, `item 3` and so on but imagine what if we have more than 100 items. Do you think it is practical ? Well no. Instead do this. ![[Pasted image 20251231210812.png]]But you may be thinking what is PM key here ? Well it is combination of `Player_ID` and `Item_Type`.
+
+![[Pasted image 20251231210943.png]]
+
+Now let's move forward. Now in that above figure. What if every player has levels like Beginner, Intermediate and so on ? We need to add column with name `level` and write level of each player. ![[Pasted image 20251231211157.png]] Now look ? Isn't `Player_Rating` duplicated ? What if player `gila19` looses all `copper coins` ? She will be deleted from table right ? If we try to query for player `gila19` player rating is ? We can't find it. This problem is known as ==Deletion Anamoly==.
+![[Pasted image 20251231211746.png]]Now what if one player with two or more `item type` updates his player rating but somehow something goes wrong and only one row is updated ? Well now data is inconsistent and by itself wrong ? It is called ==Update Anamoly==. 
+
+And What if new player joins the game but don't have any `item type` ? Well he/she couldn't be in database as `item type` is also PM with `player id`. Well it is called ==Insertion Anamoly==.
+
+2 NF is about how table's non key column(attributes) connects to PMK. ==Each non key attribute must depend on the entire primary key==. In our example, `player rating` doesn't depends on PM but only on `player Id`. 
+
+![[Pasted image 20251231213012.png]]The arrow signifies the dependency(==Functional Dependency==). It tells the each value of the thing on left side of arrow is associate with exactly one value of thing on right side of arrow. Like each value of player id and item type is associated with specific item quantity.  But there is something wrong with another dependency. Player rating isn't dependent on PMK but only one part of PMK. 
+
+To solve this we need to make another table ![[Pasted image 20251231213445.png]]
+Suppose we decide to add Player skill level in Player table ranging from 1 to 9. and player `gila19` goes from 3 -> 4 in player skill. ![[Pasted image 20251231213855.png]]
+and by some chance, something went wrong when updating
+`player_rating`. Now the `player_rating` is Beginner. with player skill level 4. That shouldn't happen. That is design error. You can see 2 NF didn't causes error here cuz no attribute depends only partially here on `player_id`. They are fully dependent on PM K. 
+
+![[Pasted image 20251231214618.png]] Here we can see that Player skill level isn't dependent on Player Id but on Player Rating. And Player Rating is dependent on Player PM K. This type of dependency is called ==transitive dependency==.
+
+==The dependency of non key attribute on another non key attribute== is seen here. So this table is not in ==3 NF==.
+So what do we do ? We remove Player rating column from table and make new table. We can cover Boyce-Codd Normal Form at the time of covering 3 NF. 
+![[Pasted image 20251231215109.png]]
+
+==In almost all cases, once you normalized table this far, you have normalized it totally==.
+
+Let's go to ==4 NF==
+
+And Let's go to ==5 NF==.
+
+
+And conclusion at last. ![[Pasted image 20251231220541.png]]
+What you should write here:
+
+#### 🔹 Normal forms (brief, not textbook)
+
+- Why 3NF exists (update anomalies)
+    
+- What problems normalization actually solves
+    
+
+#### 🔹 When normalization hurts
+
+- Too many joins on hot paths
+    
+- Read-heavy systems (feeds, dashboards)
+    
+- Reporting queries
+    
+
+#### 🔹 Controlled denormalization
+
+- Duplicated columns for reads
+    
+- Materialized views
+    
+- Snapshot tables
+### Indexing and Performance
+This should be your **largest section**.
+
+#### 🔹 Index fundamentals (not definitions)
+
+- B-tree vs Hash (why B-tree wins)
+    
+- Composite index ordering (leftmost prefix rule)
+    
+- Covering indexes
+    
+
+#### 🔹 Index selection strategy
+
+- High-cardinality columns
+    
+- Indexing foreign keys
+    
+- Indexing for `WHERE`, `JOIN`, `ORDER BY`
+    
+
+#### 🔹 Read vs write tradeoff
+
+- Insert/update cost
+    
+- Index bloat
+    
+- Too many indexes problem
+    
+
+#### 🔹 Query planning
+
+- Sequential scan vs index scan
+    
+- Why index is sometimes NOT used
+    
+- `EXPLAIN` / `EXPLAIN ANALYZE` mindset
+### Transaction and Concurrency
+##### **Transactions, Locks & Isolation**
+
+Even if you don’t write SQL here, **this is core SQL knowledge**.
+
+- ACID in real systems
+    
+- Isolation levels (READ COMMITTED vs REPEATABLE READ)
+    
+- Phantom reads (conceptual)
+    
+- Row-level vs table-level locks
+    
+- Deadlocks (why ordering matters)
+    
+
+Interviewers LOVE this.
+
+### Data Integrity and Constraints
+###### **Data Integrity & Safety**
+
+- Primary keys vs unique constraints
+    
+- Foreign keys (when to avoid them)
+    
+- Cascades (delete/update dangers)
+    
+- Check constraints vs application validation
+### Views and Materialization
+If you know:
+
+- Joins
+    
+- Window functions
+    
+- CTEs
+    
+- Indexing + EXPLAIN
+### Scaling and Operation SQL Knowledge
+##### **SQL at Scale**
+
+This is what separates juniors from seniors.
+
+- Vertical vs horizontal scaling
+    
+- Read replicas
+    
+- Write bottlenecks
+    
+- Sharding basics (when SQL alone breaks)
+    
+- OLTP vs OLAP workload separation
+
+
+
+##### One sentence to lock in
 
 > **In PostgreSQL, one application-level client connection equals one dedicated database backend process.**
 
 
-### 🔹 Implication 2: Predictable failure modes
+##### 🔹 Implication 2: Predictable failure modes
 
 In Postgres:
 
@@ -411,7 +603,7 @@ Postgres fails **locally**, not globally.
 
 ---
 
-### 🔹 Implication 3: OS scheduling matters
+###### 🔹 Implication 3: OS scheduling matters
 
 Because Postgres relies on the OS:
 
@@ -429,7 +621,7 @@ This is why Postgres:
 - Degrades gracefully
     
 - Rarely “locks up” completely
-### Reason 2: Shared memory + processes scale predictably
+##### Reason 2: Shared memory + processes scale predictably
 
 Postgres uses:
 
@@ -451,7 +643,7 @@ Correctness > cleverness.
 
 ---
 
-### Reason 3: Simpler mental model for concurrency
+#### Reason 3: Simpler mental model for concurrency
 
 Threads share _everything_.
 
@@ -475,7 +667,7 @@ Remember:
 
 Postgres is designed for _that_ moment.
 
-## Why this matters in real life (not theory)
+#### Why this matters in real life (not theory)
 
 ### Scenario: traffic spike
 
@@ -505,7 +697,7 @@ This is why Postgres is trusted for:
     
 - Large SaaS platforms
 
-## 5️⃣ Why not everyone chooses this design?
+#### 5️⃣ Why not everyone chooses this design?
 
 Because it has tradeoffs.
 
@@ -540,7 +732,7 @@ Postgres optimized for:
 
 Different goals.
 
-## 6️⃣ Why _you_, personally, should care
+#### 6️⃣ Why _you_, personally, should care
 
 Because this affects:
 
@@ -561,7 +753,7 @@ Because this affects:
     
 - Why fewer connections can be faster
 
-## 7️⃣ How this ties into MVCC, WAL, transactions
+#### 7️⃣ How this ties into MVCC, WAL, transactions
 
 This design enables:
 
@@ -575,14 +767,14 @@ This design enables:
 These aren’t independent features.  
 They **require** this architecture.
 
-## One sentence to remember forever
+#### One sentence to remember forever
 
 > **PostgreSQL is built to survive bad code, bad queries, and bad days — by isolating work at the OS level.**
 
 That’s the bird’s-eye view.
 
 
-## 3️⃣ Concurrency is normal, not exceptional
+#### 3️⃣ Concurrency is normal, not exceptional
 
 Postgres assumes:
 
@@ -597,7 +789,7 @@ Postgres assumes:
 
 So it is designed for **conflict**, not avoidance.
 
-## Data integrity is a _first-class feature_
+#### Data integrity is a _first-class feature_
 
 In PostgreSQL:
 
@@ -610,7 +802,7 @@ In PostgreSQL:
 
 They are **rules of reality**.
 
-### This leads to:
+#### This leads to:
 
 - Snapshot isolation
     
@@ -621,7 +813,7 @@ They are **rules of reality**.
 
 If you think in “one request at a time”, you will design bad schemas.
 
-## Storage is not the same as memory
+#### Storage is not the same as memory
 
 This sounds obvious — but people forget it.
 
@@ -636,7 +828,7 @@ Postgres constantly balances:
 - Background cleanup
     
 
-### Why this matters
+#### Why this matters
 
 - Indexes are not free
     
@@ -649,7 +841,7 @@ Postgres constantly balances:
 
 This explains _performance behavior_ later.
 
-## 6️⃣ The database plans queries, not you
+#### 6️⃣ The database plans queries, not you
 
 You don’t “tell” Postgres how to run a query.
 
@@ -663,7 +855,7 @@ Postgres decides:
 - Index usage
     
 
-### Your job is to:
+#### Your job is to:
 
 - Model data correctly
     
@@ -674,7 +866,7 @@ Postgres decides:
 
 Trying to micro-control execution is a junior mistake.
 
-## 7️⃣ Transactions are the unit of truth
+#### 7️⃣ Transactions are the unit of truth
 
 In PostgreSQL:
 
@@ -689,7 +881,7 @@ In PostgreSQL:
     - Isolation
         
 
-### This means
+##### This means
 
 - Partial failure is impossible
     
@@ -702,11 +894,11 @@ Once this clicks, you stop fearing complexity.
 
 ---
 
-## How we’ll learn PostgreSQL (seriously, not skimming)
+#### How we’ll learn PostgreSQL (seriously, not skimming)
 
 We’ll go in **layers**, each building intuition. You’ll _feel_ why Postgres exists and when it beats NoSQL.
 
-### Phase 0 – Mindset shift (important)
+##### Phase 0 – Mindset shift (important)
 
 PostgreSQL is:
 
@@ -736,7 +928,7 @@ If you don’t internalize this difference, Postgres will feel “annoying”.
 
 ---
 
-## 8️⃣ What makes PostgreSQL different from others (summary table)
+##### 8️⃣ What makes PostgreSQL different from others (summary table)
 
 | Feature            | PostgreSQL    | MySQL              | MongoDB          |
 | ------------------ | ------------- | ------------------ | ---------------- |
@@ -751,7 +943,7 @@ Postgres is built for:
 > **Long-term correctness under growth**
 
 
-### Why this matters
+##### Why this matters
 
 **Pros**
 
@@ -765,7 +957,7 @@ Postgres is built for:
 
 
 
-### 2️⃣ Databases, schemas, tables (core mental model)
+##### 2️⃣ Databases, schemas, tables (core mental model)
 
 text
 
@@ -793,9 +985,9 @@ Copy code
 
 ---
 
-## Phase 2 – Data modeling (THIS is where NoSQL users struggle)
+#### Phase 2 – Data modeling (THIS is where NoSQL users struggle)
 
-### 3️⃣ Tables are contracts, not suggestions
+##### 3️⃣ Tables are contracts, not suggestions
 
 sql
 
@@ -822,7 +1014,7 @@ Copy code
 
 ---
 
-### 4️⃣ Relationships (the big shift)
+###### 4️⃣ Relationships (the big shift)
 
 Mongo:
 
@@ -851,9 +1043,9 @@ This gives you:
 
 ---
 
-## Phase 3 – Querying the relational way
+##### Phase 3 – Querying the relational way
 
-### 5️⃣ JOINs are not expensive (when done right)
+##### 5️⃣ JOINs are not expensive (when done right)
 
 sql
 
@@ -877,7 +1069,7 @@ Mongo:
 
 ---
 
-### 6️⃣ Aggregation (Postgres destroys NoSQL here)
+##### 6️⃣ Aggregation (Postgres destroys NoSQL here)
 
 sql
 
@@ -889,9 +1081,9 @@ This runs **inside the engine**, optimized in C.
 
 ---
 
-## Phase 4 – Transactions (Postgres superpower)
+##### Phase 4 – Transactions (Postgres superpower)
 
-### 7️⃣ ACID transactions (you’ll love this)
+###### 7️⃣ ACID transactions (you’ll love this)
 
 sql
 
@@ -914,7 +1106,7 @@ Postgres: **native and default**
 
 ---
 
-### 8️⃣ Isolation levels (important later)
+###### 8️⃣ Isolation levels (important later)
 
 - READ COMMITTED (default)
     
@@ -934,9 +1126,9 @@ Postgres prevents:
 
 ---
 
-## Phase 5 – Indexes (performance fundamentals)
+##### Phase 5 – Indexes (performance fundamentals)
 
-### 9️⃣ Index types (huge topic)
+###### 9️⃣ Index types (huge topic)
 
 - B-tree (default)
     
@@ -966,7 +1158,7 @@ Bad indexing = slow DB even with good SQL.
 
 ---
 
-## Phase 7 – PostgreSQL in real apps (NestJS angle)
+###### Phase 7 – PostgreSQL in real apps (NestJS angle)
 
 Since you’re a NestJS dev:
 
@@ -998,11 +1190,11 @@ We’ll connect Postgres concepts directly to:
 
 ---
 
-## How I suggest we proceed (step-by-step)
+##### How I suggest we proceed (step-by-step)
 
 If you agree, we’ll do this:
 
-### Lesson 1 (next message)
+##### Lesson 1 (next message)
 
 - Install PostgreSQL
     
@@ -1015,7 +1207,7 @@ If you agree, we’ll do this:
 - First real inserts & queries
     
 
-### Lesson 2
+##### Lesson 2
 
 - Data modeling properly
     
@@ -2995,13 +3187,13 @@ I’ll give exercises in a **structured order**, with questions, practical tasks
 
 ---
 
-# STEP 1 — PostgreSQL as a SYSTEM OWNER (Practical Exercises)
+#### STEP 1 — PostgreSQL as a SYSTEM OWNER (Practical Exercises)
 
 **Goal:** Understand how Postgres runs on your OS, how clusters are managed, how data is stored, and how processes interact. You should be able to answer “what happens when Postgres starts/stops?” and be confident about the filesystem, processes, and logs.
 
 ---
 
-## 1️⃣ Cluster discovery & process observation
+#### 1️⃣ Cluster discovery & process observation
 
 **Exercise A — List clusters**
 
@@ -3298,7 +3490,7 @@ ps aux | grep postgres
 
 ---
 
-## 2️⃣ Data directory inspection
+#### 2️⃣ Data directory inspection
 
 **Exercise: Explore the cluster’s data directory**
 
@@ -3468,7 +3660,7 @@ By the end of Step 1, **you should be able to answer these without cheat sheets*
     
 6. If Postgres dies unexpectedly, how would you verify which cluster/data directory is safe?
     
-7. How would you observe connections spawned by a Node.js/NestJS app?
+7. How would you observe connections spawned by a Node.js NestJS app?
     
 
 ---
@@ -3504,6 +3696,17 @@ By the end of Step 2, you should **confidently understand how clients connect, h
 **Goal:** Understand how connections work, how Postgres handles them internally, and how clients (psql, Node.js apps) interact with the server.
 
 ---
+You **can confidently move on** to the **connection model and client-level operations**:
+
+- How a client connects to the cluster
+    
+- How backends are forked
+    
+- How queries are executed
+    
+- How sessions work
+    
+- How sockets and ports are used
 
 #### 1️⃣ Observe the connection lifecycle
 
@@ -3852,7 +4055,7 @@ GRANT dev TO app_user;
 
 ---
 
-## 2️⃣ AUTHENTICATION (Proving who you are)
+##### 2️⃣ AUTHENTICATION (Proving who you are)
 
 **Concept:**  
 Authentication is **done before SQL executes**. Postgres checks:
@@ -3893,7 +4096,7 @@ less /var/log/postgresql/postgresql-16-main.log
 sudo systemctl restart postgresql
 ```
 
-### Questions
+#### Questions
 
 1. What is the difference between `peer`, `trust`, and `scram-sha-256`?
     
@@ -3904,7 +4107,7 @@ sudo systemctl restart postgresql
 
 ---
 
-##### 3️⃣ AUTHORIZATION (Permissions)
+###### 3️⃣ AUTHORIZATION (Permissions)
 
 **Concept:**  
 Once authenticated, Postgres checks **what you can do**.
@@ -3977,7 +4180,7 @@ DELETE FROM tasks WHERE id=1; -- should fail
 
 ---
 
-## 5️⃣ Optional deeper topics (stretch)
+#### 5️⃣ Optional deeper topics (stretch)
 
 - Default privileges for schemas and tables
     
@@ -3990,7 +4193,7 @@ DELETE FROM tasks WHERE id=1; -- should fail
 
 ---
 
-#### 6️⃣ Confidence questions (exam-ready)
+##### 6️⃣ Confidence questions (exam-ready)
 
 By the end of Step 3, you should confidently answer:
 
@@ -4015,7 +4218,7 @@ By the end of Step 3, you should confidently answer:
 
 ---
 
-#### ✅ Expected outcome after Step 3
+##### ✅ Expected outcome after Step 3
 
 - You can create and manage roles confidently.
     
@@ -4033,20 +4236,20 @@ By the end of Step 3, you should confidently answer:
 If you want, we can next do **Step 4**, which includes **WAL, crash recovery, transactions**, and also a **practical Node + NestJS experiment** showing durability — this is a game-changer for production readiness.
 
 Do you want me to move to Step 4 now?
-## STep 5
+### Step 5
 Perfect. Step 4 is where PostgreSQL starts to **really show its power and robustness**. This is critical if you want to build **production-grade, US remote-level backend apps**. Step 4 focuses on **transactions, WAL (Write-Ahead Logging), crash recovery, and durability guarantees**.
 
 We’ll do it like before: practical exercises, conceptual understanding, and exam-level questions. Since your goal is NestJS + Node, I’ll include practical experiments where useful.
 
 ---
 
-# STEP 4 — Transactions, WAL, and Durability
+##### STEP 4 — Transactions, WAL, and Durability
 
 **Goal:** Understand how PostgreSQL ensures **data integrity and durability**, even in crashes, and how to work with it safely in apps.
 
 ---
 
-## 1️⃣ Transactions
+##### 1️⃣ Transactions
 
 **Concept:**  
 A transaction is a **unit of work** that is either fully applied or fully discarded. It ensures **ACID properties**:
@@ -4060,7 +4263,7 @@ A transaction is a **unit of work** that is either fully applied or fully discar
 - **Durability** — committed changes survive crashes
     
 
-### Exercises
+#### Exercises
 
 1. Connect as `app_user`:
     
@@ -4097,7 +4300,7 @@ COMMIT;
 SELECT * FROM tx_test;  -- should show 'test3'
 ```
 
-### Questions
+#### Questions
 
 1. What happens if a crash occurs **after COMMIT** but before data files are updated?
     
@@ -4108,7 +4311,7 @@ SELECT * FROM tx_test;  -- should show 'test3'
 
 ---
 
-## 2️⃣ Write-Ahead Logging (WAL)
+#### 2️⃣ Write-Ahead Logging (WAL)
 
 **Concept:**  
 Postgres writes **changes to WAL first**, then applies them to data files. This ensures **durability** even if the system crashes.
@@ -4145,7 +4348,7 @@ sudo systemctl start postgresql
 - Verify that committed transactions persist, rolled-back transactions do not.
     
 
-### Questions
+#### Questions
 
 1. Why does Postgres write to WAL before updating data files?
     
@@ -4156,7 +4359,7 @@ sudo systemctl start postgresql
 
 ---
 
-## 3️⃣ Checkpoints
+#### 3️⃣ Checkpoints
 
 **Concept:**  
 Checkpoints flush **dirty data pages** from memory to disk. They reduce recovery time after a crash.
@@ -4181,7 +4384,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 - You should see `checkpoint` entries periodically
     
 
-### Questions
+#### Questions
 
 1. What is a checkpoint and why is it necessary?
     
@@ -4192,7 +4395,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 4️⃣ Practical NestJS / Node.js experiments
+#### 4️⃣ Practical NestJS / Node.js experiments
 
 - Simulate multiple concurrent transactions from Node:
     
@@ -4218,7 +4421,7 @@ await client.end();
 - Kill Node process mid-transaction → verify rollback behavior.
     
 
-### Questions
+#### Questions
 
 1. How does Node client behavior interact with WAL and transactions?
     
@@ -4229,7 +4432,7 @@ await client.end();
 
 ---
 
-## 5️⃣ Optional deeper topics (stretch)
+#### 5️⃣ Optional deeper topics (stretch)
 
 - **Point-in-time recovery (PITR)**
     
@@ -4244,7 +4447,7 @@ await client.end();
 
 ---
 
-## 6️⃣ Confidence questions (exam-level)
+#### 6️⃣ Confidence questions (exam-level)
 
 1. Explain the full lifecycle of a transaction from `BEGIN` → `COMMIT` → WAL → data files.
     
@@ -4261,7 +4464,7 @@ await client.end();
 
 ---
 
-### ✅ Expected outcome after Step 4
+#### ✅ Expected outcome after Step 4
 
 - You can **explain WAL, transactions, and checkpoints** confidently.
     
@@ -4286,13 +4489,13 @@ We’ll follow the same structure: **practical exercises, mental models, and exa
 
 ---
 
-# STEP 5 — Advanced Topics: Performance, Maintenance, Failure Recovery, and High Availability
+##### STEP 5 — Advanced Topics: Performance, Maintenance, Failure Recovery, and High Availability
 
 **Goal:** Understand how Postgres behaves under load, how it maintains data integrity long-term, and how to design resilient production systems.
 
 ---
 
-## 1️⃣ Autovacuum and Table Maintenance
+#### 1️⃣ Autovacuum and Table Maintenance
 
 **Concept:**  
 Postgres **does not automatically reclaim space** from deleted/updated rows in tables. `autovacuum` handles cleanup to prevent bloat.
@@ -4333,7 +4536,7 @@ SELECT relname, n_dead_tup FROM pg_stat_user_tables;
 VACUUM ANALYZE vac_test;
 ```
 
-### Questions
+#### Questions
 
 1. Why does Postgres need autovacuum?
     
@@ -4344,7 +4547,7 @@ VACUUM ANALYZE vac_test;
 
 ---
 
-## 2️⃣ Indexing and Query Performance
+### 2️⃣ Indexing and Query Performance
 
 **Concept:**  
 Indexes improve SELECT performance but can slow down INSERT/UPDATE/DELETE. Understanding **when and how to use them** is key.
@@ -4368,7 +4571,7 @@ EXPLAIN ANALYZE SELECT * FROM vac_test WHERE val='x';
 3. Observe query plan changes when indexes exist vs absent.
     
 
-### Questions
+##### Questions
 
 1. How does Postgres choose which index to use?
     
@@ -4390,7 +4593,7 @@ Two main types:
 - **Logical replication** (per table, per change)
     
 
-### Exercises (conceptual + optional practical)
+##### Exercises (conceptual + optional practical)
 
 1. Observe WAL in use for replication:
     
@@ -4418,7 +4621,7 @@ ls -lh /var/lib/postgresql/16/main/pg_wal
 
 ---
 
-## 4️⃣ Backup and Restore
+#### 4️⃣ Backup and Restore
 
 **Concept:**
 
@@ -4427,7 +4630,7 @@ ls -lh /var/lib/postgresql/16/main/pg_wal
 - Use `pg_basebackup` or WAL archiving for physical backups
     
 
-### Exercises
+#### Exercises
 
 1. Take a logical backup:
     
@@ -4446,7 +4649,7 @@ psql -U postgres -d appdb_restored -f appdb_backup.sql
 3. Observe WAL usage during backup operations.
     
 
-### Questions
+#### Questions
 
 1. What is the difference between logical and physical backups?
     
@@ -4457,7 +4660,7 @@ psql -U postgres -d appdb_restored -f appdb_backup.sql
 
 ---
 
-## 5️⃣ Crash Recovery and Failover
+#### 5️⃣ Crash Recovery and Failover
 
 **Concept:**  
 Postgres guarantees durability via WAL and checkpoints. After a crash:
@@ -4469,7 +4672,7 @@ Postgres guarantees durability via WAL and checkpoints. After a crash:
 3. Discards uncommitted changes
     
 
-### Exercises
+#### Exercises
 
 1. Simulate crash (stop service abruptly):
     
@@ -4489,7 +4692,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 3. Verify committed transactions persist, uncommitted ones do not.
     
 
-### Questions
+#### Questions
 
 1. How does Postgres detect crash recovery?
     
@@ -4500,7 +4703,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 6️⃣ Node/NestJS Practical Integration
+#### 6️⃣ Node/NestJS Practical Integration
 
 - Use **transactions, inserts, and deletions** in Node/NestJS while simulating multiple concurrent users.
     
@@ -4509,7 +4712,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 - Optional: Test what happens if Node crashes mid-transaction or if the DB restarts.
     
 
-### Questions
+#### Questions
 
 1. How would you ensure **atomic operations** in your NestJS services?
     
@@ -4520,7 +4723,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 7️⃣ Optional Deeper Topics
+#### 7️⃣ Optional Deeper Topics
 
 - **Row-Level Security (RLS)** for per-user permissions
     
@@ -4535,7 +4738,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-## 8️⃣ Confidence Questions (Exam-Ready)
+#### 8️⃣ Confidence Questions (Exam-Ready)
 
 1. Explain how autovacuum prevents table bloat.
     
@@ -4554,7 +4757,7 @@ tail -f /var/log/postgresql/postgresql-16-main.log
 
 ---
 
-### ✅ Expected Outcome after Step 5
+#### ✅ Expected Outcome after Step 5
 
 - You can **explain advanced Postgres internals**: WAL, checkpoints, autovacuum, replication.
     
@@ -4578,11 +4781,11 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-# **Bibek’s 5-Step Postgres Mastery Roadmap**
+##### **Bibek’s 5-Step Postgres Mastery Roadmap**
 
 ---
 
-## **STEP 1 — PostgreSQL as a System Owner**
+#### **STEP 1 — PostgreSQL as a System Owner**
 
 **Goal:** Understand the OS-level Postgres setup, processes, clusters, and data directories.
 
@@ -4640,7 +4843,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 2 — Connection Model & Client Interaction**
+#### **STEP 2 — Connection Model & Client Interaction**
 
 **Goal:** Understand how clients connect, backend processes are spawned, and connection limits.
 
@@ -4678,7 +4881,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 3 — Roles, Authentication & Authorization**
+#### **STEP 3 — Roles, Authentication & Authorization**
 
 **Goal:** Learn identity, authentication, and permissions.
 
@@ -4722,7 +4925,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 4 — Transactions, WAL & Durability**
+#### **STEP 4 — Transactions, WAL & Durability**
 
 **Goal:** Understand ACID, WAL, checkpoints, and crash recovery.
 
@@ -4765,7 +4968,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-## **STEP 5 — Advanced Topics: Performance, HA, Backup & Recovery**
+#### **STEP 5 — Advanced Topics: Performance, HA, Backup & Recovery**
 
 **Goal:** Build production-grade Postgres knowledge for remote jobs.
 
@@ -4816,7 +5019,7 @@ I’ll structure it like a **study + hands-on lab guide**, with exercises, menta
 
 ---
 
-### ✅ Suggested Learning Path
+#### ✅ Suggested Learning Path
 
 - **Step 1–2:** ~2–3 days, focus on system + connection experiments.
     
