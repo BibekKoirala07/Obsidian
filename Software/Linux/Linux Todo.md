@@ -2,21 +2,21 @@
 
 🔹 Learn these basics until they become muscle memory:
 
-|Topic|Command(s)|
-|---|---|
-|Current directory|`pwd`|
-|List files|`ls -la`, `ls -lh`|
-|Change directory|`cd`|
-|Create file/folder|`touch`, `mkdir -p`|
-|Copy/move/delete|`cp`, `mv`, `rm -rf`|
-|View file contents|`cat`, `less`, `head`, `tail -n 20`|
-|Search inside files|`grep "text" file`, `grep -r "text" ./folder`|
-|Find files|`find . -name "*.js"`|
-|Wildcards|`*.js`, `?.txt`|
-|Permissions|`chmod +x`, `chown`, `ls -l`|
-|File compression|`tar -czvf`, `unzip`, `gzip`, `xz`|
-|Output redirect|`>`, `>>`, `|
-|Disk usage|`df -h`, `du -sh .`|
+| Topic               | Command(s)                                    |
+| ------------------- | --------------------------------------------- |
+| Current directory   | `pwd`                                         |
+| List files          | `ls -la`, `ls -lh`                            |
+| Change directory    | `cd`                                          |
+| Create file/folder  | `touch`, `mkdir -p`                           |
+| Copy/move/delete    | `cp`, `mv`, `rm -rf`                          |
+| View file contents  | `cat`, `less`, `head`, `tail -n 20`           |
+| Search inside files | `grep "text" file`, `grep -r "text" ./folder` |
+| Find files          | `find . -name "*.js"`                         |
+| Wildcards           | `*.js`, `?.txt`                               |
+| Permissions         | `chmod +x`, `chown`, `ls -l`                  |
+| File compression    | `tar -czvf`, `unzip`, `gzip`, `xz`            |
+| Output redirect     | `>`, `>>`, `                                  |
+| Disk usage          | `df -h`, `du -sh .`                           |
 
 🔁 Practice:
 
@@ -103,7 +103,7 @@
 
 ---
 
-## ✅ PHASE 5: Bash Scripting & Customization (Week 9–10)
+### ✅ PHASE 5: Bash Scripting & Customization (Week 9–10)
 
 🔹 Automate your routine using Bash:
 
