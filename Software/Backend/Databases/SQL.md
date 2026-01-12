@@ -495,6 +495,10 @@ For Arrays
 integer[] or text[]
 ```
 
+###### WHERE
+Always prefer `WHERE` instead of `HAVING` if possible
+###### Having
+Having don't use indexes as having runs after aggregation. 
 ###### Joins
 ==SQL Joins are graph traversal and not table merging==. 
 
@@ -709,6 +713,130 @@ So where does data comes from in our database ? One option is it comes from fron
 
 Let have a scenario. The data from other database get interfaced in our database. 
 ### Indexing and Performance
+Simply,==Indexing is the separate data structure which helps DB to find row faster, not display them(common confusion)==. That is it. It is like a look up structure. Without index, DB is forced to do sequential scan. With indexing, DB can do Index scan/Index jump(jumping directly to rows).
+
+Index trade off write speed + storage for read speed. 
+
+###### 2. How slow queries happen (the real enemy)
+
+ Bad performance usually comes from:
+
+1. Full table scans on large tables
+    
+2. Wrong index (exists but not usable)
+    
+3. Too many rows returned
+    
+4. Poor cardinality (low selectivity)
+    
+5. Planner choosing a bad plan (stats problem)
+    
+
+Indexes solve **#1 and #2**, partially help **#3**, and rely on **stats** for #5.
+
+Indexes are mainly used in `WHERE`, `JOIN`, `ORDER BY` and `GROUP BY`.
+
+###### Let's start for `WHERE`.
+We can create index like this
+```
+	CREATE INDEX ON users(email)
+```
+and if we use email to query like
+```sql
+	EXPLAIN ANALYZE SELECT * FROM users WHERE email = "example@gmail.com"
+```
+Even with common sense, We can see that `email` is indexed. Without indexing, we would know that that query would do sequential scan but with indexing, DB could jump directly to matching rows. 
+
+Now we may think what about composite indexing ? 
+```sql
+	CREATE INDEX idx_name ON users(username, email)
+```
+The tricky thing to understand is the this indexing works for `username` alone and `username` and `email`. It doesn't work for email at all as index starts with `username`.
+```sql
+	SELECT * FROM users WHERE username = 'username' // correct
+	SELECT * FROM users WHERE username = 'username' and email = 'email' // it works
+	
+	SELECT * FROM users WHERE email = 'email' // it doesnot work as indexing starts with username
+	SELECT * FROM users WHERE email = 'email' and username = 'username' // it doesnot work
+```
+DB can't jump using `email` first. It is called ==Left most rule==.
+
+If you want to use both separately i.e. meaning just `email` or `username`, then index both separately. 
+
+==One composite index != two separate index==
+###### Let's look at `JOIN`
+Now let's look at another indexing in query. 
+Let's try to join user with order
+```sql
+	EXPLAIN SELECT * FROM orders
+	JOIN users
+	ON users.id = orders.user_id
+```
+Now let's look from the point of common sense. We know that PK is already indexed. so `users.id` is indexed but is `orders.user_id` indexed ? Well no, So it goes like this : `For each users, DB will search for users again and again`. 
+But what if we create Index in `user_id`.
+```sql
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+```
+Now DB have escaped sequential scan and can `directly find the matching user for each order`.
+###### Let's look at `ORDER BY`
+Let us have a query
+```sql
+	EXPLAIN SELECT * FROM orders
+	ORDER BY created_at DESC
+```
+First DB reads all the row and sort it.  So it causes full table scan and expensive sort operation. 
+
+So we need to create the index in `created_at DESC`
+```sql
+	CREATE INDEX createdat_desc ON users(created_at DESC)
+```
+Now DB think that Rows are already sorted in the index. 
+
+Now let's move forward by concatenating `WHERE` and `ORDER BY`
+```sql
+	EXPLAIN SELECT * FROM orders
+	WHERE user_id = 5
+	ORDER BY created_at DESC
+	LIMIT 10
+```
+Without index what do you think would happen ? Well first DB will filter all the rows, after that sorting will happen and will apply limit. But with indexing
+```sql
+	CREATE INDEX double_index ON orders(user_id, created_at DESC)
+```
+Not it works for above query. Now DB filters by `user_id`, rows are already sorted and applies `limit`
+
+If we see `ORDER BY` and `LIMIT`, then there should be index. 
+###### Let's look at `GROUP BY`
+The things with indexing with `GROUP BY` is that it depends on query and data only. Indexing can by help but not always. 
+
+Let look with example
+```sql
+	EXPLAIN SELECT user_id, COUNT(*) FROM orders GROUP BY user_id
+```
+First DB have to get all the orders and group by `user_id`. Using Explain we can see 
+```sql
+Seq Scan
+HashAggregate // slow
+```
+
+So what does adding indexing on `user_id` does ? Now it will show
+```
+Index Scan
+GroupAggregate
+```
+But ==there is some caveat as it only work sometimes==.
+It only can help when 
+- Grouping Column has  many distinct values
+- Query can read data in grouped order
+- Index allows index-only scan
+But they don't help when 
+- There are very few distinct values 
+- DB still needs to scan most rows 
+- Hash Aggregation is cheaper. 
+
+==In real world. If WHERE and GROUP BY comes in sequential, then do indexing on both==. 
+
+
 Index is a separate Data Structure that maps column values to physical row location(TIDs)(just stores column values and where to find the rows in the table). 
 
 Since PG stores table rows in block called pages(usually 8 KB each). Table = a bunch of these pages(like sheet in a notebook). And Index is stored separately from table data. It has its own page, organized for fast search. Index = "table of content" page.
@@ -729,21 +857,15 @@ Another thing is index never stores the full row(It is like table of content). I
 It skip entire table entirely. 
 
 
+==TIPS==
+- Indexing should be done in high cardinality columns as index performs best in those columns. Like it shouldn't be done in columns like `gender` as it has low cardinality. It should be thing like `email` or things like that with high cardinality. What about composite index ? Well have low cardinality column in second option. Like `users(email, isActive)`.
 
-
-Got it. I’ll explain **PostgreSQL indexing** the way a **system designer / senior backend interview** expects — not beginner tips, not “don’t use `SELECT *` stuff.
-
-Think of this as **mental models + interview-grade talking points**.
-
-> “Indexes trade extra write cost and storage for faster reads by avoiding full heap scans.”
-
----
 
 ###### 2️⃣ When PostgreSQL Uses an Index
 
 Postgres decides via the **query planner**.
 
-##### Typical cases where index is used
+###### Typical cases where index is used
 
 - `WHERE column = value`
     
@@ -859,11 +981,11 @@ B-tree is better in most cases.
 
 ---
 
-#### 4.3 GIN (Generalized Inverted Index)
+###### 4.3 GIN (Generalized Inverted Index)
 
 Used for **multi-valued columns**
 
-##### Common uses
+###### Common uses
 
 - `ARRAY`
     
@@ -893,10 +1015,11 @@ WHERE tags @> ARRAY['postgres']
 
 ---
 
-#### 4.4 GiST (Generalized Search Tree)
+###### 4.4 GiST (Generalized Search Tree)
 
 Used for **geometric / fuzzy matching**
 
+### EXPLAIN AND EXPLAIN ANALYZE
 ### Use cases
 
 - Geospatial (PostGIS)
