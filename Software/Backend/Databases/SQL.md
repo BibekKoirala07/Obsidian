@@ -823,7 +823,7 @@ WHERE tags @> ARRAY['postgres']
 
 Used for **geometric / fuzzy matching**
 
-### Use cases
+##### Use cases
 
 - Geospatial (PostGIS)
     
@@ -841,7 +841,6 @@ CREATE INDEX ON places USING GiST(location);
 > “GiST is extensible and supports custom distance operators.”
 
 ---
-
 ###### 4.5 BRIN (Block Range Index)
 
 ##### Designed for
@@ -1646,6 +1645,7 @@ Interviewers LOVE this.
     
 - Check constraints vs application validation
 ### Views and Materialization
+We don't index views but base table. We do index Materialized views. 
 If you know:
 
 - Joins
@@ -1734,7 +1734,7 @@ Correctness > cleverness.
 
 ---
 
-#### Reason 3: Simpler mental model for concurrency
+##### Reason 3: Simpler mental model for concurrency
 
 Threads share _everything_.
 
@@ -1758,9 +1758,9 @@ Remember:
 
 Postgres is designed for _that_ moment.
 
-#### Why this matters in real life (not theory)
+##### Why this matters in real life (not theory)
 
-### Scenario: traffic spike
+##### Scenario: traffic spike
 
 **Thread-based DB**
 
@@ -1792,7 +1792,7 @@ This is why Postgres is trusted for:
 
 Because it has tradeoffs.
 
-### Downsides of process-based design
+###### Downsides of process-based design
 
 - Higher memory usage per connection
     
