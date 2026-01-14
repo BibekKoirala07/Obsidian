@@ -1,5 +1,61 @@
 Here we will learn about PostgreSQL.
 
+Know this later 
+##### confirm who owns the database
+
+Run this as `postgres`:
+
+`SELECT datname, pg_get_userbyid(datdba) AS owner FROM pg_database WHERE datname = current_database();`
+
+If owner ≠ `bibek`, then `bibek` cannot create tables by default.
+
+---
+
+###### 4️⃣ Fix #1 (Recommended): Grant schema permission
+
+Run this as `postgres`:
+
+`GRANT CREATE ON SCHEMA public TO bibek;`
+
+
+###### 5️⃣ Fix #2 (Best practice): Make `bibek` the database owner
+
+Even better:
+
+`ALTER DATABASE your_db_name OWNER TO bibek;`
+
+Database owner automatically has:
+
+- CREATE on schemas
+    
+- Full control inside that DB ## 6️⃣ Why PostgreSQL does this (INTERVIEW GOLD ⚠️)
+
+PostgreSQL separates:
+
+- **Database privileges** → connect, create schema
+    
+- **Schema privileges** → create tables, views, functions
+    
+
+> Table creation happens inside a schema, not directly in a database.
+
+
+###### 8️⃣ Quick mental model (easy)
+
+`Cluster  └── Database       └── Schema            └── Table`
+
+Permissions are checked **at each level**.
+
+---
+
+###### 9️⃣ Interview-style Q&A
+
+❓ _User has CREATEDB but cannot create tables — why?_  
+✅ Because CREATE TABLE requires CREATE privilege on the schema.
+
+❓ _How do you fix it?_  
+✅ Grant CREATE on schema or make the user database owner.
+
 A general-purpose transactional data engine designed to protect correctness under concurrency.
 
 > **In PostgreSQL, one application-level client connection equals one dedicated database backend process.**
@@ -498,7 +554,7 @@ integer[] or text[]
 ###### WHERE
 Always prefer `WHERE` instead of `HAVING` if possible
 ###### Having
-Having don't use indexes as having runs after aggregation. 
+Having don't use indexes as Having runs after aggregation. 
 ###### Joins
 ==SQL Joins are graph traversal and not table merging==. 
 
@@ -550,7 +606,26 @@ Inner joins ❌ Joining without thinking about cardinality. This is common mista
 4. **Rolling Aggregates**: Comparing specific ranks of values and aggregating if needed. You will learn the `ROWS BETWEEN` clause here.
 
 ###### Sub queries
+There are two kinds of sub queries. They are co-related and non-correlated subqueries. 
 ###### Stored Procedures
+```sql
+CREATE OR REPLACE PROCEDURE proc_name(
+	IN p_first_name TEXT,
+	IN p_age NUMERIC DEFAULT 3000,
+	OUT p_id INT,
+)
+LANGUAGE plpgsql (procedural sql(It has IF, LOOP variables))
+SECURITY DEFINER (gets creater priviledge)
+SET search_path = public
+AS $$
+BEGIN
+	
+	COMMIT;
+END;
+$$;
+```
+`Security Definer` means the procedure runs with the privilege of the user who created it and not who called it, the opposite is default behavior.
+
 Stored procedure is executable code stored inside the database(Stored logic). They must be treated as workflows rather than functions. ==Stored procedure can be really helpful in terms of security. You can grant permission to run a procedure without granting access to table. ==.
 
 ==Caution==
@@ -571,7 +646,6 @@ table_without_password_and_active AS (
 	SELECT id, username, email
 	FROM cte_name
 	WHERE active = true
-	
 )
 SELECT * FROM table_without_password
 ```
