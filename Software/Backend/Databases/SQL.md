@@ -128,6 +128,7 @@ Here comes PgBouncer - It sits between the app and PostgreSQL
 Node.js app connects to PgBouncer directly instead of PostgreSQL and then PgBouncer manages real backend connection to PostgreSQL. It is small server that sits between apps and SQL. It is a standalone process, not a part of Node.js or DB. And it manages limited number of backend connection to PG while exposing virtual connections to apps. It also queue request if all backend connection are busy. It makes apps feels like hundreds of connections and multiplexing them efficiently also. While PostgreSQL never sees more than N(let's say 50) connection. It 1. Acts as a **global connection pool** for that Postgres server.
 
 Example of PgBouncer -> It is a different app. Now the Nest will connect to 6432(not 5432)
+
 ```text
 [databases]
 # database_name = host:port dbname user password
@@ -383,6 +384,8 @@ After we run this command, `whoami` shows `postgres`. So this is the thing that 
 
 Sometimes we may see that why is sub roles like ebpearls is able to connect with password despite not being given that privilege. Well, may be for that user, we may not need to able to login as We may have trust coming from localhost for `pg_hba.conf`. 
 
+==It is the role that we do login and not other things It is mostly confusing at first but it is true.==
+
 
 #### Why Postgres does this (ONE reason only, for now)
 
@@ -400,19 +403,7 @@ Because databases:
 Threads make this _much harder_.
 
 Processes make this **boringly safe**.
-
-```sql
-Client
-  ↓
-Authentication (pg_hba.conf)
-  ↓
-Role Login (LOGIN privilege)
-  ↓
-Authorization (GRANT / REVOKE)
-  ↓
-Object-level permissions (DB / schema / table / column)
-
-```
+<<<<<<< HEAD
 ### Database Specific
 ```sql
 CREATE DATABASE dbname
@@ -504,12 +495,17 @@ For Arrays
 integer[] or text[]
 ```
 
+###### WHERE
+Always prefer `WHERE` instead of `HAVING` if possible
+###### Having
+Having don't use indexes as having runs after aggregation. 
 ###### Joins
 ==SQL Joins are graph traversal and not table merging==. 
 
 Inner joins ❌ Joining without thinking about cardinality. This is common mistakes
 
  🔹 Data retrieval patterns
+>>>>>>> f2376b6a631f041adb50707bf5aa9a1b0c996f69
 
 - `WHERE` vs `HAVING` (filter before vs after aggregation)
     
@@ -553,13 +549,90 @@ Inner joins ❌ Joining without thinking about cardinality. This is common mista
     
 4. **Rolling Aggregates**: Comparing specific ranks of values and aggregating if needed. You will learn the `ROWS BETWEEN` clause here.
 
+###### Sub queries
+###### Stored Procedures
+Stored procedure is executable code stored inside the database(Stored logic). They must be treated as workflows rather than functions. ==Stored procedure can be really helpful in terms of security. You can grant permission to run a procedure without granting access to table. ==.
+
+==Caution==
+- There should be no business logic inside stored procedures. (It should belong to application code(node))
+- They are invisible to most dev tolling, and require DB expertise and create a "DB god" bottleneck. 
+- Testing is extremely difficult for SP, so is versioning, and portability is low and debugging is weak and only performance is better sometimes. 
+That is the reason why Modern backend systems use fewer stored procedures. ==They are normally used for DB workflows/batch jobs==. In PostgreSQL, Stored procedure run inside backend processes, share memory and locks and can impact overall DB performance. What will happen if there is bad loop in a procedure. Since it is not isolated like app code, it blocks resources, affects all queries also. 
+
+###### Window Function
+
+###### CTE
+```sql
+WITH cte_name AS (
+	SELECT **
+	FROM users
+)
+table_without_password_and_active AS (
+	SELECT id, username, email
+	FROM cte_name
+	WHERE active = true
+	
+)
+SELECT * FROM table_without_password
+```
+CTE's are temporary and scope limited. They don't store data. It just stores the query, not the result. It is just read only. We can't write using CTE. It is just scope to the query that defined it. ==They make our query readable and modular. ==
+
+We also have Recursive CTE also. And it is the place where CTE's become powerful. 
+
+Why use it ? 
+Re usability, Readability, Modularity and Recursive Queries
+
+Caution
+###### Triggers
+==Use triggers when when we must and keep them stupid==
+==Triggers are for enforcing invariant, not implementing behavior==. 
+```sql
+CREATE TRIGGER set_updated_at
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION set_timestamp()
+```
+Trigger run outside application awareness. 
+
+==Caution==
+- No Business logic in triggers  pls
+- Cross tables mutation. This hide cascades, deadlocks and performance nightmares. 
+- In fact we can do http calls, messaging and file writes in trigger, but we must never reach outside the database. 
+- No performance heavy logic in triggers, 
+- Triggers are dangerous as they are invisible execution. It creates Debugging hell
+- ORM hate triggers, cuz they expects that writes do exactly what they say, row counts match expectations. Triggers violate this basic thing. 
+
+If you want next, we can:
+
+- Walk through a **real “bad trigger” postmortem**
+    
+- Compare **triggers vs application-level constraints**
+    
+- Decide **when constraints beat triggers**
+    
+- Or design a **safe trigger checklist**
+
+###### Data Retrieval
+```sql
+Client
+  ↓
+Authentication (pg_hba.conf)
+  ↓
+Role Login (LOGIN privilege)
+  ↓
+Authorization (GRANT / REVOKE)
+  ↓
+Object-level permissions (DB / schema / table / column)
+
+```
 ### Keys
 ###### Primary Key
 PK should be highly stable. Example, Phone number can't be used as PK for people as it can change easily. Primary Key can't be NULL at all. PK can be one column or more depending on the architecture of table. 
 ###### Candidate Key
-It just means that columns can be candidate for PK. We know PK are highly stable and unique, right ? But what if we have more than one column who fulfil that role ? So those keys are Candidate Keys. And let's say we have table with one column being State Capital or District Capital. Can it be CK ? Well it seems like ? But what if some state change the capital ? Can we guarantee that Capital will be same ? Well no, It could depends on time right ? So CK must exhibit uniqueness over time rather than across just one instance. Just like PK. 
+It just means that whichever columns can be candidate for PK. We know PK are highly stable and unique, right ? But what if we have more than one column who fulfill that role ? So those keys are Candidate Keys. And let's say we have table with one column being State Capital or District Capital. Can it be CK ? Well it seems like ? But what if some state change the capital ? Can we guarantee that Capital will be same ? Well no(may be both could have State Capital as Maryland right ? ), It could depends on time(may be in 1880, There was Augusta but for some other state right now, the capital is also Augusta) right ? So CK must exhibit uniqueness over time rather than across just one instance. Just like PK. 
 ###### Super Key
 ###### Alternate Key
+Other candidate Key except PK is Alternate Keys
 ###### Foreign Key
 ###### Surrogate Key 
 ###### Natural Key 
@@ -568,7 +641,7 @@ It just means that columns can be candidate for PK. We know PK are highly stable
 ###### Compound Key
 ###### Intelligent Key
 
-### Normalization and Schema Design
+### Normalization, and Schema Design
 Let's talk about Normalization first.
 Good Database can't protect bad data. But there are some case of bad data that some good database design can protect. Like this value can't be logically be true. Like one customer with 2 DOB is logically not possible. It is called failure of data integrity. Like data can't be trusted because it disagree with itself. 
 
@@ -633,8 +706,137 @@ What you should write here:
 - Materialized views
     
 - Snapshot tables
-### De Normalization
+### DE Normalization
+Should we be normalizing all our table all the time ? Hell no, there are some situation when fully normalized table is impractical and undesirable. 
+
+So where does data comes from in our database ? One option is it comes from front end right ? and other option is another database. For this topic, the focus is on other database. 
+
+Let have a scenario. The data from other database get interfaced in our database. 
 ### Indexing and Performance
+Simply,==Indexing is the separate data structure which helps DB to find row faster, not display them(common confusion)==. That is it. It is like a look up structure. Without index, DB is forced to do sequential scan. With indexing, DB can do Index scan/Index jump(jumping directly to rows).
+
+Index trade off write speed + storage for read speed. 
+
+###### 2. How slow queries happen (the real enemy)
+
+ Bad performance usually comes from:
+
+1. Full table scans on large tables
+    
+2. Wrong index (exists but not usable)
+    
+3. Too many rows returned
+    
+4. Poor cardinality (low selectivity)
+    
+5. Planner choosing a bad plan (stats problem)
+    
+
+Indexes solve **#1 and #2**, partially help **#3**, and rely on **stats** for #5.
+
+Indexes are mainly used in `WHERE`, `JOIN`, `ORDER BY` and `GROUP BY`.
+
+###### Let's start for `WHERE`.
+We can create index like this
+```
+	CREATE INDEX ON users(email)
+```
+and if we use email to query like
+```sql
+	EXPLAIN ANALYZE SELECT * FROM users WHERE email = "example@gmail.com"
+```
+Even with common sense, We can see that `email` is indexed. Without indexing, we would know that that query would do sequential scan but with indexing, DB could jump directly to matching rows. 
+
+Now we may think what about composite indexing ? 
+```sql
+	CREATE INDEX idx_name ON users(username, email)
+```
+The tricky thing to understand is the this indexing works for `username` alone and `username` and `email`. It doesn't work for email at all as index starts with `username`.
+```sql
+	SELECT * FROM users WHERE username = 'username' // correct
+	SELECT * FROM users WHERE username = 'username' and email = 'email' // it works
+	
+	SELECT * FROM users WHERE email = 'email' // it doesnot work as indexing starts with username
+	SELECT * FROM users WHERE email = 'email' and username = 'username' // it doesnot work
+```
+DB can't jump using `email` first. It is called ==Left most rule==.
+
+If you want to use both separately i.e. meaning just `email` or `username`, then index both separately. 
+
+==One composite index != two separate index==
+###### Let's look at `JOIN`
+Now let's look at another indexing in query. 
+Let's try to join user with order
+```sql
+	EXPLAIN SELECT * FROM orders
+	JOIN users
+	ON users.id = orders.user_id
+```
+Now let's look from the point of common sense. We know that PK is already indexed. so `users.id` is indexed but is `orders.user_id` indexed ? Well no, So it goes like this : `For each users, DB will search for users again and again`. 
+But what if we create Index in `user_id`.
+```sql
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+```
+Now DB have escaped sequential scan and can `directly find the matching user for each order`.
+###### Let's look at `ORDER BY`
+Let us have a query
+```sql
+	EXPLAIN SELECT * FROM orders
+	ORDER BY created_at DESC
+```
+First DB reads all the row and sort it.  So it causes full table scan and expensive sort operation. 
+
+So we need to create the index in `created_at DESC`
+```sql
+	CREATE INDEX createdat_desc ON users(created_at DESC)
+```
+Now DB think that Rows are already sorted in the index. 
+
+Now let's move forward by concatenating `WHERE` and `ORDER BY`
+```sql
+	EXPLAIN SELECT * FROM orders
+	WHERE user_id = 5
+	ORDER BY created_at DESC
+	LIMIT 10
+```
+Without index what do you think would happen ? Well first DB will filter all the rows, after that sorting will happen and will apply limit. But with indexing
+```sql
+	CREATE INDEX double_index ON orders(user_id, created_at DESC)
+```
+Not it works for above query. Now DB filters by `user_id`, rows are already sorted and applies `limit`
+
+If we see `ORDER BY` and `LIMIT`, then there should be index. 
+###### Let's look at `GROUP BY`
+The things with indexing with `GROUP BY` is that it depends on query and data only. Indexing can by help but not always. 
+
+Let look with example
+```sql
+	EXPLAIN SELECT user_id, COUNT(*) FROM orders GROUP BY user_id
+```
+First DB have to get all the orders and group by `user_id`. Using Explain we can see 
+```sql
+Seq Scan
+HashAggregate // slow
+```
+
+So what does adding indexing on `user_id` does ? Now it will show
+```
+Index Scan
+GroupAggregate
+```
+But ==there is some caveat as it only work sometimes==.
+It only can help when 
+- Grouping Column has  many distinct values
+- Query can read data in grouped order
+- Index allows index-only scan
+But they don't help when 
+- There are very few distinct values 
+- DB still needs to scan most rows 
+- Hash Aggregation is cheaper. 
+
+==In real world. If WHERE and GROUP BY comes in sequential, then do indexing on both==. 
+
+
 Index is a separate Data Structure that maps column values to physical row location(TIDs)(just stores column values and where to find the rows in the table). 
 
 Since PG stores table rows in block called pages(usually 8 KB each). Table = a bunch of these pages(like sheet in a notebook). And Index is stored separately from table data. It has its own page, organized for fast search. Index = "table of content" page.
@@ -655,21 +857,15 @@ Another thing is index never stores the full row(It is like table of content). I
 It skip entire table entirely. 
 
 
+==TIPS==
+- Indexing should be done in high cardinality columns as index performs best in those columns. Like it shouldn't be done in columns like `gender` as it has low cardinality. It should be thing like `email` or things like that with high cardinality. What about composite index ? Well have low cardinality column in second option. Like `users(email, isActive)`.
 
 
-Got it. I’ll explain **PostgreSQL indexing** the way a **system designer / senior backend interview** expects — not beginner tips, not “don’t use `SELECT *` stuff.
-
-Think of this as **mental models + interview-grade talking points**.
-
-> “Indexes trade extra write cost and storage for faster reads by avoiding full heap scans.”
-
----
-
-#### 2️⃣ When PostgreSQL Uses an Index
+###### 2️⃣ When PostgreSQL Uses an Index
 
 Postgres decides via the **query planner**.
 
-##### Typical cases where index is used
+###### Typical cases where index is used
 
 - `WHERE column = value`
     
@@ -684,7 +880,7 @@ Postgres decides via the **query planner**.
 - `UNIQUE` constraint checks
     
 
-##### Cases where index is often NOT used
+###### Cases where index is often NOT used
 
 - Small tables (sequential scan cheaper)
     
@@ -705,16 +901,16 @@ Postgres decides via the **query planner**.
 
 ---
 
-#### 3️⃣ Index Scan vs Bitmap Index Scan (VERY IMPORTANT)
+###### 3️⃣ Index Scan vs Bitmap Index Scan (VERY IMPORTANT)
 
-##### Index Scan
+###### Index Scan
 
 - Used when **few rows** expected
     
 - Reads index → jumps to heap rows
     
 
-##### Bitmap Index Scan
+###### Bitmap Index Scan
 
 - Used when **many rows**
     
@@ -733,11 +929,11 @@ EXPLAIN ANALYZE SELECT * FROM orders WHERE status = 'PENDING';
 
 ---
 
-#### 4️⃣ Core Index Types You MUST Know
+###### 4️⃣ Core Index Types You MUST Know
 
-#### 4.1 B-Tree (Default, 90% use cases)
+###### 4.1 B-Tree (Default, 90% use cases)
 
-##### Supports
+###### Supports
 
 - `=`
     
@@ -767,7 +963,7 @@ CREATE INDEX idx_users_email ON users(email);
 
 ---
 
-#### 4.2 Hash Index (Rare)
+###### 4.2 Hash Index (Rare)
 
 - Only supports `=`
     
@@ -785,11 +981,11 @@ B-tree is better in most cases.
 
 ---
 
-#### 4.3 GIN (Generalized Inverted Index)
+###### 4.3 GIN (Generalized Inverted Index)
 
 Used for **multi-valued columns**
 
-##### Common uses
+###### Common uses
 
 - `ARRAY`
     
@@ -819,11 +1015,12 @@ WHERE tags @> ARRAY['postgres']
 
 ---
 
-#### 4.4 GiST (Generalized Search Tree)
+###### 4.4 GiST (Generalized Search Tree)
 
 Used for **geometric / fuzzy matching**
 
-##### Use cases
+### EXPLAIN AND EXPLAIN ANALYZE
+### Use cases
 
 - Geospatial (PostGIS)
     
@@ -1645,7 +1842,144 @@ Interviewers LOVE this.
     
 - Check constraints vs application validation
 ### Views and Materialization
+<<<<<<< HEAD
 We don't index views but base table. We do index Materialized views. 
+=======
+Views is just like a stored query that the database expands inline when used. 
+
+Like If we have this View:
+```sql
+CREATE VIEW safe_users AS
+SELECT id, username 
+FROM users
+```
+Then we can use it as a function
+Like
+```sql
+SELECT * FROM safe_users WHERE id = 10;
+```
+And this above SQL query behaves as you wrote: 
+```sql
+SELECT id, username FROM users WHERE id = 10;
+```
+You see it acts as a function without parameters. We can hide sensitive fields like `password` in views and reuse it later. Also we can write tedious JOIN query in Views and reuse it later when it is needed. Human makes mistakes, new devs join, ORM sometimes do `SELECT *`. So try to create Views. 
+
+Views don't have any caching facility at all. It may look like but no. The query you wrote in views is directly expanded or appended in query where that view in involved. That is it. Nothing complex. However real value is in control, safety and consistency. Views don't store results nor they bypass index or planner and nor they make queries faster. It is the duty of query planner that inline the view.
+
+And guess what as long as views remain stable, the app(api) don't break right ? We can change the table structure, split table and rename column also. This matter a lot in large system, data teams and backward compatibility. 
+
+==The main goal of Views in to help control exposure==.
+
+By the name it sounds like Views are just made for `SELECT` query right ? But You can write using View also. However there is a catch. Views is updatable only if
+==Each row of view maps to exactly one row in ONE base table==.
+This is the golden rule. However don't do write with Views. It is architecturally fragile and Operationally unsafe. 
+
+Lets talk about performance for Views.
+Never hide business login in Views. Views aren't business-rules engines. 
+
+ORMs teat view as Read-only tables. They don't assume that views is used for Inserting , updating, and deleting work. Even if the DB technically allows it. 
+
+
+Now let's move to Materialized Views
+MV is about performance architecture.  
+Let say we create MV like this
+```sql
+CREATE MATERIALIZED VIEWS daily_sales AS
+SELECT 
+	date(created_at) AS day,
+	SUM(total) AS revenue
+FROM orders
+GROUP BY day;
+```
+After creating this MV, the query is executed once. the result is stored exactly like a regular table. Thus making read operation fast. MV stores data. 
+
+==Material Views need to be indexed manually== It need to happen immediately after creation of MV.
+
+It exists to solve the problem of running expensive queries (like JOIN, GROUP BY, aggregates, etc. )every time. Even if the field has index, expensive queries has to run every time. So to solve this problem, MV is written once, executed once and saved in disk as table. When the request comes for MV, It is read from that table.
+
+Materialized Views has a life cycle. 
+- Creation
+- Reading
+- Refreshing `REFRESH MATERIALIZED daily_sales;`. This rerun the query and replaces stored data. It is about being able to read data despite at the time of updating. Nothing special. 
+
+==When using MV, We are explicitly choosing Staleness.==
+So we must update the data in MV. We can do it using 
+- Manual Refresh
+- Or by using Scheduled Refresh(like cron job, Background worker, Nightly Batch).
+- Or Concurrent refresh(only available in PostgreSQL)
+
+
+
+
+
+
+
+##### 2️⃣ How are they stored (physically)?
+
+Postgres stores materialized views as:
+
+> **Heap tables** (row-oriented storage)
+
+Same as:
+
+- Regular tables
+    
+- Temp tables
+    
+
+Each row:
+
+- Stored in 8KB pages
+    
+- Managed by MVCC
+    
+- Has tuple headers (xmin/xmax)
+    
+
+📌 **Materialized views participate in MVCC just like tables.**
+
+This is important.
+
+If you want next:
+
+- Why materialized views + replicas can hurt
+    
+- Incremental refresh strategies (and why Postgres lacks native support)
+    
+- When to DROP + CREATE vs REFRESH
+    
+- Materialized views vs partitioned tables
+
+
+#### 8️⃣ Final mental model (important)
+
+> **A materialized view is literally a table managed by the database, not by you.**
+
+The only special thing about it:
+
+- How it’s populated
+    
+- How it’s refreshed
+    
+
+Everything else:
+
+- Storage
+    
+- Indexing
+    
+- Locks
+    
+- MVCC
+    
+
+👉 **Exactly like tables**.
+
+- Compare **materialized views vs incremental aggregation**
+    
+- Talk about **why triggers + materialized views are dangerous**
+
+>>>>>>> 033a4c318f2802741eb19da913d6736a13d89bae
 If you know:
 
 - Joins
@@ -1656,9 +1990,6 @@ If you know:
     
 - Indexing + EXPLAIN
 ### Scaling and Operation SQL Knowledge
-##### **SQL at Scale**
-
-This is what separates juniors from seniors.
 
 - Vertical vs horizontal scaling
     
@@ -1788,11 +2119,15 @@ This is why Postgres is trusted for:
     
 - Large SaaS platforms
 
-#### 5️⃣ Why not everyone chooses this design?
+###### 5️⃣ Why not everyone chooses this design?
 
 Because it has tradeoffs.
 
+<<<<<<< HEAD
 ###### Downsides of process-based design
+=======
+##### Downsides of process-based design
+>>>>>>> 033a4c318f2802741eb19da913d6736a13d89bae
 
 - Higher memory usage per connection
     
@@ -1827,7 +2162,627 @@ Different goals.
 
 Because this affects:
 
-### Architecture decisions
+### Fancy Operations
+Here are essential SQL and database terms that will make you sound knowledgeable in technical interviews:
+
+**Operations & Properties**
+
+- **Idempotent** - operations that produce the same result no matter how many times you execute them
+- **Atomic** - transactions that complete fully or not at all
+- **Deterministic** - functions that always return the same output for the same input
+- **Commutative** - operations where order doesn't matter (A + B = B + A)
+- **Immutable** - data that cannot be changed after creation
+- **Transactional** - operations grouped into all-or-nothing units
+- **Reentrant** - code that can be safely executed concurrently
+
+**Performance & Optimization**
+
+- **Cardinality** - the uniqueness of data values (high cardinality = many unique values)
+- **Selectivity** - the fraction of rows returned by a query condition
+- **Predicate pushdown** - filtering data as early as possible in query execution
+- **Materialized view** - pre-computed query results stored physically
+- **Query plan** - the execution strategy the database chooses
+- **Index selectivity** - how well an index narrows down results
+- **Table scan** vs **Index seek** - full table read vs targeted index lookup
+- **Covering index** - an index containing all columns needed for a query
+- **Clustered** vs **Non-clustered index** - physical vs logical data ordering
+- **Denormalization** - intentionally introducing redundancy for performance
+- **Partitioning** - dividing tables into smaller, manageable pieces
+- **Sharding** - horizontal partitioning across multiple database instances
+
+**Data Integrity & Constraints**
+
+- **Referential integrity** - maintaining valid relationships between tables
+- **Constraint propagation** - how constraints affect related data
+- **Cascading operations** - automatic actions on related records (CASCADE DELETE)
+- **Orphaned records** - child records without valid parent references
+- **Surrogate key** - artificial identifier (like auto-increment ID)
+- **Natural key** - real-world unique identifier
+- **Composite key** - primary key made of multiple columns
+- **Foreign key constraint** - enforcing relationships between tables
+
+**Concurrency & Transactions**
+
+- **ACID properties** - Atomicity, Consistency, Isolation, Durability
+- **Isolation levels** - READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE
+- **Dirty read** - reading uncommitted changes from another transaction
+- **Phantom read** - new rows appearing between reads in same transaction
+- **Non-repeatable read** - data changing between reads in same transaction
+- **Deadlock** - two transactions waiting for each other's locks
+- **Pessimistic locking** - locking data before reading/writing
+- **Optimistic locking** - checking for conflicts at commit time
+- **Two-phase commit** - protocol for distributed transactions
+- **Write-ahead logging (WAL)** - recording changes before applying them
+
+**Advanced Concepts**
+
+- **Normalization** - organizing data to reduce redundancy (1NF, 2NF, 3NF, BCNF)
+- **Temporal tables** - tracking historical data changes over time
+- **Window functions** - calculations across related rows (ROW_NUMBER, RANK, LEAD, LAG)
+- **Common Table Expressions (CTEs)** - named temporary result sets
+- **Recursive queries** - queries that reference themselves
+- **Pivoting** and **Unpivoting** - transforming rows to columns and vice versa
+- **Set-based operations** - thinking in terms of entire datasets rather than row-by-row
+- **Lateral joins** - correlated subqueries in FROM clause
+- **Correlated subquery** - subquery referencing outer query columns
+- **Derived table** - subquery in FROM clause
+- **Scalar subquery** - subquery returning single value
+
+**Architecture & Design**
+
+- **Schema** - logical organization of database objects
+- **Star schema** vs **Snowflake schema** - data warehouse designs
+- **OLTP** (Online Transaction Processing) - operational databases
+- **OLAP** (Online Analytical Processing) - analytical/reporting databases
+- **Data lake** vs **Data warehouse** - raw vs structured analytical storage
+- **ETL** (Extract, Transform, Load) - data integration process
+- **Replication** - copying data across database instances
+- **Master-slave architecture** - primary writer with read replicas
+- **Eventual consistency** - distributed systems reaching consistency over time
+- **CAP theorem** - tradeoffs between Consistency, Availability, Partition tolerance
+
+**Query Techniques**
+
+- **Subquery factoring** - using CTEs for readability
+- **Query optimization** - improving query performance
+- **Execution plan analysis** - understanding how queries run
+- **Index hints** - forcing specific index usage
+- **Statistical analysis** - database stats for query planning
+- **Parameterized queries** - using placeholders for SQL injection prevention
+- **Prepared statements** - pre-compiled SQL for performance
+
+Using these terms appropriately in context will demonstrate deep SQL knowledge in interviews. Good luck with your remote job search!
+Got it.  
+You don’t want **definitions like a textbook** — you want **vocabulary that signals seniority**, that you can _say naturally_ in interviews or while teaching.
+
+Below is a **curated, high-signal SQL / database vocabulary list** with **one-line meanings** and **how it sounds in interviews**.
+
+Think of this as your **SQL language arsenal**.
+
+---
+
+##### 🔑 CORE CONCEPT WORDS (must-know)
+
+###### **Idempotent**
+
+> An operation that can be applied multiple times with the same result.
+
+🗣 Interview use:
+
+> “This migration is idempotent, so rerunning it is safe.”
+
+---
+
+###### **Deterministic**
+
+> Same input → same output, always.
+
+🗣:
+
+> “This function is deterministic, which helps the planner optimize it.”
+
+---
+
+###### **Side effects**
+
+> Changes state beyond returning data.
+
+🗣:
+
+> “SELECTs should be side-effect free.”
+
+---
+
+###### **Atomic**
+
+> All-or-nothing execution.
+
+🗣:
+
+> “The operation is atomic due to transactional guarantees.”
+
+---
+
+###### **Consistency (ACID)**
+
+> Data always moves from one valid state to another.
+
+🗣:
+
+> “Constraints and triggers enforce consistency.”
+
+---
+
+###### **Isolation**
+
+> Transactions don’t interfere with each other.
+
+🗣:
+
+> “We rely on MVCC for isolation.”
+
+---
+
+###### **Durability**
+
+> Once committed, data survives crashes.
+
+🗣:
+
+> “WAL ensures durability.”
+
+---
+
+##### 🧠 QUERY & PLANNER WORDS (INTERVIEW GOLD)
+
+###### **Query planner / optimizer**
+
+> Component that decides _how_ to execute SQL.
+
+🗣:
+
+> “The planner chose a hash join due to row estimates.”
+
+---
+
+###### **Cost-based optimization**
+
+> Planner chooses plans based on estimated cost.
+
+🗣:
+
+> “Postgres uses a cost-based planner, not rule-based.”
+
+---
+
+###### **Selectivity**
+
+> How much data a filter removes.
+
+🗣:
+
+> “High-selectivity indexes are more effective.”
+
+---
+
+##### **Cardinality**
+
+> Estimated number of rows.
+
+🗣:
+
+> “Bad cardinality estimates can cause bad plans.”
+
+---
+
+###### **Predicate pushdown**
+
+> Filters applied as early as possible.
+
+🗣:
+
+> “The planner pushed down the WHERE clause.”
+
+---
+
+###### **Inlining**
+
+> Expanding a view or function into the main query.
+
+🗣:
+
+> “Views are inlined by the optimizer.”
+
+---
+
+###### **Execution plan**
+
+> Step-by-step query execution strategy.
+
+🗣:
+
+> “We inspected the execution plan using EXPLAIN.”
+
+---
+
+###### 📦 STORAGE & DATA WORDS
+
+###### **Heap table**
+
+> Unordered row storage.
+
+🗣:
+
+> “Materialized views are stored as heap tables.”
+
+---
+
+##### **Tuple**
+
+> A single row (Postgres term).
+
+🗣:
+
+> “Dead tuples need vacuuming.”
+
+---
+
+###### **Page**
+
+> Fixed-size disk block (usually 8KB).
+
+🗣:
+
+> “Indexes reduce page reads.”
+
+---
+
+##### **Bloat**
+
+> Wasted space from dead tuples.
+
+🗣:
+
+> “Frequent updates caused table bloat.”
+
+---
+
+###### **HOT update**
+
+> Heap-Only Tuple update (Postgres).
+
+🗣:
+
+> “HOT updates avoid index rewrites.”
+
+---
+
+###### **Visibility**
+
+> Whether a row is visible to a transaction.
+
+🗣:
+
+> “MVCC controls row visibility.”
+
+---
+
+###### 🧪 TRANSACTION & CONCURRENCY WORDS
+
+###### **MVCC**
+
+> Multi-Version Concurrency Control.
+
+🗣:
+
+> “MVCC avoids read-write blocking.”
+
+---
+
+###### **Snapshot**
+
+> Transaction’s view of the database.
+
+🗣:
+
+> “Each transaction operates on a snapshot.”
+
+---
+
+###### **Write amplification**
+
+> One write causing many internal writes.
+
+🗣:
+
+> “Materialized view refresh causes write amplification.”
+
+---
+
+###### **Lock escalation**
+
+> Small locks becoming larger ones.
+
+🗣:
+
+> “Lock escalation can hurt concurrency.”
+
+---
+
+###### **Deadlock**
+
+> Circular waiting between transactions.
+
+🗣:
+
+> “We avoided deadlocks by consistent lock ordering.”
+
+---
+
+###### 🧱 SCHEMA & DESIGN WORDS
+
+###### **Normalization**
+
+> Reducing redundancy.
+
+🗣:
+
+> “OLTP schemas are usually normalized.”
+
+---
+
+###### **Denormalization**
+
+> Intentional redundancy for performance.
+
+🗣:
+
+> “Materialized views are a form of denormalization.”
+
+---
+
+###### **Projection**
+
+> Selecting specific columns.
+
+🗣:
+
+> “Views provide controlled projections.”
+
+---
+
+##### **Invariants**
+
+> Rules that must always hold.
+
+🗣:
+
+> “Triggers enforce invariants.”
+
+---
+
+###### **Contract**
+
+> Stable interface between systems.
+
+🗣:
+
+> “Views act as a schema contract.”
+
+---
+
+###### **Backward compatibility**
+
+> Changes don’t break existing consumers.
+
+🗣:
+
+> “Views help maintain backward compatibility.”
+
+---
+
+###### ⚙️ INDEXING WORDS
+
+###### **Covering index**
+
+> Index that satisfies query without touching table.
+
+🗣:
+
+> “This index is covering for the query.”
+
+---
+
+###### **Index-only scan**
+
+> Reads only the index.
+
+🗣:
+
+> “Visibility map enabled index-only scans.”
+
+---
+
+###### **Partial index**
+
+> Index on subset of rows.
+
+🗣:
+
+> “Partial indexes improve selectivity.”
+
+---
+
+###### **Composite index**
+
+> Index on multiple columns.
+
+🗣:
+
+> “Column order matters in composite indexes.”
+
+---
+
+##### 🧰 VIEWS & MATERIALIZED VIEWS WORDS
+
+###### **Read façade**
+
+> Read-only abstraction layer.
+
+🗣:
+
+> “Views act as read façades.”
+
+---
+
+###### **Staleness**
+
+> Data not fully up to date.
+
+🗣:
+
+> “Materialized views trade freshness for speed.”
+
+---
+
+###### **Refresh strategy**
+
+> How and when data is updated.
+
+🗣:
+
+> “We use concurrent refresh to avoid blocking.”
+
+---
+
+###### **Precomputation**
+
+> Calculating results ahead of time.
+
+🗣:
+
+> “Materialized views rely on precomputation.”
+
+---
+
+##### 🔐 SECURITY WORDS
+
+###### **Least privilege**
+
+> Minimum required permissions.
+
+🗣:
+
+> “We grant SELECT only on views.”
+
+---
+
+####### **Security boundary**
+
+> Controlled access layer.
+
+🗣:
+
+> “Views create a security boundary.”
+
+---
+
+##### **Privilege escalation**
+
+> Gaining unintended permissions.
+
+🗣:
+
+> “Procedures prevent privilege escalation.”
+
+---
+
+##### 🧠 ADVANCED / ARCHITECTURE WORDS (VERY IMPRESSIVE)
+
+##### **CQRS**
+
+> Separate read and write models.
+
+🗣:
+
+> “Views fit naturally into CQRS.”
+
+---
+
+###### **OLTP vs OLAP**
+
+> Transactional vs analytical workloads.
+
+🗣:
+
+> “Materialized views are OLAP-oriented.”
+
+---
+
+###### **Eventual consistency**
+
+> Data converges over time.
+
+🗣:
+
+> “Dashboards tolerate eventual consistency.”
+
+---
+
+##### **Write path / Read path**
+
+> How data flows for writes vs reads.
+
+🗣:
+
+> “We optimized the read path using materialized views.”
+
+---
+
+###### **Operational complexity**
+
+> Ongoing maintenance cost.
+
+🗣:
+
+> “Triggers increase operational complexity.”
+
+---
+
+#### 🧠 ONE FINAL TIP (VERY IMPORTANT)
+
+You don’t need to **memorize everything**.
+
+You need to:
+
+- Understand them
+    
+- Use them _naturally_
+    
+- Drop them **casually**, not forcefully
+    
+
+💬 Example:
+
+> “We used materialized views to precompute aggregates, accepting some staleness, and handled refreshes concurrently to avoid blocking reads.”
+
+That sentence alone sounds **US-remote-senior-level**.
+
+---
+
+If you want next, I can:
+
+- Give you **interview-ready sentences**
+    
+- Mock **US remote SQL interviews**
+    
+- Help you sound **confident, not try-hard**
+    
+- Turn this into a **one-page cheat sheet**
+    
+
+Just say the word.
+###### Architecture decisions
 
 - How you deploy
     
@@ -1836,7 +2791,7 @@ Because this affects:
 - How you pool connections
     
 
-### Performance reasoning
+###### Performance reasoning
 
 - Why connection storms kill Postgres
     
@@ -1844,7 +2799,7 @@ Because this affects:
     
 - Why fewer connections can be faster
 
-#### 7️⃣ How this ties into MVCC, WAL, transactions
+###### 7️⃣ How this ties into MVCC, WAL, transactions
 
 This design enables:
 
@@ -1858,14 +2813,14 @@ This design enables:
 These aren’t independent features.  
 They **require** this architecture.
 
-#### One sentence to remember forever
+###### One sentence to remember forever
 
 > **PostgreSQL is built to survive bad code, bad queries, and bad days — by isolating work at the OS level.**
 
 That’s the bird’s-eye view.
 
 
-#### 3️⃣ Concurrency is normal, not exceptional
+###### 3️⃣ Concurrency is normal, not exceptional
 
 Postgres assumes:
 
@@ -2307,24 +3262,24 @@ If you agree, we’ll do this:
 - Mistakes NoSQL devs make
     
 
-### Lesson 3
+###### Lesson 3
 
 - JOINs, aggregations, subqueries
     
 
-### Lesson 4
+###### Lesson 4
 
 - Transactions & isolation
     
 
-### Lesson 5
+###### Lesson 5
 
 - Indexing & performance intuition
     
 
 ---
 
-### Before we start Lesson 1, tell me:
+###### Before we start Lesson 1, tell me:
 
 1. **OS** (Linux / macOS / Windows)?
     
@@ -2341,9 +3296,9 @@ That single sentence explains almost everything.
 
 ---
 
-## 1️⃣ Process-based architecture (this already makes it different)
+###### 1️⃣ Process-based architecture (this already makes it different)
 
-### PostgreSQL is **process-based**, not thread-based
+###### PostgreSQL is **process-based**, not thread-based
 
 - Each client connection → **one OS process**
     
@@ -2358,7 +3313,7 @@ That single sentence explains almost everything.
     - Locks
         
 
-### Why this matters
+####### Why this matters
 
 **Pros**
 
@@ -2389,13 +3344,13 @@ That choice repeats everywhere.
 
 ---
 
-## 2️⃣ MVCC — the core idea you must internalize
+###### 2️⃣ MVCC — the core idea you must internalize
 
 > **Postgres never overwrites data in place. Ever.**
 
 This is the most important sentence in this lesson.
 
-### What MVCC actually means
+###### What MVCC actually means
 
 Instead of:
 
@@ -2425,7 +3380,7 @@ A transaction sees:
 - Only rows valid **at its snapshot time**
     
 
-### Consequences (huge)
+###### Consequences (huge)
 
 - Readers never block writers
     
@@ -2440,11 +3395,11 @@ This is **not true** in many other systems.
 
 ---
 
-## 3️⃣ Why “reads don’t block writes” is not magic
+###### 3️⃣ Why “reads don’t block writes” is not magic
 
 Let’s be concrete.
 
-### In a locking-based system
+###### In a locking-based system
 
 - Read → shared lock
     
@@ -2453,7 +3408,7 @@ Let’s be concrete.
 - Conflict = waiting
     
 
-### In PostgreSQL
+###### In PostgreSQL
 
 - Reader sees old version
     
@@ -2468,7 +3423,7 @@ That’s a _design philosophy_, not an accident.
 
 ---
 
-## 4️⃣ “Every row has versions” (and why that matters)
+###### 4️⃣ “Every row has versions” (and why that matters)
 
 A table is **not** just rows.
 
@@ -2507,11 +3462,11 @@ We’ll revisit this later.
 
 ---
 
-## 5️⃣ WAL — Write-Ahead Logging (durability, not speed)
+###### 5️⃣ WAL — Write-Ahead Logging (durability, not speed)
 
 > **Postgres never considers data committed until it’s written to WAL.**
 
-### What WAL is
+###### What WAL is
 
 - Sequential append-only log
     
@@ -2526,7 +3481,7 @@ We’ll revisit this later.
     - Point-in-time recovery
         
 
-### Why this matters
+###### Why this matters
 
 - Sequential writes are fast
     
@@ -2548,7 +3503,7 @@ This is why banks love it.
 
 ---
 
-## 6️⃣ Cost-based query planner (Postgres _thinks_ before running)
+###### 6️⃣ Cost-based query planner (Postgres _thinks_ before running)
 
 Postgres does not execute SQL as written.
 
@@ -2599,7 +3554,7 @@ This is why understanding indexes matters.
 
 ---
 
-## 7️⃣ “Real transactions” (this is not marketing)
+###### 7️⃣ “Real transactions” (this is not marketing)
 
 Postgres transactions are:
 
@@ -2630,7 +3585,7 @@ MongoDB only achieved this **years later**, and with caveats.
 
 ---
 
-## 8️⃣ What makes PostgreSQL different from others (summary table)
+###### 8️⃣ What makes PostgreSQL different from others (summary table)
 
 |Feature|PostgreSQL|MySQL|MongoDB|
 |---|---|---|---|
@@ -2647,7 +3602,7 @@ Postgres is built for:
 
 ---
 
-## 9️⃣ Why this matters for leadership (important for you)
+###### 9️⃣ Why this matters for leadership (important for you)
 
 You said:
 
@@ -2670,7 +3625,7 @@ You argue **tradeoffs**.
 
 ---
 
-## Mental model to keep forever
+###### Mental model to keep forever
 
 Think of PostgreSQL as:
 
@@ -2687,7 +3642,7 @@ Think of PostgreSQL as:
 
 ---
 
-## What we do next (no SELECT * yet)
+###### What we do next (no SELECT * yet)
 
 Next lesson we will cover:
 
@@ -2731,7 +3686,7 @@ No jargon dump. No skipping. No ego words.
 
 ---
 
-# The _Pre-SQL_ Mental Model for PostgreSQL
+###### The _Pre-SQL_ Mental Model for PostgreSQL
 
 _(What you must know before writing queries)_
 
@@ -2744,7 +3699,7 @@ Everything else is a detail of these.
 
 ---
 
-## 3️⃣ Concurrency is normal, not exceptional
+###### 3️⃣ Concurrency is normal, not exceptional
 
 Postgres assumes:
 
@@ -2759,7 +3714,7 @@ Postgres assumes:
 
 So it is designed for **conflict**, not avoidance.
 
-### This leads to:
+###### This leads to:
 
 - Snapshot isolation
     
@@ -2772,7 +3727,7 @@ If you think in “one request at a time”, you will design bad schemas.
 
 ---
 
-## 4️⃣ Data integrity is a _first-class feature_
+###### 4️⃣ Data integrity is a _first-class feature_
 
 In PostgreSQL:
 
@@ -2785,7 +3740,7 @@ In PostgreSQL:
 
 They are **rules of reality**.
 
-### Mental shift
+###### Mental shift
 
 Instead of:
 
@@ -2812,7 +3767,7 @@ Great leaders _remove_ problems instead of handling them repeatedly.
 
 ---
 
-## 5️⃣ Storage is not the same as memory
+###### 5️⃣ Storage is not the same as memory
 
 This sounds obvious — but people forget it.
 
@@ -2827,7 +3782,7 @@ Postgres constantly balances:
 - Background cleanup
     
 
-### Why this matters
+###### Why this matters
 
 - Indexes are not free
     
@@ -2842,7 +3797,7 @@ This explains _performance behavior_ later.
 
 ---
 
-## 6️⃣ The database plans queries, not you
+###### 6️⃣ The database plans queries, not you
 
 You don’t “tell” Postgres how to run a query.
 
@@ -2857,7 +3812,7 @@ Postgres decides:
 - Index usage
     
 
-### Your job is to:
+###### Your job is to:
 
 - Model data correctly
     
@@ -2870,7 +3825,7 @@ Trying to micro-control execution is a junior mistake.
 
 ---
 
-## 7️⃣ Transactions are the unit of truth
+###### 7️⃣ Transactions are the unit of truth
 
 In PostgreSQL:
 
@@ -2885,7 +3840,7 @@ In PostgreSQL:
     - Isolation
         
 
-### This means
+###### This means
 
 - Partial failure is impossible
     
@@ -2898,7 +3853,7 @@ Once this clicks, you stop fearing complexity.
 
 ---
 
-## 8️⃣ PostgreSQL is conservative by design
+###### 8️⃣ PostgreSQL is conservative by design
 
 This is the _philosophical_ point.
 
@@ -2923,11 +3878,11 @@ That’s why:
 This is not a flaw.  
 It’s the reason Postgres scales _organizationally_, not just technically.
 
-## How we’ll learn PostgreSQL (seriously, not skimming)
+###### How we’ll learn PostgreSQL (seriously, not skimming)
 
 We’ll go in **layers**, each building intuition. You’ll _feel_ why Postgres exists and when it beats NoSQL.
 
-### Phase 0 – Mindset shift (important)
+###### Phase 0 – Mindset shift (important)
 
 PostgreSQL is:
 
@@ -2957,9 +3912,9 @@ If you don’t internalize this difference, Postgres will feel “annoying”.
 
 ---
 
-## Phase 1 – PostgreSQL as a system (not SQL yet)
+###### 1 – PostgreSQL as a system (not SQL yet)
 
-### 1️⃣ What PostgreSQL actually is
+###### 1️⃣ What PostgreSQL actually is
 
 Postgres is:
 
@@ -2989,7 +3944,7 @@ We’ll revisit this often.
 
 ---
 
-### 2️⃣ Databases, schemas, tables (core mental model)
+###### 2️⃣ Databases, schemas, tables (core mental model)
 
 text
 
@@ -3017,9 +3972,9 @@ Copy code
 
 ---
 
-## Phase 2 – Data modeling (THIS is where NoSQL users struggle)
+###### Phase 2 – Data modeling (THIS is where NoSQL users struggle)
 
-### 3️⃣ Tables are contracts, not suggestions
+###### 3️⃣ Tables are contracts, not suggestions
 
 sql
 
@@ -3046,7 +4001,7 @@ Copy code
 
 ---
 
-### 4️⃣ Relationships (the big shift)
+###### 4️⃣ Relationships (the big shift)
 
 Mongo:
 
@@ -3075,9 +4030,9 @@ This gives you:
 
 ---
 
-## Phase 3 – Querying the relational way
+###### Phase 3 – Querying the relational way
 
-### 5️⃣ JOINs are not expensive (when done right)
+###### 5️⃣ JOINs are not expensive (when done right)
 
 sql
 
@@ -3101,7 +4056,7 @@ Mongo:
 
 ---
 
-### 6️⃣ Aggregation (Postgres destroys NoSQL here)
+###### 6️⃣ Aggregation (Postgres destroys NoSQL here)
 
 sql
 
@@ -3113,9 +4068,9 @@ This runs **inside the engine**, optimized in C.
 
 ---
 
-## Phase 4 – Transactions (Postgres superpower)
+###### Phase 4 – Transactions (Postgres superpower)
 
-### 7️⃣ ACID transactions (you’ll love this)
+###### 7️⃣ ACID transactions (you’ll love this)
 
 sql
 
@@ -3138,7 +4093,7 @@ Postgres: **native and default**
 
 ---
 
-### 8️⃣ Isolation levels (important later)
+###### 8️⃣ Isolation levels (important later)
 
 - READ COMMITTED (default)
     
@@ -3158,7 +4113,7 @@ Postgres prevents:
 
 ---
 
-## Phase 5 – Indexes (performance fundamentals)
+###### Phase 5 – Indexes (performance fundamentals)
 
 ### 9️⃣ Index types (huge topic)
 
@@ -3243,11 +4198,11 @@ We’ll connect Postgres concepts directly to:
 
 ---
 
-## How I suggest we proceed (step-by-step)
+##### How I suggest we proceed (step-by-step)
 
 If you agree, we’ll do this:
 
-### Lesson 1 (next message)
+###### Lesson 1 (next message)
 
 - Install PostgreSQL
     
@@ -3260,7 +4215,7 @@ If you agree, we’ll do this:
 - First real inserts & queries
     
 
-### Lesson 2
+###### Lesson 2
 
 - Data modeling properly
     
@@ -3269,24 +4224,24 @@ If you agree, we’ll do this:
 - Mistakes NoSQL devs make
     
 
-### Lesson 3
+###### Lesson 3
 
 - JOINs, aggregations, subqueries
     
 
-### Lesson 4
+###### Lesson 4
 
 - Transactions & isolation
     
 
-### Lesson 5
+###### Lesson 5
 
 - Indexing & performance intuition
     
 
 ---
 
-### Before we start Lesson 1, tell me:
+###### Before we start Lesson 1, tell me:
 
 1. **OS** (Linux / macOS / Windows)?
     
@@ -3299,7 +4254,7 @@ If you agree, we’ll do this:
 
 Once you answer that, we start **Lesson 1 properly**, no rushing.
 
-## 8️⃣ What makes PostgreSQL different from others (summary table)
+###### 8️⃣ What makes PostgreSQL different from others (summary table)
 
 |Feature|PostgreSQL|MySQL|MongoDB|
 |---|---|---|---|
@@ -3317,19 +4272,19 @@ Postgres is built for:
 ---
 ---
 
-## 2️⃣ Time exists inside the database (MVCC intuition)
+###### 2️⃣ Time exists inside the database (MVCC intuition)
 
 Postgres is **time-aware**.
 
 Not in a sci-fi way — in a _consistency_ way.
 
-### Simple idea
+###### Simple idea
 
 Different users can see **different versions of the same row** at the same time — and _both are correct_.
 
 That’s it. That’s MVCC.
 
-### Why this matters
+###### Why this matters
 
 - Reads don’t block writes
     
@@ -3342,7 +4297,7 @@ This is extremely unintuitive at first — but incredibly powerful.
 
 
 
-### 1️⃣ What PostgreSQL actually is
+###### 1️⃣ What PostgreSQL actually is
 
 Postgres is:
 
@@ -3372,7 +4327,7 @@ We’ll revisit this often.
 
 ---
 
-### 2️⃣ Databases, schemas, tables (core mental model)
+###### 2️⃣ Databases, schemas, tables (core mental model)
 
 `PostgreSQL server  ├── database (like a Mongo DB)  │    ├── schema (namespace)  │    │    ├── table  │    │    ├── index  │    │    └── view`
 
@@ -3388,9 +4343,9 @@ Think of schema like:
 
 ---
 
-## Phase 2 – Data modeling (THIS is where NoSQL users struggle)
+###### Phase 2 – Data modeling (THIS is where NoSQL users struggle)
 
-### 3️⃣ Tables are contracts, not suggestions
+###### 3️⃣ Tables are contracts, not suggestions
 
 `CREATE TABLE users (   id UUID PRIMARY KEY,   email TEXT NOT NULL UNIQUE,   password_hash TEXT NOT NULL,   created_at TIMESTAMP DEFAULT now() );`
 
@@ -3409,7 +4364,7 @@ This replaces:
 
 ---
 
-### 4️⃣ Relationships (the big shift)
+###### 4️⃣ Relationships (the big shift)
 
 Mongo:
 
@@ -3430,9 +4385,9 @@ This gives you:
 
 ---
 
-## Phase 3 – Querying the relational way
+###### Phase 3 – Querying the relational way
 
-### 5️⃣ JOINs are not expensive (when done right)
+###### 5️⃣ JOINs are not expensive (when done right)
 
 `SELECT u.email, p.title FROM users u JOIN posts p ON p.user_id = u.id;`
 
@@ -3452,7 +4407,7 @@ Mongo:
 
 ---
 
-### 6️⃣ Aggregation (Postgres destroys NoSQL here)
+###### 6️⃣ Aggregation (Postgres destroys NoSQL here)
 
 `SELECT user_id, COUNT(*)  FROM posts GROUP BY user_id HAVING COUNT(*) > 10;`
 
@@ -3460,9 +4415,9 @@ This runs **inside the engine**, optimized in C.
 
 ---
 
-## Phase 4 – Transactions (Postgres superpower)
+###### Phase 4 – Transactions (Postgres superpower)
 
-### 7️⃣ ACID transactions (you’ll love this)
+###### 7️⃣ ACID transactions (you’ll love this)
 
 `BEGIN;  INSERT INTO orders (...) VALUES (...); UPDATE users SET balance = balance - 100 WHERE id = ...;  COMMIT;`
 
@@ -3481,7 +4436,7 @@ Postgres: **native and default**
 
 ---
 
-### 8️⃣ Isolation levels (important later)
+###### 8️⃣ Isolation levels (important later)
 
 - READ COMMITTED (default)
     
@@ -3501,9 +4456,9 @@ Postgres prevents:
 
 ---
 
-## Phase 5 – Indexes (performance fundamentals)
+###### Phase 5 – Indexes (performance fundamentals)
 
-### 9️⃣ Index types (huge topic)
+###### 9️⃣ Index types (huge topic)
 
 - B-tree (default)
     
@@ -5538,7 +6493,7 @@ await client.end();
 
 ---
 
-#### 6️⃣ Confidence questions (exam-level)
+###### 6️⃣ Confidence questions (exam-level)
 
 1. Explain the full lifecycle of a transaction from `BEGIN` → `COMMIT` → WAL → data files.
     
@@ -5555,7 +6510,7 @@ await client.end();
 
 ---
 
-#### ✅ Expected outcome after Step 4
+###### ✅ Expected outcome after Step 4
 
 - You can **explain WAL, transactions, and checkpoints** confidently.
     
@@ -5573,7 +6528,7 @@ await client.end();
 If you want, I can now outline **Step 5**, which will bring everything together for **production-grade Postgres understanding** that will **wow remote interviewers**.
 
 Do you want me to go to Step 5 now?
-## Step 6
+###### Step 6
 Perfect. Step 5 is where we move from **core Postgres mechanics** to **advanced, production-grade concepts**: performance, maintenance, high availability, and failure handling. This step is crucial for **remote Big Tech readiness** because it shows you understand Postgres **beyond CRUD**.
 
 We’ll follow the same structure: **practical exercises, mental models, and exam-level questions**.
@@ -5586,12 +6541,12 @@ We’ll follow the same structure: **practical exercises, mental models, and exa
 
 ---
 
-#### 1️⃣ Autovacuum and Table Maintenance
+###### 1️⃣ Autovacuum and Table Maintenance
 
 **Concept:**  
 Postgres **does not automatically reclaim space** from deleted/updated rows in tables. `autovacuum` handles cleanup to prevent bloat.
 
-### Exercises
+###### Exercises
 
 1. Check autovacuum settings:
     
@@ -5627,7 +6582,7 @@ SELECT relname, n_dead_tup FROM pg_stat_user_tables;
 VACUUM ANALYZE vac_test;
 ```
 
-#### Questions
+###### Questions
 
 1. Why does Postgres need autovacuum?
     
@@ -5638,12 +6593,12 @@ VACUUM ANALYZE vac_test;
 
 ---
 
-### 2️⃣ Indexing and Query Performance
+###### 2️⃣ Indexing and Query Performance
 
 **Concept:**  
 Indexes improve SELECT performance but can slow down INSERT/UPDATE/DELETE. Understanding **when and how to use them** is key.
 
-### Exercises
+##### Exercises
 
 1. Create indexes:
     
@@ -5673,7 +6628,7 @@ EXPLAIN ANALYZE SELECT * FROM vac_test WHERE val='x';
 
 ---
 
-## 3️⃣ Replication and High Availability (HA)
+###### 3️⃣ Replication and High Availability (HA)
 
 **Concept:**  
 Postgres can replicate data to **standby servers** for failover and read scaling.  
@@ -5684,7 +6639,7 @@ Two main types:
 - **Logical replication** (per table, per change)
     
 
-##### Exercises (conceptual + optional practical)
+###### Exercises (conceptual + optional practical)
 
 1. Observe WAL in use for replication:
     
@@ -5712,7 +6667,7 @@ ls -lh /var/lib/postgresql/16/main/pg_wal
 
 ---
 
-#### 4️⃣ Backup and Restore
+###### 4️⃣ Backup and Restore
 
 **Concept:**
 
@@ -5740,7 +6695,7 @@ psql -U postgres -d appdb_restored -f appdb_backup.sql
 3. Observe WAL usage during backup operations.
     
 
-#### Questions
+###### Questions
 
 1. What is the difference between logical and physical backups?
     
@@ -5763,7 +6718,7 @@ Postgres guarantees durability via WAL and checkpoints. After a crash:
 3. Discards uncommitted changes
     
 
-#### Exercises
+###### Exercises
 
 1. Simulate crash (stop service abruptly):
     
