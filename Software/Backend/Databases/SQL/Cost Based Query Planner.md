@@ -1,0 +1,3 @@
+Let's say we have some query like `SElECT * FROM users WHERE age > 30`. Now we can fetch the data in many different ways. And Not all ways are equally fast. Like PG can scan the entire table. Use an index or Combine multiple tables via JOINs in different orders. The query planner decides the fastest way based on statistics and costs. 
+
+When we are talking about cost-based ? Means PG assign a cost to each possible plan. How many rows it expects to scan. How much CPU/memory it will use, Disk I/O. Then it will picks the plan with lowest cost. It is very good at picking efficient plan automatically. SQL = `What you want`, Planner = `How Postgres will get it`.  At last, It is more about How PostgreSQL will run queries. 
