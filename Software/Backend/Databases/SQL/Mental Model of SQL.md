@@ -1,5 +1,3 @@
-### Mental Model of SQL
-
 ##### Complete PostgreSQL Query Execution Path - Deep Dive
 
 Let me walk you through the **entire journey** of a query from connection establishment to final result return. This is the comprehensive path you need.

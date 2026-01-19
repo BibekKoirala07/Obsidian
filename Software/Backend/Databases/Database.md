@@ -1,6 +1,6 @@
 ## Types of NoSQL Database
 ### JSON-tree like structure(Real time Database) 
-```
+```sql
 {
   "name": "Alice",
   "children": [
@@ -21,7 +21,7 @@
 - fast to get result
 
 ### Collection-document sub-Collection Model( Fire-Store Database )
-```
+```sql
 // Collection: products
 {
   "id": "12345",

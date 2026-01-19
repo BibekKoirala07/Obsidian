@@ -2,21 +2,19 @@ Once you answer that, we start **Lesson 1 properly**, no rushing.
 
 ###### 8️⃣ What makes PostgreSQL different from others (summary table)
 
-|Feature|PostgreSQL|MySQL|MongoDB|
-|---|---|---|---|
-|MVCC|✅ Native|⚠️ Partial|❌ Historically|
-|Transactions|✅ Always|⚠️ Engine-specific|⚠️ Session-based|
-|Schema enforcement|✅ Strong|⚠️ Medium|❌ App-level|
-|Query planner|✅ Advanced|⚠️ Simpler|❌ Manual|
-|Data integrity|✅ Very strong|⚠️ Medium|❌ Weak|
-|Flexibility|✅ JSONB|⚠️ Limited|✅ High|
+| Feature            | PostgreSQL    | MySQL              | MongoDB          |
+| ------------------ | ------------- | ------------------ | ---------------- |
+| MVCC               | ✅ Native      | ⚠️ Partial         | ❌ Historically   |
+| Transactions       | ✅ Always      | ⚠️ Engine-specific | ⚠️ Session-based |
+| Schema enforcement | ✅ Strong      | ⚠️ Medium          | ❌ App-level      |
+| Query planner      | ✅ Advanced    | ⚠️ Simpler         | ❌ Manual         |
+| Data integrity     | ✅ Very strong | ⚠️ Medium          | ❌ Weak           |
+| Flexibility        | ✅ JSONB       | ⚠️ Limited         | ✅ High           |
 
 Postgres is built for:
 
 > **Long-term correctness under growth**
 
-
-### Basic SQL - Data Types, Data Retrieval, Filtering, Aggregate Function, Grouping Data, Windows Function, Joins, Sub queries, Procedures and Much More
 ###### Data Types
 For Numerals, We have plenty of types like 
 ```sql
@@ -481,7 +479,6 @@ WHERE is_active = true;
 
 > “Partial indexes encode business logic into storage.”
 
----
 
 #### 8️⃣ Functional Index
 

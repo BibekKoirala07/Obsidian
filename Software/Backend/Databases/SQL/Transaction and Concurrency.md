@@ -1,5 +1,3 @@
-##### **Transactions, Locks & Isolation**
-
 Even if you don’t write SQL here, **this is core SQL knowledge**.
 
 - ACID in real systems

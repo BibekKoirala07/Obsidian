@@ -1,4 +1,5 @@
-### Scaling and Operation SQL Knowledge
+### Vertical and Horizontal Scaling
+
 
 - Vertical vs horizontal scaling
     
@@ -12,161 +13,358 @@
 
 
 
-##### 🔹 Implication 2: Predictable failure modes
+### 🔹 Vertical vs Horizontal Scaling
 
-In Postgres:
+**Vertical scaling**
 
-- One query crashing ≠ database crashing
+- Increase CPU/RAM/Storage
     
-- One user misbehaving ≠ system outage
+- Simple but limited
     
-
-This is huge in production.
-
-Mongo / thread-based systems:
-
-- Bugs can cascade
-    
-- Memory corruption can kill the server
+- Best for OLTP small-medium systems
     
 
-Postgres fails **locally**, not globally.
+**Horizontal scaling**
+
+- Add more servers
+    
+- Requires sharding/partitioning
+    
+- Best for high-traffic systems
+    
+
+###### 🔹 Read Replicas
+
+- Used to scale reads
+    
+- Master handles writes
+    
+- Replicas handle reads
+    
+- **Lag is important** (replication delay)
+    
+
+### 🔹 High Availability (HA)
+
+- Failover mechanisms
+    
+- Multi-AZ deployments
+    
+- Standby replicas
+    
+- Automated failover
+    
+
+### 🔹 CAP Theorem (Basic but important)
+
+- **Consistency, Availability, Partition tolerance**
+    
+- SQL DBs usually prefer **Consistency + Partition tolerance** (CP)
+    
+- Some systems use **Read replicas = eventual consistency**
+    
 
 ---
 
-###### 🔹 Implication 3: OS scheduling matters
+## 2. **Indexes (Most Important for Performance)**
 
-Because Postgres relies on the OS:
+### 🔹 Types of Indexes
 
-- CPU scheduling is fair
+- **B-Tree (default)**
     
-- Context switching is predictable
+- **Hash index** (rare, special cases)
     
-- Kernel handles starvation
+- **GIN / GiST** (full text, arrays)
     
-
-This is why Postgres:
-
-- Behaves well under load
-    
-- Degrades gracefully
-    
-- Rarely “locks up” completely
-##### Reason 2: Shared memory + processes scale predictably
-
-Postgres uses:
-
-- Processes for execution
-    
-- Shared memory for coordination
+- **BRIN** (large tables, sorted data)
     
 
-This means:
+### 🔹 Indexing Rules
 
-- Less complex locking logic
+- Index columns used in:
     
-- Fewer race conditions
+    - WHERE
+        
+    - JOIN
+        
+    - ORDER BY
+        
+    - GROUP BY
+        
+- Use **composite indexes** for multi-column queries
     
-- Easier correctness proofs
+    - Order matters (high cardinality first)
+        
+
+### 🔹 Index Problems
+
+- Too many indexes → slower writes
+    
+- Index bloat
+    
+- Index not used due to poor query structure
     
 
-Correctness > cleverness.
+### 🔹 Partial Index
+
+- Index only subset of rows
+    
+- Useful for “active” records  
+    Example:  
+    `WHERE status = 'active'`
+    
 
 ---
 
-##### Reason 3: Simpler mental model for concurrency
+## 3. **Query Optimization**
 
-Threads share _everything_.
+### 🔹 EXPLAIN / EXPLAIN ANALYZE
 
-Processes share:
+- Shows execution plan
+    
+- Helps identify:
+    
+    - Seq scan vs index scan
+        
+    - Join types
+        
+    - Cost, estimated rows
+        
 
-- Only what you explicitly allow
+### 🔹 Common Bottlenecks
+
+- **Sequential scan** on large tables
+    
+- **Nested loop joins** with large datasets
+    
+- **Sort operations** on big data
+    
+- **Function calls in WHERE clause**
     
 
-This makes:
+### 🔹 Query Tuning Techniques
 
-- Locking easier to reason about
+- Rewrite queries
     
-- MVCC safer to implement
+- Avoid SELECT *
     
-- Crashes less catastrophic
+- Use LIMIT properly
     
-
-Remember:
-
-> Databases fail in the worst possible moments.
-
-Postgres is designed for _that_ moment.
-
-##### Why this matters in real life (not theory)
-
-##### Scenario: traffic spike
-
-**Thread-based DB**
-
-- Threads fight over memory
+- Denormalize when needed
     
-- One bad query can stall others
-    
-- Global locks get contended
+- Use materialized views
     
 
-**Postgres**
+---
 
-- Each backend progresses independently
-    
-- Slow queries don’t poison others
-    
-- OS handles fairness
-    
+## 4. **Partitioning**
 
-This is why Postgres is trusted for:
+### 🔹 What is Partitioning?
 
-- Financial systems
-    
-- Government systems
-    
-- Large SaaS platforms
+Splitting a big table into smaller pieces (partitions).
 
-###### 5️⃣ Why not everyone chooses this design?
+### 🔹 Partition Types
 
-Because it has tradeoffs.
-
-<<<<<<< HEAD
-###### Downsides of process-based design
-=======
-##### Downsides of process-based design
->>>>>>> 033a4c318f2802741eb19da913d6736a13d89bae
-
-- Higher memory usage per connection
+- **Range partitioning** (by date)
     
-- Lower raw connection count
+- **List partitioning** (by category)
     
-- Needs external pooling
-    
-- Not ideal for serverless without pooling
+- **Hash partitioning** (even distribution)
     
 
-MongoDB optimized for:
+### 🔹 Benefits
 
-- Developer velocity
+- Faster queries on partitioned column
     
-- Flexible schemas
+- Faster deletes (drop partition)
     
-- High connection counts
-    
-
-Postgres optimized for:
-
-- Correctness
-    
-- Isolation
-    
-- Long-running systems
+- Better maintenance
     
 
-Different goals.
+---
 
-#### 6️⃣ Why _you_, personally, should care
+## 5. **Concurrency & Isolation**
 
-Because this affects:
+### 🔹 Transaction Isolation Levels
+
+- **Read Uncommitted** (dirty reads)
+    
+- **Read Committed** (default in Postgres)
+    
+- **Repeatable Read**
+    
+- **Serializable**
+    
+
+### 🔹 Locking
+
+- Row locks vs table locks
+    
+- Deadlocks
+    
+- Long transactions cause blocking
+    
+
+### 🔹 Optimistic vs Pessimistic Locking
+
+- Optimistic: check version column
+    
+- Pessimistic: lock rows
+    
+
+---
+
+## 6. **Replication & Backup**
+
+### 🔹 Replication
+
+- Streaming replication (Postgres)
+    
+- Logical replication
+    
+- Hot standby
+    
+
+### 🔹 Backups
+
+- Base backup + WAL logs
+    
+- Point-in-time recovery (PITR)
+    
+- Always test restore
+    
+
+---
+
+## 7. **Monitoring & Observability**
+
+### 🔹 What to monitor?
+
+- Query latency
+    
+- Cache hit ratio
+    
+- Connection count
+    
+- Locks / deadlocks
+    
+- Replication lag
+    
+- Disk I/O
+    
+- CPU & memory usage
+    
+
+### 🔹 Tools
+
+- **pg_stat_statements**
+    
+- **pg_stat_activity**
+    
+- Prometheus + Grafana
+    
+- Datadog / New Relic
+    
+
+---
+
+## 8. **Reliability & Maintenance**
+
+### 🔹 Routine Maintenance
+
+- VACUUM (Postgres)
+    
+- REINDEX
+    
+- ANALYZE / auto-analyze
+    
+- Partition maintenance
+    
+
+### 🔹 Preventing Issues
+
+- Avoid long transactions
+    
+- Avoid huge unindexed scans
+    
+- Maintain indexes
+    
+- Keep statistics updated
+    
+
+---
+
+## 9. **Data Modeling for Scale**
+
+### 🔹 Normalization vs Denormalization
+
+- Normalization: avoids duplication, best for correctness
+    
+- Denormalization: improves read performance
+    
+
+### 🔹 Use Cases
+
+- OLTP: normalized
+    
+- Analytics: denormalized / star schema
+    
+
+### 🔹 Star Schema / Fact & Dimension
+
+- Fact table = events (high volume)
+    
+- Dimension tables = attributes (smaller)
+    
+
+---
+
+## 10. **Security & Access Control**
+
+### 🔹 Roles & Permissions
+
+- Create roles for:
+    
+    - read-only
+        
+    - read-write
+        
+    - admin
+        
+
+### 🔹 Row Level Security (RLS)
+
+- Use when multiple tenants share the same table
+    
+- Enforce per-user access at DB level
+    
+
+### 🔹 JWT + RLS
+
+- App passes JWT claims
+    
+- DB uses claims to filter rows
+    
+- Example:
+    
+    - `SET LOCAL app.current_user_id = ...`
+        
+    - RLS policy uses `current_setting('app.current_user_id')`
+        
+
+---
+
+# 🎯 If you want, I can make this into:
+
+✅ **A full Obsidian note** with sections and links  
+✅ **A PDF/Markdown export**  
+✅ **A more advanced version for Postgres specifically**  
+✅ **Examples for each topic (with SQL code)**
+
+---
+
+## Quick question
+
+Do you want the notes to be **Postgres-specific** or **generic SQL** (works for MySQL, SQL Server too)?
+
+

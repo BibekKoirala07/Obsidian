@@ -63,7 +63,7 @@ What you should write here:
 - Materialized views
     
 - Snapshot tables
-### DE Normalization
+### De Normalization
 Should we be normalizing all our table all the time ? Hell no, there are some situation when fully normalized table is impractical and undesirable. 
 
 So where does data comes from in our database ? One option is it comes from front end right ? and other option is another database. For this topic, the focus is on other database. 

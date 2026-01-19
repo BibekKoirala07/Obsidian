@@ -143,9 +143,6 @@ PostgreSQL separates:
 
 Permissions are checked **at each level**.
 
----
-
-###### 9️⃣ Interview-style Q&A
 
 ❓ _User has CREATEDB but cannot create tables — why?_  
 ✅ Because CREATE TABLE requires CREATE privilege on the schema.
