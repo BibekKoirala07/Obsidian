@@ -1,7 +1,4 @@
 
-### Stack
-### Queues
-### Trees - Kind of Graph
 1. ✅ Binary Tree vs BST (deep dive)
     
 2. ✅ Balanced trees (why skewed trees are bad)
@@ -64,14 +61,6 @@ What if node can have more than 2 children ? That is a ==General Tree (N-ary Tre
 
 What if node has only one child everywhere ? It is called ==Skewed Tree==.
 
-
-
-### Graphs
-Good question. For **Tree DSA**, especially if you’re aiming for **strong fundamentals + interview readiness**, you should think in **layers**, not as a random list of topics.
-
-I’ll give you a **clean mental map**, then a **checklist** you can use to self-assess.
-
----
 
 ## 1️⃣ Core Tree Basics (Non-negotiable)
 
@@ -909,10 +898,6 @@ Arrays
 → Dynamic Programming
 ```
 
----
-
-# 🎯 For YOU (Based on your depth-first thinking)
-
 Don’t:  
 ❌ Rush all topics  
 ❌ Memorize solutions
@@ -921,18 +906,3 @@ Do:
 ✅ Learn **patterns**  
 ✅ Understand **why** solutions work  
 ✅ Relate recursion, trees, DP mentally
-
----
-
-If you want next:
-
-- 📆 **3-month DSA study plan**
-    
-- 🧠 **Pattern-based problem list**
-    
-- 📝 **Obsidian DSA note structure**
-    
-- 🔥 **Must-do interview problems (LeetCode)**
-    
-
-Just tell me 👊
