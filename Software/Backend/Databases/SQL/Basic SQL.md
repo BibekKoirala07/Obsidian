@@ -108,6 +108,19 @@ Inner joins ❌ Joining without thinking about cardinality. This is common mista
 
 ###### Sub queries
 There are two kinds of sub queries. They are co-related and non-correlated sub queries. 
+
+Co-related queries means the queries which will execute once.
+```sql
+SELECT *  FROM users
+WHERE salary = (
+	SELECT Max(salary) FROM users
+)
+```
+
+While non-correlated sub queries means that sub query will be executed per row of outer query.
+```sql
+SELECT 
+```
 ###### Stored Procedures
 ```sql
 CREATE OR REPLACE PROCEDURE proc_name(
