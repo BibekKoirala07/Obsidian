@@ -1,5 +1,5 @@
 ### Persistence
-Supabase provides us with translator which chnages the sql to supabase client code. 
+Supabase provides us with translator which changes the sql to supabase client code. 
 Aggregate function are disabled by default in supabase due to performance risk. We can enable it in supabase sql editor
 every non aggregate select target must exists in group by clause if aggregate function is used. 
 
