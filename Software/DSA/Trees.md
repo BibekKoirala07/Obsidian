@@ -44,11 +44,19 @@ Child mean node below. The child of A is B, C and D. Not Others.
 Leaf means Node with no children.(C,E,H,I,G)
 Edge means connection between nodes. Edges = Nodes - 1. A-B, B-E etc. 
 
-Height of Node means longest path from that node to leaf. For H and I it is 0. For B it is 2, For F it is 1. For D it is 1. Height of root is Height of root which is 3 for now(remember longest path). 
+The Level of node n is the number of edges on the path from the root node to that node. 
+Level = Depth + 1;
+
+Height of Node means longest path from that node to leaf. For H and I it is 0. For B it is 2, For F it is 1. For D it is 1. Height of root is Height of root which is 3 for now(remember longest path). (Height of the tree is also maximum level of any node. )
 
 Depth of Node means distance from root(number of edges from root to the node) to itself. Like for A is 0, B,C and D is 1. E,F and G is 2. H and I is 3
 
 Sub tree means any node and its descendant. Like sub tree of B is `{B,E,H,F,I}`.
+
+For root level, if you want zero ambiguity then 
+for depth count edges
+for level count nodes
+
 
 ==Each node can be seen as root of smaller tree. This is very important.
 

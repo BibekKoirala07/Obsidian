@@ -1,6 +1,6 @@
 ### Persistence
 Supabase provides us with translator which changes the sql to supabase client code. 
-Aggregate function are disabled by default in supabase due to performance risk. We can enable it in supabase sql editor
+
 every non aggregate select target must exists in group by clause if aggregate function is used. 
 
 realtime subscription/events
@@ -8,20 +8,6 @@ realtime subscription/events
 turn the publications on in database publications and also. 
 
 ![[Pasted image 20251218112707.png]]
-### PostgREST
-It is a server which converts each table in supabase to REST API automatically.
-
-Suppose we have `users ` table then that table becomes a endpoint. For eg. `/GET users`. We actually can get row by doing this. and also we can get further more by this `/GET users?select=*,posts(*)`
-
-Supabase client converts our code into REST calls
-for eg
-```
-supabase.from("posts").select("*")
-```
-becomes 
-```
-GET /posts?select=*
-```
 
 ### Authentication
 when signed in supabase issues the token and put it in local Storage. The client library automatically takes that data from token(jwt) and creates a session out of it.
