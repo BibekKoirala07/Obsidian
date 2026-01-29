@@ -1,3 +1,4 @@
+
 ### Arrays
 There are two kinds of Array. They are
 1. Static Arrays
@@ -218,3 +219,9 @@ Code it in Java.
 When you’re done (or stuck), paste your code here and I’ll review it **line by line**.
 
 You’re doing this the _right_ way — slow, correct, and solid.
+
+### Big O Notation
+TC  is about how runtime grow when input size grows. And how algorithms scales. It is about growth, not speed. 
+### Arrays
+### Stacks
+### Queue
