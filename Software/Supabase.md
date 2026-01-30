@@ -86,6 +86,22 @@ So we need `supabase/ssr` package to handle everything.
 Supabase client already provides us the facility to turn SQL to supabase client code.
 Aggregate function are disabled by default in supabase due to performance risk. We can enable it in supabase sql editor.
 
+### Best Practices in Supabase
+For authentication, don't try to make yourself, supabase already gives you template. Don't try to be too much. 
+###### **D. Using Supabase REST / Edge functions (RPC / serverless)**
+
+1. You can **expose Supabase functions via Edge functions** or **Supabase REST endpoints**.
+    
+2. Call them from Next.js via **fetch()** or `supabase.from().rpc()`
+    
+3. No BFF needed — serverless function acts as centralized query endpoint.
+    
+
+✅ Pros:
+
+- Fully decouples DB logic from Next.js page
+    
+- Works well if you want to **share with other clients**
 
 
 ## What do people actually use Supabase Edge Functions for?
