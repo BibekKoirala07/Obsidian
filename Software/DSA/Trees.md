@@ -34,8 +34,6 @@ Example
        E     F         G
             / \
            H   I
-
-
 ```
 Here Each Alphabet are Node(A, B, C). 
 Root is A. There should only be one root per tree. 
@@ -68,6 +66,86 @@ What if all the node in tree has maximum two chidren. Could be 0, 1 or 2 childre
 What if node can have more than 2 children ? That is a ==General Tree (N-ary Tree)==. Examples are File Management and Organization Chart. 
 
 What if node has only one child everywhere ? It is called ==Skewed Tree==.
+
+
+- Binary Tree (structure, DFS, BFS)
+    
+- Binary Search Tree (rules, operations, height)
+    
+- Tree height & complexity analysis
+    
+- Balanced vs Unbalanced Trees
+    
+- Complete / Full / Perfect Binary Trees
+    
+- Heap (Min / Max)
+    
+- Priority Queue (conceptual use)
+    
+- AVL Tree (idea of rotations)
+    
+- Red-Black Tree (rules & motivation)
+    
+- General Trees (N-ary)
+    
+- Trie (Prefix Tree)
+    
+- Segment Tree (only if you do CP)
+    
+- B-Tree / B+ Tree (databases, optional)
+
+
+### Tree learning order (Binary Tree → forward)
+
+1. Binary Tree (structure, DFS, BFS)
+    
+2. Binary Tree properties (height, diameter, count)
+    
+3. Binary Search Tree
+    
+4. BST complexity & degeneration
+    
+5. Balanced vs Unbalanced Trees
+    
+6. Complete / Full / Perfect Binary Trees
+    
+7. Heap
+    
+8. Priority Queue
+    
+9. AVL Tree
+    
+10. Red-Black Tree
+    
+11. N-ary Trees
+    
+12. Trie
+    
+13. Segment Tree (optional)
+    
+14. B-Tree / B+ Tree (databases)
+
+
+## Step 2: Tree Properties That Actually Matter
+
+Forget decorative terms. These are the ones that affect performance.
+
+### Height vs Depth (People mess this up)
+
+- **Height**: longest path to a leaf
+    
+- **Depth**: distance from root
+    
+
+### Why it matters
+
+- Height = **time complexity**
+    
+- Bad height = tree becomes a linked list 😬
+    
+
+👉 **Key realization**:  
+All tree optimization problems are secretly **height problems**.
 
 
 ## 1️⃣ Core Tree Basics (Non-negotiable)

@@ -2,7 +2,7 @@
 
 Get used to **looping, indexing, and thinking in O(n)**.
 
-### Exercises (write in Java)
+###### Exercises (write in Java)
 
 1️⃣ Reverse an array  
 2️⃣ Find maximum & minimum  
@@ -21,13 +21,13 @@ Get used to **looping, indexing, and thinking in O(n)**.
 
 ---
 
-## 🥈 Phase 2: Two Pointers (VERY IMPORTANT)
+##### 🥈 Phase 2: Two Pointers (VERY IMPORTANT)
 
-### Goal:
+###### Goal:
 
 Learn to avoid nested loops.
 
-### Exercises:
+###### Exercises:
 
 1️⃣ Reverse array (two pointers)  
 2️⃣ Move zeroes to end  
@@ -44,13 +44,13 @@ Learn to avoid nested loops.
 
 ---
 
-## 🥉 Phase 3: Sliding Window
+###### 🥉 Phase 3: Sliding Window
 
-### Goal:
+###### Goal:
 
 Handle **subarrays** efficiently.
 
-### Exercises:
+###### Exercises:
 
 1️⃣ Maximum sum subarray of size `k`  
 2️⃣ Minimum sum subarray of size `k`  
@@ -66,13 +66,13 @@ Handle **subarrays** efficiently.
 
 ---
 
-## 🏅 Phase 4: Prefix Sum
+###### 🏅 Phase 4: Prefix Sum
 
-### Goal:
+###### Goal:
 
 Answer range queries fast.
 
-### Exercises:
+###### Exercises:
 
 1️⃣ Build prefix sum array  
 2️⃣ Range sum queries  
@@ -88,13 +88,13 @@ Answer range queries fast.
 
 ---
 
-## 🏆 Phase 5: Difference Array (Small but Powerful)
+###### 🏆 Phase 5: Difference Array (Small but Powerful)
 
-### Goal:
+###### Goal:
 
 Handle range updates.
 
-### Exercises:
+###### Exercises:
 
 1️⃣ Range increment queries  
 2️⃣ Flight bookings problem  
@@ -106,31 +106,6 @@ Handle range updates.
     
 - prefix sum at the end
     
-
----
-
-## 🧠 How to Code (IMPORTANT FOR YOU)
-
-### Folder Structure (Simple Java)
-
-```
-arrays/
-  basics/
-  twopointers/
-  slidingwindow/
-  prefixsum/
-  differencearray/
-```
-
-Each folder:
-
-```
-Main.java
-```
-
-Don’t overthink structure yet — **learning > architecture**.
-
----
 
 ## 📌 Daily Routine (Best Way)
 
@@ -149,7 +124,7 @@ Don’t overthink structure yet — **learning > architecture**.
 
 ---
 
-## 🔥 Where to Practice (Best for You)
+###### 🔥 Where to Practice (Best for You)
 
 ### Start with:
 
@@ -158,21 +133,10 @@ Don’t overthink structure yet — **learning > architecture**.
 - **GeeksForGeeks**
     
 
-Search by problem name, not difficulty.
 
 ---
 
-## 🟢 What NOT to Do (Very Important)
-
-❌ Jump to graphs / DP  
-❌ Memorize solutions  
-❌ Do 20 problems/day
-
-You want **depth**, not volume.
-
----
-
-## 🎯 Your NEXT TASK (Do This Now)
+###### 🎯 Your NEXT TASK (Do This Now)
 
 Start with **ONE problem**:
 
@@ -184,7 +148,7 @@ When you’re done (or stuck), paste your code here and I’ll review it **line 
 
 You’re doing this the _right_ way — slow, correct, and solid.
 
-### Big O Notation
+### Basic Terms
 TC  is about how runtime grow when input size grows. And how algorithms scales. It is about growth, not speed. 
 ### Arrays
 There are two kinds of Array. They are
@@ -213,9 +177,9 @@ Be honest with yourself. If you dodge a question, that’s the gap.
 
 ---
 
-# 🔍 ARRAY MASTERY — REAL UNDERSTANDING CHECK
+##### 🔍 ARRAY MASTERY — REAL UNDERSTANDING CHECK
 
-## 1️⃣ Fundamentals (no code yet)
+###### 1️⃣ Fundamentals (no code yet)
 
 **Q1.** Why is random access in arrays O(1), but insertion at the beginning O(n)?  
 → Follow-up: What exactly is being shifted in memory?
@@ -230,7 +194,7 @@ If you can’t explain cache locality → you don’t _really_ know arrays.
 
 ---
 
-## 2️⃣ Time & Space Tradeoffs (this separates people)
+###### 2️⃣ Time & Space Tradeoffs (this separates people)
 
 **Q4.** Given:
 
@@ -249,7 +213,7 @@ Can you store an array of integers?
 
 ---
 
-## 3️⃣ Prefix Sum (deep understanding)
+###### 3️⃣ Prefix Sum (deep understanding)
 
 **Q7.** Why does prefix sum turn range queries from O(n) to O(1)?  
 → What are you _prepaying_ for?
@@ -930,7 +894,7 @@ Deque shines when:
     - Task scheduling where urgent tasks may be inserted at front
 
 
-## Types of deque
+###### Types of deque
 
 1. **Input-restricted deque**
     
@@ -972,7 +936,7 @@ Each node has prev + next
 
 Front/rear pointers → O(1) insertion/deletion
 
-## 6️⃣ Why it’s important
+###### 6️⃣ Why it’s important
 
 - Many algorithms use deque for **sliding window max/min**, **shortest path**, etc.
     
@@ -1017,13 +981,13 @@ If something here feels fuzzy, **don’t move on yet**.
 
 ---
 
-# ✅ STACK SYLLABUS (DONE = SAFE TO MOVE TO QUEUE)
+###### STACK SYLLABUS (DONE = SAFE TO MOVE TO QUEUE)
 
 Think of this as a **checklist**, not a to-do list.
 
 ---
 
-## 1️⃣ Conceptual Foundations
+###### 1️⃣ Conceptual Foundations
 
 You must understand these **without code** first:
 
@@ -1038,7 +1002,7 @@ If you explain stack only in terms of push/pop → incomplete.
 
 ---
 
-## 2️⃣ Operations & Complexity
+###### 2️⃣ Operations & Complexity
 
 You should know:
 
@@ -1060,11 +1024,11 @@ This matters later for queues and deques.
 
 ---
 
-## 3️⃣ Implementations
+##### 3️⃣ Implementations
 
 You must understand **both**, even if you code only one:
 
-### 🔹 Array-based stack
+###### 🔹 Array-based stack
 
 - Fixed vs dynamic size
     
@@ -1073,7 +1037,7 @@ You must understand **both**, even if you code only one:
 - Amortized O(1) push
     
 
-### 🔹 Linked-list-based stack
+###### 🔹 Linked-list-based stack
 
 - Why no resizing
     
@@ -1086,7 +1050,7 @@ If “amortized” still feels hand-wavy → stop.
 
 ---
 
-## 4️⃣ Stack Patterns (core of stack thinking)
+###### 4️⃣ Stack Patterns (core of stack thinking)
 
 You should recognize and explain these patterns:
 
@@ -1103,7 +1067,7 @@ If you can’t _name_ the pattern when you see it, you’re not ready.
 
 ---
 
-## 5️⃣ Canonical Stack Problems (conceptual mastery)
+###### 5️⃣ Canonical Stack Problems (conceptual mastery)
 
 You should be able to explain the **why**, not just the how:
 
@@ -1125,7 +1089,7 @@ Especially:
 
 ---
 
-## 6️⃣ Monotonic Stack (absolutely mandatory)
+###### 6️⃣ Monotonic Stack (absolutely mandatory)
 
 This is the **gatekeeper topic**.
 
@@ -1144,7 +1108,7 @@ If monotonic stack feels like a trick → you’re not done.
 
 ---
 
-## 7️⃣ Stack & Recursion
+###### 7️⃣ Stack & Recursion
 
 You must conceptually know:
 
@@ -1163,7 +1127,7 @@ You should be able to answer:
 
 ---
 
-## 8️⃣ Failure Modes & Misuse
+###### 8️⃣ Failure Modes & Misuse
 
 You should know:
 
@@ -1182,7 +1146,7 @@ Knowing limits = maturity.
 
 ---
 
-## 9️⃣ Real-world mappings (no forced examples)
+###### 9️⃣ Real-world mappings (no forced examples)
 
 Stacks should naturally map to:
 
@@ -1199,7 +1163,7 @@ If you have to _force_ the mapping, rethink.
 
 ---
 
-# 🚦 FINAL READINESS TEST (ONE QUESTION)
+###### 🚦 FINAL READINESS TEST (ONE QUESTION)
 
 If I give you a problem and you can say within 30 seconds:
 
@@ -1209,7 +1173,7 @@ Then yes—you’re ready for queues.
 
 ---
 
-# 📌 Why queues come next (important perspective)
+###### 📌 Why queues come next (important perspective)
 
 Stacks teach:
 
@@ -1238,7 +1202,7 @@ If you jump early, queues feel boring and pointless.
 
 ---
 
-## Straight answer
+###### Straight answer
 
 This syllabus is **complete and sufficient**.  
 No fluff. No overkill.
@@ -1264,13 +1228,13 @@ I’ll give you a **clear syllabus + exercises + what you must understand**, not
 
 ---
 
-# ✅ HASHING + QUEUE — PRACTICAL SYLLABUS
+###### ✅ HASHING + QUEUE — PRACTICAL SYLLABUS
 
 Think of this as **“control + memory + order”**.
 
 ---
 
-## BIG PICTURE (lock this first)
+###### BIG PICTURE (lock this first)
 
 Hashing answers:
 
@@ -1295,9 +1259,9 @@ If you don’t keep this mental model, everything will feel random.
 
 ---
 
-## PHASE 1 — Warm-up: Why Hash + Queue together (Day 1)
+###### PHASE 1 — Warm-up: Why Hash + Queue together (Day 1)
 
-### 🔹 Core Understanding
+###### 🔹 Core Understanding
 
 You must understand why **hashing alone is insufficient**.
 
@@ -1319,7 +1283,7 @@ Queue adds:
 - Eviction order
     
 
-### 🔹 Think-through Question
+###### 🔹 Think-through Question
 
 > Why can’t a pure HashMap implement a cache correctly?
 
@@ -1327,17 +1291,17 @@ If your answer doesn’t mention **order**, you’re missing it.
 
 ---
 
-## PHASE 2 — LRU Cache (THE canonical problem) (Day 2–3)
+###### PHASE 2 — LRU Cache (THE canonical problem) (Day 2–3)
 
 This is non-negotiable.
 
-### 🔹 What LRU means
+###### 🔹 What LRU means
 
 > Evict the **least recently used** item when memory is full.
 
 Not “oldest inserted”—**recently used**.
 
-### 🔹 Data Structures Used
+###### 🔹 Data Structures Used
 
 - **HashMap** → key → node
     
@@ -1351,7 +1315,7 @@ Why:
 - Deque → O(1) move-to-front & remove-last
     
 
-### 🔹 Exercises
+###### 🔹 Exercises
 
 1. Explain LRU cache **without code**
     
@@ -1379,9 +1343,9 @@ If LRU feels “clever” instead of **obvious**, redo it.
 
 ---
 
-## PHASE 3 — Frequency + Queue (Day 4)
+###### PHASE 3 — Frequency + Queue (Day 4)
 
-### 🔹 Pattern: Counting + Ordering
+###### 🔹 Pattern: Counting + Ordering
 
 Examples:
 
@@ -1390,14 +1354,14 @@ Examples:
 - Top-K frequent elements (simplified version)
     
 
-### 🔹 Typical Setup
+###### 🔹 Typical Setup
 
 - HashMap → frequency
     
 - Queue → order of arrival
     
 
-### 🔹 Exercise
+###### 🔹 Exercise
 
 **First Non-Repeating Character**  
 Input stream:  
@@ -1418,22 +1382,22 @@ This tests real understanding.
 
 ---
 
-## PHASE 4 — Rate Limiting (Backend Gold) (Day 5)
+###### PHASE 4 — Rate Limiting (Backend Gold) (Day 5)
 
 This is where interviewers get impressed.
 
-### 🔹 Problem
+###### 🔹 Problem
 
 > Allow max `N` requests per user per minute.
 
-### 🔹 Structure
+###### 🔹 Structure
 
 - HashMap → userId → queue of timestamps
     
 - Queue → request times
     
 
-### 🔹 Logic
+###### 🔹 Logic
 
 1. Remove timestamps older than 60s
     
@@ -1442,7 +1406,7 @@ This is where interviewers get impressed.
 3. Accept or reject
     
 
-### 🔹 Exercises
+###### 🔹 Exercises
 
 - Why queue, not stack?
     
@@ -1455,9 +1419,9 @@ This is **real production thinking**.
 
 ---
 
-## PHASE 5 — Sliding Window with HashMap + Queue/Deque (Day 6)
+###### PHASE 5 — Sliding Window with HashMap + Queue/Deque (Day 6)
 
-### 🔹 Pattern
+###### 🔹 Pattern
 
 Window + uniqueness / frequency constraints.
 
@@ -1468,14 +1432,14 @@ Examples:
 - Sliding window with at most K distinct elements
     
 
-### 🔹 Data Structures
+###### 🔹 Data Structures
 
 - HashMap → counts
     
 - Queue/Deque → window boundaries
     
 
-### 🔹 Exercise
+###### 🔹 Exercise
 
 Explain:
 
@@ -1485,9 +1449,9 @@ If you can reason this cleanly, you’re leveling up.
 
 ---
 
-## PHASE 6 — Task Scheduling (Day 7)
+###### PHASE 6 — Task Scheduling (Day 7)
 
-### 🔹 Scenario
+###### 🔹 Scenario
 
 - Tasks arrive
     
@@ -1496,14 +1460,14 @@ If you can reason this cleanly, you’re leveling up.
 - Some must wait (cooldown)
     
 
-### 🔹 Structures
+###### 🔹 Structures
 
 - HashMap → task → next allowed time
     
 - Queue → execution order
     
 
-### 🔹 Think Question
+###### 🔹 Think Question
 
 > Why priority queue is sometimes needed instead of normal queue?
 
@@ -1511,7 +1475,7 @@ This introduces scheduling intuition.
 
 ---
 
-## PHASE 7 — Failure Modes (VERY IMPORTANT) (Day 8)
+###### PHASE 7 — Failure Modes (VERY IMPORTANT) (Day 8)
 
 You must understand:
 
@@ -1524,7 +1488,7 @@ You must understand:
 - Why eviction strategies matter
     
 
-### 🔹 Exercise
+###### 🔹 Exercise
 
 > What happens if consumers are slower than producers for 1 hour?
 
@@ -1532,7 +1496,7 @@ If your answer doesn’t mention **memory blow-up**, redo.
 
 ---
 
-## FINAL READINESS TEST (Be honest)
+###### FINAL READINESS TEST (Be honest)
 
 You are **done with Hashing + Queue** if you can explain:
 
@@ -1551,11 +1515,11 @@ If yes → move on.
 
 ---
 
-# 🚀 WHAT COMES NEXT (IMPORTANT)
+##### 🚀 WHAT COMES NEXT (IMPORTANT)
 
 After **Hashing + Queue**, the correct next step is:
 
-### 👉 **Trees (not graphs yet)**
+###### 👉 **Trees (not graphs yet)**
 
 Specifically:
 
@@ -1570,7 +1534,7 @@ Do **NOT** jump to DP or graphs yet.
 
 ---
 
-## Blunt closing thought
+##### Blunt closing thought
 
 Hashing + Queue is the line where:
 
@@ -1645,7 +1609,7 @@ If you don’t internalize this tradeoff, everything feels pointless.
 - Why insertion/deletion can be O(1)
     
 
-### 🔹 Think Question
+###### 🔹 Think Question
 
 > Why can linked list insert in O(1) but array can’t?
 
@@ -1653,9 +1617,9 @@ If your answer doesn’t mention **shifting**, revisit arrays.
 
 ---
 
-## PHASE 2 — Singly Linked List (Day 2–3)
+##### PHASE 2 — Singly Linked List (Day 2–3)
 
-### 🔹 Operations (conceptually first)
+###### 🔹 Operations (conceptually first)
 
 - Insert at head
     
@@ -1668,7 +1632,7 @@ If your answer doesn’t mention **shifting**, revisit arrays.
 - Search
     
 
-### 🔹 Pointer Discipline (VERY IMPORTANT)
+###### 🔹 Pointer Discipline (VERY IMPORTANT)
 
 You must be able to:
 
@@ -1679,7 +1643,7 @@ You must be able to:
 - Not lose the list
     
 
-### 🔹 Exercises
+###### 🔹 Exercises
 
 - Reverse a linked list
     
@@ -1692,9 +1656,9 @@ If you lose track of pointers on paper → slow down.
 
 ---
 
-## PHASE 3 — Time & Space Reality (Day 3)
+###### PHASE 3 — Time & Space Reality (Day 3)
 
-### 🔹 Understand
+###### 🔹 Understand
 
 - Why linked list is bad for cache locality
     
@@ -1703,7 +1667,7 @@ If you lose track of pointers on paper → slow down.
 - Why memory overhead is high
     
 
-### 🔹 Think Question
+###### 🔹 Think Question
 
 > Why are linked lists rare in real systems despite O(1) insertion?
 
@@ -1711,9 +1675,9 @@ This tests maturity.
 
 ---
 
-## PHASE 4 — Doubly Linked List (Day 4)
+###### PHASE 4 — Doubly Linked List (Day 4)
 
-### 🔹 Must Understand
+###### 🔹 Must Understand
 
 - `prev` and `next`
     
@@ -1722,7 +1686,7 @@ This tests maturity.
 - Why extra memory is the tradeoff
     
 
-### 🔹 Exercise
+###### 🔹 Exercise
 
 - Insert & delete in middle
     
@@ -1733,11 +1697,11 @@ If this clicks, trees will feel natural later.
 
 ---
 
-## PHASE 5 — Linked List Patterns (Day 5)
+###### PHASE 5 — Linked List Patterns (Day 5)
 
 These appear constantly in interviews.
 
-### 🔹 Fast & Slow Pointer
+###### 🔹 Fast & Slow Pointer
 
 - Find middle
     
@@ -1746,14 +1710,14 @@ These appear constantly in interviews.
 - Remove cycle
     
 
-### 🔹 Two Pointer (list version)
+###### 🔹 Two Pointer (list version)
 
 - Intersection of two lists
     
 - Nth node from end
     
 
-### 🔹 Dummy Node Technique
+###### 🔹 Dummy Node Technique
 
 - Simplifies head deletion
     
@@ -1764,9 +1728,9 @@ If these feel hacky → you’re missing the pattern.
 
 ---
 
-## PHASE 6 — Advanced Manipulations (Day 6)
+##### PHASE 6 — Advanced Manipulations (Day 6)
 
-### 🔹 Must Be Comfortable With
+###### 🔹 Must Be Comfortable With
 
 - Reverse in groups (k nodes)
     
@@ -1775,7 +1739,7 @@ If these feel hacky → you’re missing the pattern.
 - Reorder list
     
 
-### 🔹 Key Question
+###### 🔹 Key Question
 
 > Why linked list reversal is pointer reassignment, not data swapping?
 
@@ -1783,7 +1747,7 @@ This matters later in trees.
 
 ---
 
-## PHASE 7 — Misuse & Failure Modes (Day 7)
+###### PHASE 7 — Misuse & Failure Modes (Day 7)
 
 You must understand:
 
@@ -1800,7 +1764,7 @@ Linked lists teach **discipline**, not convenience.
 
 ---
 
-## FINAL READINESS TEST
+###### FINAL READINESS TEST
 
 You are **READY for Trees** if you can:
 
@@ -1814,7 +1778,7 @@ If not—fix that first.
 
 ---
 
-# 🌳 WHY LINKED LISTS BEFORE TREES
+###### 🌳 WHY LINKED LISTS BEFORE TREES
 
 Trees are:
 
@@ -1824,7 +1788,7 @@ If pointers scare you in linked lists, trees will destroy you.
 
 ---
 
-## Blunt conclusion
+###### Blunt conclusion
 
 Linked lists are not popular because they’re fast.
 
