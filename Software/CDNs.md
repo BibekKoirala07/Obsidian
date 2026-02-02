@@ -1,12 +1,94 @@
-Love this approach. This is **exactly** how seniors learn:  
-pick _one_ subsystem → exhaust it → then integrate it with everything else.
+CDNs are about moving data closer to the users and reducing work on the main server. 
 
-Below is a **deep, structured, “no-hand-waving” CDN syllabus**.  
-You don’t need to learn it all at once — this is a **map**, not a to-do list for today.
+And of course we know there are two kinds of assets. They are static assets and dynamic assets. Static assets are like HTML, js bundles, CSS, images, Fonts and things like that Dynamic assets are user, auth, database, business logic and things like that. 
 
-Think of this as your **CDN bible** 📘
+Dynamic assets usually live on EC2, fly.io, render, railway, kubernetes or serverless(Lambda, Cloud Functions) and things like that. 
 
----
+CDNs mainly care about static assets and only sometimes about dynamic assets. 
+
+Website is always deployed only at one place(mostly). It is called ==origin==. CDNs don't magically host our website at multi place. It just copies the response when needed. However there are multi-region backend also which is quite advanced. Some big system later evolve into this. 
+
+```java
+User (AU) → CDN → Origin (Singapore)
+User (US) → CDN → Origin (US)
+```
+But imagine have to do replicated database, region-aware routing and consistent strategy for this. This is not default CDN behavior and not that common unless in big tech. 
+
+So If user from anther place hits the nearest edge,
+If not cached -> edges fetches it from origin -> caches to edge -> serves next times. 
+
+### What happens to the request as a whole
+Let's assume we have Next/React static build, Backend, Auth and CDN
+
+###### Step 0: DNS
+User in Nepal types `https://demo.com`. What is the goal of DNS ? It should return the nearest edge which is mumbai.
+###### Step 1: HTML request
+Then the user request `GET /index.html`. Then at first if finds that there is no cache stored for that(cache miss). and CDN goes to origin where origin respond like this
+```js
+200 OK
+Cache-Control: public, max-age: 3600
+```
+Then Mumbai CDN get is and cache it. and sends to user. 
+###### Step: 2: Browser parsers HTML
+What happens after parsing ? then browser find this kinds of links
+```js
+<link rel="stylesheet" href="main.css">
+<script src=/main.js"></script>
+```
+
+So now browser goes for CSS request, For first time, It again finds it as cache miss and fetch from origin and cache it and return it like how HTML did in previous step
+
+Same thing happens for js bundle also. 
+###### Step 3: Js runs
+What happens when js runs ? It sees API call. Let's say there are two API calls. One is authorized route and another is non-authorized route. 
+
+Let's say one requests is
+```
+GET /api/posts // unauthorized
+GET /api/me // it contains Bearer Token
+```
+
+Now let's say for unauthorized route, CDN sees that URL is same for everyone. so it is safe to cache. and it gets this
+```js
+200 OK
+Cache-Control: public, max-age=30
+```
+Same flow happens like for HTML, CSS and Js bundles. So it is also cached. 
+
+But the `GET /api/me` is different as It is authentication required route. 
+CDN don't cache authenticated request at all. So for this request CDNs does
+```java
+Edge -> Origin -> Edge -> User
+```
+No Caching here. 
+
+So the question arises, is every authentication required route is required to hit origin ? 
+Short Answer : Mostly yes. 
+So we need to make response time very low. and guess what it is fine as they are much cheaper than serving assets. 
+
+But sometimes, it is still quite fast if it moves to origin. 
+Every authenticated requests does: 
+```
+Browser
+   ├─ TLS handshake (long distance)
+   ├─ TCP slow start
+   ├─ Request sent
+   ├─ Server processes
+   ├─ Response sent
+   └─ Connection closed / reused poorly
+```
+Now for authenticated request, CDNs must improves this even without caching right ? 
+
+
+- we can add **edge auth verification**
+    
+- or talk about **why Next.js + CDN feels instant**
+    
+- or simulate this with **real headers and logs**
+
+
+
+
 
 # 🧠 CDN — COMPLETE SYLLABUS (Senior-Level)
 

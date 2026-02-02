@@ -1,5 +1,7 @@
 ### LangChain
 
+
+
 LangChain’s rule is:
 
 > **LLM outputs are objects, not text.**
