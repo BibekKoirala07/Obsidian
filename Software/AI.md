@@ -1,6 +1,32 @@
 ### LangChain
 
+For Loader, We have TextLoader, WebBaseLoader, CSVLoader, DirectoryLoader
 
+For Splitters, We have CharacterTextSplitter, MarkDownHeaderTextSplitter, PythonCodeTextSplitter, TokenTextSplitter, SemanticChunker
+
+For Embeddings, We have OPENAIEmbeddings, HuggingFaceEmbeddings, OllamaEmbeddings, GoogleGenerativeAIEmbedings
+
+For vectorStrore, we have InMemoryStore, Chroma, FAISS, PostgresVectorStore.
+
+
+Reference documentation for the [`langchain-core`](https://pypi.org/project/langchain-core/) package.
+
+`langchain-core` contains the core interfaces and abstractions used across the LangChain ecosystem. Most users will primarily interact with the main [`langchain`](https://reference.langchain.com/python/langchain/langchain/) package, which builds on top of `langchain-core` and provides implementations for all the core interfaces.
+
+- [Caches](https://reference.langchain.com/python/langchain_core/caches/): Caching mechanisms.
+- [Callbacks](https://reference.langchain.com/python/langchain_core/callbacks/): Callback handlers and management.
+- [Documents](https://reference.langchain.com/python/langchain_core/documents/): Document abstractions.
+- [Embeddings](https://reference.langchain.com/python/langchain_core/embeddings/): Embedding abstractions.
+- [Exceptions](https://reference.langchain.com/python/langchain_core/exceptions/): Common LangChain exception types.
+- [Language models](https://reference.langchain.com/python/langchain_core/language_models/): Base interfaces for language models.
+- [Serialization](https://reference.langchain.com/python/langchain_core/load/): Components for serialization and deserialization.
+- [Output parsers](https://reference.langchain.com/python/langchain_core/output_parsers/): Parsing model outputs.
+- [Prompts](https://reference.langchain.com/python/langchain_core/prompts/): Prompt templates and related utilities.
+- [Rate limiters](https://reference.langchain.com/python/langchain_core/rate_limiters/): Rate limiting utilities.
+- [Retrievers](https://reference.langchain.com/python/langchain_core/retrievers/): Retriever interfaces and implementations.
+- [Runnables](https://reference.langchain.com/python/langchain_core/runnables/): Runnables and related abstractions.
+- [Utilities](https://reference.langchain.com/python/langchain_core/utils/): Various utility functions and classes.
+- [Vector stores](https://reference.langchain.com/python/langchain_core/vectorstores/): Vector store interfaces and implementations.
 
 LangChain’s rule is:
 
