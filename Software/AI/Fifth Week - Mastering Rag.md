@@ -40,6 +40,38 @@ There are so many problem. Let's say John Max has HR record and it is quite big.
 
 Another problem is when you ask so many question. then all the question is added to message list right ? then when you ask question then that question looses its strength and power. So this is quite a big problem. context for that question gets lost. 
 
+Another problem is question like "How many employee has salary more than 60,000"
+
 You have to look at 120 number video more than 1 time. 
 
 ![[Pasted image 20260203215434.png]]
+
+Now onto evaluations. 
+
+==We can make LLM evaluate its own answer also. it is a big thing. ==
+
+Always make best possible dataset.
+How good are you at retrieving. There are bunch of metric. MRR is one thing. 
+
+Recall@K (eg. Recall@3)  is top 3 chunk has how much relevant context. 
+
+![[Pasted image 20260204095604.png]]
+
+What we really call about is Recall. 
+
+==jsonl is file with each line being python dict==. These things are very common
+
+MRI and keyword_coverage. 
+
+Advanced RaG Technique. 
+One things to remember is that it is all pseudoscience. 
+
+Graph RAG. 
+Graph Database aren't that much needed as much as they are advertized.
+
+![[Pasted image 20260204113533.png]]
+
+Many people say RAG is dead. It is cuz of two reason. One being The context window are huge today and another one is becuase of Agentic RAG
+
+Query Expansion and Multiprocessing. 
+semantic chunking
