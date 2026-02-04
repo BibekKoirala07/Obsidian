@@ -16,19 +16,44 @@ GET /posts?select=*
 ```
 
 ### Supabase Keys
+The main thing in SB about  key is Publishable key
 ### Auth
+### Authentication with Service Providers. 
+Account linking is OFF by default. 
+
+As long as the email account is verified with verification email, SB assumes that that email provider and google provider or other providers are same. 
+Now, as long as the Google email is **verified**, Supabase assumes the person owning the Google account is the same person who created the email/password account and merges them automatically to prevent you from having duplicate users for the same person.
+This was done to create the friction less experience. 
+
+Same will happen if we do it with adding facebook also. 
+
+If we want to stop this we have to shift to manual strategy. Supabase always assume that you want a friction less experience. 
+###### Important Security Note
+If you ever decide to allow users to **change their email**, keep in mind that Supabase will handle the update across the user record, but the "Provider ID" for Google will stay the same.
 ### RPC
 ### Edge functions
-It may sound fancy but edge function is small, stateless(no memory between request) server-side function that runs close to the user on demand. 
+It may sound fancy but edge function is small, stateless(no memory between request) server-side function that runs close to the user on demand. LIke in previous times, if the server is in New York and the app is running in Nepal, the app had to send the request all the way to new york. Well that is latency. 
 
-Why are they preferred ? They scales automatically. We don't have to manage servers, scaling, load balancing and OS patches. Like backend endpoints without owning a backend. 
+But instead of doing all that. Imagine the user want data it can go to nearest `edge` from Nepal. In Supabase it is distributed across hundreds of global data centers(via the cloudflare or SB network).
 
-==Edge function in SB uses `deno` runtime== It requires very less amount to cold start a EF in SB.
+Why are they preferred ? They scales automatically. We don't have to manage servers, scaling, load balancing and OS patches. Like backend endpoints without owning a backend. Just write `index.ts` and put there that is it. 
+
+Unlike old school "lambda" funciton, the edge function start instantly. It used to lake 2 second for lambda function to start. For SB EF it takes about some milliseconds. 
+
+And simple, Secrets and complex logic aren't visible to user's browsers. 
+
+==Edge function in SB uses `deno` runtime== 
+
+It shouldn't be misused that much. Only when we need to hide logic or are using to communicate with third-party API, communicating Web hooks, and doing heavy lifting and do things like image and data processing, we should use them. 
+
+Now there is double edge sword with latency. Imagine EF is in Mumbai and database is in New York. No matter what you do, the function has to talk to DB all the way across ocean. So you gained nothing by doing this. 
+
+And Cold Starts. They are small but real. Direct DB query via SDK are faster for simple tasks. 
 
 ### Supabase/ssr
-We know supabase is session based i.e. access Token and refresh Token.
+We know SB is session based i.e. access Token and refresh Token.
 
-Basically supabase/ssr is a helper library that makes auth work correctly in server component by managing cookies across server and client boundaries. 
+Basically SB/ssr is a helper library that makes auth work correctly in server component by managing cookies across server and client boundaries. 
 ```
 ```
 ==It help us create supabase client that understand SSR==. This clients know where do cookies comes from , know how to set cookies and works in both client and server environment.
