@@ -18,6 +18,20 @@ GET /posts?select=*
 ### Supabase Keys
 The main thing in SB about  key is Publishable key
 ### Auth
+In forgot password form, when wrong email is sent, then also SB consider it as a success. If we gave away the info like user doesn't exists, then hacker can get info about user's email using Ddos attack. 
+
+When We do reset password and it becomes successfull, SB create a short session for them. The user don't need to login after a successfull reset password. This is the default feature.
+
+In Whole of SB we have two states in terms of authentication. Like One is `aal1` and another is `aal2`. We need to understand it deeply to understand auth. When we log in, there is the field in auth session where we can check the value. We can see it in `claims`
+
+`aal1` just means user is email and password authenticated. and `aal2` means the user is email and password authenticated and also MFA authenticated. Now imagine, if the user has disabled MFA. Then `aal1` is sufficient to know that user is authenticated. But what is user has MFA enabled but has `aal1` ? then it means in current state, user is email and password authenticated but isn't MFA verified. right ? We clearly need to check this thing very thoroughly.
+
+So technically
+```js
+if (hasMfaEnabled && aal != 'aal1') {
+	block // it means that user has MFA enabled but the user is only email and password authenticated. not MFA verified. 
+}
+```
 ### Authentication with Service Providers. 
 Account linking is OFF by default. 
 
@@ -31,6 +45,7 @@ If we want to stop this we have to shift to manual strategy. Supabase always ass
 ###### Important Security Note
 If you ever decide to allow users to **change their email**, keep in mind that Supabase will handle the update across the user record, but the "Provider ID" for Google will stay the same.
 ### RPC
+### Web Hooks
 ### Edge functions
 It may sound fancy but edge function is small, stateless(no memory between request) server-side function that runs close to the user on demand. LIke in previous times, if the server is in New York and the app is running in Nepal, the app had to send the request all the way to new york. Well that is latency. 
 
@@ -44,7 +59,7 @@ And simple, Secrets and complex logic aren't visible to user's browsers.
 
 ==Edge function in SB uses `deno` runtime== 
 
-It shouldn't be misused that much. Only when we need to hide logic or are using to communicate with third-party API, communicating Web hooks, and doing heavy lifting and do things like image and data processing, we should use them. 
+It shouldn't be misused that much. Only when we need to hide logic or are using to communicate with third-party API, communicating Web hooks, and doing heavy lifting and do things like image and data processing, we should use them. We can also use it if external API calls are also involved. 
 
 Now there is double edge sword with latency. Imagine EF is in Mumbai and database is in New York. No matter what you do, the function has to talk to DB all the way across ocean. So you gained nothing by doing this. 
 
@@ -113,44 +128,8 @@ Aggregate function are disabled by default in supabase due to performance risk. 
 
 ### Best Practices in Supabase
 For authentication, don't try to make yourself, supabase already gives you template. Don't try to be too much. 
-###### **D. Using Supabase REST / Edge functions (RPC / serverless)**
+== There is a section for Security and Performance in supabase in Project Overview Section. It uses `HaveIBeenPawned.org`. You should enable this. 
 
-1. You can **expose Supabase functions via Edge functions** or **Supabase REST endpoints**.
-    
-2. Call them from Next.js via **fetch()** or `supabase.from().rpc()`
-    
-3. No BFF needed — serverless function acts as centralized query endpoint.
-    
-
-✅ Pros:
-
-- Fully decouples DB logic from Next.js page
-    
-- Works well if you want to **share with other clients**
-
-
-## What do people actually use Supabase Edge Functions for?
-
-This matters more than theory.
-
-### 🔥 Common real-world use cases
-
-#### 1. Secure logic (VERY common)
-
-Frontend should NOT:
-
-- Hold secrets
-    
-- Talk to Stripe
-    
-- Call internal APIs
-    
-
-Edge function does:
-
-`// Stripe webhook, payment verification, etc.`
-
----
 
 #### 2. Bypassing RLS safely
 
@@ -205,108 +184,3 @@ Example:
     
 
 All in one atomic flow.
-
----
-
-## 7️⃣ What edge functions are NOT good at
-
-Here’s where people screw up.
-
-❌ Long-running tasks  
-❌ CPU-heavy work  
-❌ Stateful workflows  
-❌ Cron-heavy jobs  
-❌ Background queues (without external help)
-
-They are **request/response**, not workers.
-
----
-
-## 8️⃣ Big misconception: “Edge = faster database”
-
-No.
-
-Even if your function runs at the edge:
-
-- Your **database lives in one region**
-    
-- DB latency still exists
-    
-
-Edge functions help when:
-
-- Logic is near the user
-    
-- External API calls are involved
-    
-- Auth checks happen before DB
-    
-
----
-
-## 9️⃣ Mental model that will keep you sane
-
-Think like this:
-
-> **Frontend → Edge Function → Database**
-
-NOT:
-
-> Frontend → Database (for everything)
-
-Use edge functions when:
-
-- Secrets are involved
-    
-- Logic must be trusted
-    
-- RLS becomes painful
-    
-- You’d normally create a backend endpoint
-    
-
----
-
-## 10️⃣ Straight talk for a backend dev (you)
-
-As a NestJS + backend-minded person:
-
-- Supabase Edge Functions = **mini controllers**
-    
-- No services layer
-    
-- No DI container
-    
-- No state
-    
-- No long lifetimes
-    
-
-They’re **surgical tools**, not an application framework.
-
----
-
-## Final takeaway (remember this)
-
-**Edge functions are not special.**  
-**They are just server-side code with great ergonomics.**
-
-Supabase didn’t invent them — they just:
-
-- Integrated them tightly with Postgres
-    
-- Removed infra pain
-    
-- Made backend optional
-    
-
-If you want, next we can:
-
-- Design a **real flow using RLS vs Edge Functions**
-    
-- Compare **RPC vs Edge vs Frontend queries**
-    
-- Map Edge Functions to **NestJS controllers**
-    
-
-Just say the direction.
