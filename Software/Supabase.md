@@ -32,6 +32,10 @@ if (hasMfaEnabled && aal != 'aal1') {
 	block // it means that user has MFA enabled but the user is only email and password authenticated. not MFA verified. 
 }
 ```
+
+1Password, Authy, Google Authenticator or Apple's Keychain
+
+In SB, MFA isn't compulsory. User can activate it based on themselves. There is no button to enable MFA for all users. 
 ### Authentication with Service Providers. 
 Account linking is OFF by default. 
 
