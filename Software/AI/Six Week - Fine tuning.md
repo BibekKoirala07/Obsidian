@@ -25,3 +25,23 @@ The model that ed donner is going to predict the price form the description and 
 ![[Pasted image 20260131194056.png]]
 
 Nowadays training data is huge. so it is skewed to it. 
+
+
+Five step strategy for selecting and applying LLMs to business problems
+![[Pasted image 20260208192128.png]]
+![[Pasted image 20260208192409.png]]
+![[Pasted image 20260208192416.png]]
+![[Pasted image 20260208192450.png]]
+![[Pasted image 20260208192611.png]]
+![[Pasted image 20260208192751.png]]
+
+Learn about Batch mode. 
+
+![[Pasted image 20260208195937.png]]
+
+![[Pasted image 20260208200023.png]]
+
+For Day 3
+![[Pasted image 20260208200121.png]]
+
+![[Pasted image 20260208200844.png]]
