@@ -1,4 +1,354 @@
+Before moving to authentication, We need to understand the terms such as token and session.
 
+Session means "One continuous login on one device". For example if same user logs in two device, then the user has two sessions. 
+Technically
+```js
+session_id -> row in DB
+```
+So Server is remembering you. 
+
+| id  | user_id | expires_at | device |
+| --- | ------- | ---------- | ------ |
+| a1  | 42      | Tomorrow   | chrome |
+| a2  | 42      | Today      | Phone  |
+You see this is a session. Both are separate session. 
+In session-based auth, Session = a server side object, (Server always have to check the DB or redis).
+Example
+```js
+session = {
+  id: "abc123", // but browser only stores this whether in cookies or localstorage
+  userId: 42,
+  expiresAt: "2026-02-10",
+  ip: "...",
+}
+```
+So it is not a duration but a database row. Duration is just a field `expiresAt`.
+```js
+Login
+ ↓
+Create row in DB
+ ↓
+session_id cookie
+```
+
+But for JWT, it is completely different. It put all those information in token and just issues that token. But the problem is marketing team start saying those time duration on which that token is valid as `session`. So there is a confusion. Conceptually, the session and token are completely different. The JWT just acts a fake session or pseudo-session. Why ? cuz server isn't remembering you at all. Modern token system which is AT and RT simulate sessions ( `Login Session` ). Not a DB sessions. It is time-based and not state-based. 
+```js
+Login
+  ↓
+Issue JWT
+  ↓
+Client stores
+```
+
+| Question               | Session-Based | Token-Based            |
+| ---------------------- | ------------- | ---------------------- |
+| Who remembers you?     | Server        | You                    |
+| Can logout everywhere? | Yes           | Hard                   |
+| Is there DB row?       | Yes           | No                     |
+| Is session “time”?     | No            | No (but feels like it) |
+At last, it may seems like terms are intermixed. The things like browser session, jwt session(marketing gimmick) and things like those. And real session is a server side login records. JWT system fake session using expiry. 
+# 🧠 The 4 Core Auth Models
+
+## 1️⃣ Session-Based Auth (Classic / Server Sessions)
+
+### Mental model:
+
+> “Server remembers you.”
+
+```
+Login → Session in DB → Cookie(sessionId) → Lookup
+```
+
+### How it works:
+
+- Server creates a session row
+    
+- Browser stores session ID
+    
+- Every request → server checks DB
+    
+
+### Examples:
+
+- Better Auth
+    
+- Express-session
+    
+- Django auth
+    
+- Rails auth
+    
+
+### Pros:
+
+✅ Easy to revoke  
+✅ Easy logout  
+✅ Secure  
+✅ Mature
+
+### Cons:
+
+❌ Needs DB/Redis  
+❌ Harder to scale globally
+
+---
+
+## 2️⃣ Token-Based Auth (JWT / Access Tokens)
+
+### Mental model:
+
+> “You carry your identity.”
+
+```
+Login → JWT → Browser → Verify Signature
+```
+
+### How it works:
+
+- Server issues signed token
+    
+- Client stores it
+    
+- Server verifies signature
+    
+
+### Examples:
+
+- Supabase Auth
+    
+- Auth0
+    
+- Firebase Auth
+    
+- Custom JWT auth
+    
+
+### Pros:
+
+✅ Stateless  
+✅ Scales well  
+✅ Works across services
+
+### Cons:
+
+❌ Hard to revoke  
+❌ Token leaks = bad  
+❌ Rotation complexity
+
+---
+
+## 3️⃣ Hybrid Auth (JWT + Session / Manager Layer)
+
+### Mental model:
+
+> “Token inside a session system.”
+
+```
+Provider → JWT → Cookie → Session View
+```
+
+### How it works:
+
+- Uses JWT internally
+    
+- Wraps with session manager
+    
+- Gives hooks
+    
+
+### Examples:
+
+- NextAuth / Auth.js
+    
+- Clerk (partly)
+    
+- Some custom setups
+    
+
+### Pros:
+
+✅ Flexible  
+✅ Good DX  
+✅ Works with OAuth
+
+### Cons:
+
+❌ More moving parts  
+❌ Can be confusing
+
+---
+
+## 4️⃣ Centralized Identity Provider (Auth as a Service)
+
+### Mental model:
+
+> “Someone else does auth for you.”
+
+```
+App → Auth Server → Token → App
+```
+
+### How it works:
+
+- External service manages users
+    
+- Issues tokens
+    
+- You just verify
+    
+
+### Examples:
+
+- Auth0
+    
+- Okta
+    
+- Supabase
+    
+- Cognito
+    
+- Firebase
+    
+
+### Pros:
+
+✅ Enterprise security  
+✅ MFA built-in  
+✅ Compliance
+
+### Cons:
+
+❌ Vendor lock-in  
+❌ Cost  
+❌ Less control
+
+_(Internally they still use tokens/sessions, but you don’t care.)_
+
+---
+
+# 📊 One Table (Easy Memory)
+
+|Type|Who remembers?|Where is truth?|Example|
+|---|---|---|---|
+|Session|Server|DB/Redis|Better Auth|
+|Token|Client|JWT|Supabase|
+|Hybrid|Both|Cookie/JWT|NextAuth|
+|Provider|3rd Party|External|Auth0|
+
+---
+
+# 🧠 The Simplest Way to Remember
+
+Just remember this:
+
+### There are only two “real” ways:
+
+> ✅ Server remembers you  
+> ✅ You remember yourself
+
+Everything else is packaging.
+
+---
+
+### Server remembers you
+
+= Session-based
+
+### You remember yourself
+
+= Token-based
+
+Hybrid = mix  
+Provider = outsourced
+
+---
+
+# 💼 For Backend Jobs (Like Yours)
+
+Since you’re backend-focused and aiming for good jobs:
+
+You mainly need:
+
+## Must Know Well
+
+✅ Session-based  
+✅ Token-based (JWT + refresh)
+
+## Nice to Know
+
+⚪ Hybrid (NextAuth)
+
+## Optional
+
+⚪ Auth-as-a-service
+
+If you master first two, you’re already strong.
+
+---
+
+# 🎯 What Big Companies Mostly Use
+
+Real systems:
+
+|Company|Main Model|
+|---|---|
+|Google|Token + Provider|
+|Meta|Session + Token|
+|GitHub|Session|
+|Stripe|Session|
+|Netflix|Token|
+|Banks|Hybrid|
+
+Nobody uses “just one” everywhere.
+
+---
+
+# ✅ Final Mental Map
+
+Lock this in your head:
+
+```
+1. Session → DB remembers
+2. Token → You carry proof
+3. Hybrid → Wrapper
+4. Provider → Outsourced
+```
+
+That’s it.
+
+No more categories needed.
+
+---
+
+If you want, next time I can explain:
+
+👉 Which model fits which kind of product (SaaS, startup, fintech, social app, etc.)
+
+That helps a lot in interviews.
+
+# 📊 One Table (Easy Memory)
+
+| Type     | Who remembers? | Where is truth? | Example     |
+| -------- | -------------- | --------------- | ----------- |
+| Session  | Server         | DB/Redis        | Better Auth |
+| Token    | Client         | JWT             | Supabase    |
+| Hybrid   | Both           | Cookie/JWT      | NextAuth    |
+| Provider | 3rd Party      | External        | Auth0       |
+# 🧠 The Simplest Way to Remember
+
+Just remember this:
+
+### There are only two “real” ways:
+
+> ✅ Server remembers you  
+> ✅ You remember yourself
+
+Everything else is packaging.
+### Core Auth Concepts
+###### Session-Based Auth
+###### Token-Based Auth(Jwt/AccessToken)
+##### Hybrid Auth(JWT + Session/ Manager Layer)
+###### Centralized Identity Provider(Auth as a service)
 ## The real purpose of repeated `jwt()` calls
 
 From NextAuth’s POV:
@@ -470,4 +820,330 @@ const options: NextAuthOptions = {
 };
 ```
 
+Perfect question. This is exactly the right point to ask it, because now you have all the pieces.
+
+Let’s place NextAuth precisely on the map.
+
+---
+
+# 🧠 Short Answer First
+
+> **NextAuth/Auth.js is a Hybrid system.**
+
+It can behave like:
+
+- ✅ Token-based
+    
+- ✅ Session-based
+    
+- ❌ But it is not a “pure” version of either
+    
+
+It is a **session manager on top of other auth systems**.
+
+---
+
+# 1️⃣ The Big Picture Map (Now Complete)
+
+Now you know:
+
+```
+1. Session-based  → DB remembers
+2. Token-based    → Client remembers
+3. Hybrid         → Manager
+4. Provider       → Outsourced
+```
+
+👉 NextAuth = #3 (Hybrid)
+
+---
+
+# 2️⃣ Why NextAuth Is Hybrid
+
+Because NextAuth can use:
+
+### Mode A: JWT Strategy (Default)
+
+```ts
+session: {
+  strategy: "jwt"
+}
+```
+
+Then:
+
+```
+Login → JWT in Cookie → Client carries state
+```
+
+This is token-based.
+
+No DB.
+
+Stateless.
+
+---
+
+### Mode B: Database Strategy
+
+```ts
+session: {
+  strategy: "database"
+}
+```
+
+Then:
+
+```
+Login → Session in DB → Cookie(sessionId)
+```
+
+This is classic session-based.
+
+Stateful.
+
+---
+
+So:
+
+> Same library, two models.
+
+That’s why it’s “hybrid”.
+
+---
+
+# 3️⃣ But There’s More: It’s Also a “Wrapper”
+
+NextAuth usually sits on top of:
+
+- Google
+    
+- GitHub
+    
+- Supabase
+    
+- Custom backend
+    
+- Auth0
+    
+
+So often:
+
+```
+Provider → NextAuth → Your App
+```
+
+It doesn’t “own” identity.
+
+It orchestrates it.
+
+---
+
+# 4️⃣ Your Current Setup (From Earlier)
+
+You are using:
+
+```ts
+strategy: "jwt"
+Credentials → GraphQL → Backend
+```
+
+So in your case:
+
+> NextAuth = Token-based session manager
+
+Internally:
+
+```
+Backend issues AT/RT
+ ↓
+NextAuth stores in JWT cookie
+ ↓
+Session projects
+```
+
+So:
+
+You’re running:
+
+> Token-on-top-of-token 😄
+
+Backend token + NextAuth token.
+
+---
+
+# 5️⃣ Mental Model for NextAuth (Important)
+
+Think of NextAuth as:
+
+> “Auth middleware + state container”
+
+It is NOT:
+
+❌ Identity provider  
+❌ User database  
+❌ Auth server
+
+It is:
+
+✅ Session orchestrator  
+✅ Cookie manager  
+✅ OAuth client  
+✅ Hook system
+
+---
+
+# 6️⃣ Analogy
+
+Let’s reuse earlier analogies.
+
+---
+
+## Session-based (Better Auth)
+
+Hotel reception remembers you.
+
+---
+
+## Token-based (Supabase)
+
+You carry passport.
+
+---
+
+## NextAuth = Receptionist + Passport Holder
+
+NextAuth:
+
+- Checks passport
+    
+- Stores copy
+    
+- Issues badge
+    
+- Shows badge to app
+    
+
+It doesn’t issue passport.
+
+---
+
+# 7️⃣ Why NextAuth Exists Then?
+
+Because web auth is annoying:
+
+- Cookies
+    
+- CSRF
+    
+- OAuth redirects
+    
+- PKCE
+    
+- State params
+    
+- SameSite
+    
+- SSR
+    
+- Edge
+    
+
+NextAuth handles that mess.
+
+You plug your logic.
+
+---
+
+# 8️⃣ Why It Feels Confusing
+
+Because it mixes:
+
+- Session language
+    
+- JWT language
+    
+- Provider language
+    
+
+All in one API.
+
+So people think:
+
+> “What is NextAuth actually?”
+
+Answer:
+
+> A universal auth adapter.
+
+---
+
+# 9️⃣ One Table (Clear Placement)
+
+|System|Identity|Session|Storage|Category|
+|---|---|---|---|---|
+|Supabase|Yes|Token|JWT|Provider|
+|Better Auth|Yes|DB|DB|Session|
+|NextAuth|No|JWT/DB|Cookie/DB|Hybrid|
+
+---
+
+# 10️⃣ In Interview Language
+
+If asked:
+
+> “Where does NextAuth fit?”
+
+You can say:
+
+> “NextAuth is a hybrid auth framework that manages sessions and OAuth flows, and can use either JWT-based or database-backed sessions, while delegating identity verification to providers.”
+
+That’s a strong answer.
+
+---
+
+# ✅ Final Mental Model 💡
+
+Lock this in:
+
+```
+Supabase → Issues identity
+NextAuth → Manages sessions
+BetterAuth → Owns sessions
+```
+
+Or:
+
+```
+Provider → Manager → App
+```
+
+---
+
+If you want, next I can explain when **not** to use NextAuth (which is just as important).
+###### 7️⃣ Why NextAuth Exists Then?
+
+Because web auth is annoying:
+
+- Cookies
+    
+- CSRF
+    
+- OAuth redirects
+    
+- PKCE
+    
+- State params
+    
+- SameSite
+    
+- SSR
+    
+- Edge
+    
+
+NextAuth handles that mess.
+
+You plug your logic.
 ## Auth.js
+### Better Auth

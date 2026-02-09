@@ -795,5 +795,7 @@ Before moving to CQRS, you should confidently answer:
 
 **Study time: 1-2 weeks if focused, build the validation project, then move to CQRS.**
 ### Kafka.js
+![[Pasted image 20260209093825.png]]
+
 ### Redis Pub/Sub
 ### NATS
