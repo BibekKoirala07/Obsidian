@@ -40,7 +40,7 @@ In SB, MFA isn't compulsory. User can activate it based on themselves. There is 
 In function `listFactors`, there is a section of all. It is for all the things that are unverified totp.
 
 The real-world goal of MFA (TOTP) is:
-Bind one physical device (user’s phone) to one account in a cryptographically verifiable way.
+Bind one physical device (user’s phone) to one account in a cryptographic-ally verifiable way.
 So later, when someone logs in, you can ask:
 “Prove you own that phone.”
 That’s it.

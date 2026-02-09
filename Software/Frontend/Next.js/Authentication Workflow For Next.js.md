@@ -1147,3 +1147,6 @@ NextAuth handles that mess.
 You plug your logic.
 ## Auth.js
 ### Better Auth
+
+### Insights gained while writing this
+To change a project from session based authentication to token based authentication is herculean task. I know it after trying to learn Better Auth. I though the code was going to be easy but it isn't. While things are easier to write with AI, understanding it whole other tasks. 
