@@ -259,10 +259,6 @@ You need to **know the implications** for real apps: analytics vs payments vs no
     
 - **Idempotency and retries** – crucial for reliable systems.
     
-
----
-
-💡 Brutal truth: **most developers know the tools, few understand the patterns and guarantees**. If you focus on these 5 areas, you’ll understand asynchronous messaging **at a level that actually matters for designing real systems**.
 ### BullMQ
 ### RabbitMQ
 

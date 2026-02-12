@@ -597,7 +597,6 @@ Sounds senior. Because it is.
 # ✅ 5. Proper Obsidian Structure (Advanced Level)
 
 For you:
-
 ```
 Backend/
  ├── Distributed-Systems/
