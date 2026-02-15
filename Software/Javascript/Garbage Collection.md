@@ -1,1 +1,0 @@
-[Garbage collection (javascript.info)](https://javascript.info/garbage-collection)

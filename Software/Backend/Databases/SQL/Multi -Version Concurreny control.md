@@ -10,7 +10,7 @@ id | name | xmin(which transaction created it) | xmax(which transaction made it 
 1  | Bibek | 100  | null
 ```
 
-So how do we get the values for Xmin and Xmax ? Well every transaction creates the Transaction ID(XID). Let's say that Transaction ID for upper `INSERT` command was 100. You see the Xmin there ? Well 100. If Xmax is Null, then that row is still valid, If it has some XID, then that XID represent the transaction ID that made it invalid. We can make it invalid by updating that row which don't update that row but creates new one with that values and TID also. 
+So how do we get the values for Xmin and Xmax ? Well every transaction creates the Transaction ID(XID). Let's say that Transaction ID for upper `INSERT` command was 100. You see the Xmin there ? Well 100. If Xmax is `null`, then that row is still valid, If it has some `XID`, then that `XID` represent the transaction ID that made it invalid. We can make it invalid by updating that row which don't update that row but creates new one with that values and TID also. 
 So, It may looks like this
 ```sql
 id | name | xmin | xmax

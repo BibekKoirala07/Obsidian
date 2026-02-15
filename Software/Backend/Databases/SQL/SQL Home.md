@@ -11,7 +11,6 @@
 ### [[Basic SQL]]
 ### [[Transactions]]
 ### [[Normalization, De-normalization and Schema Design]]
-
 ### [[Indexing and Performance]]
 ### [[Fancy Operations in SQL]]
 ### [[Scaling and Operational SQL knowledge]]

@@ -1,7 +1,6 @@
 ### [[Best Practices]]
 ### [[Node]]
 ### [[ORMs & Mongoose]]
-### [[Socket.io]]
 ### Beginning
 ![[Pasted image 20250102173919.png]]
 

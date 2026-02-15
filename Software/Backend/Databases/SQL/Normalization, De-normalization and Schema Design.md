@@ -36,7 +36,6 @@ Let's go to ==4 NF==
 
 And Let's go to ==5 NF==.
 
-
 And conclusion at last. ![[Pasted image 20251231220541.png]]
 What you should write here:
 

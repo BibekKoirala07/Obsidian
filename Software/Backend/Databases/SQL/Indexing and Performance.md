@@ -21,10 +21,9 @@ Index trade off write speed + storage for read speed.
 Indexes solve **#1 and #2**, partially help **#3**, and rely on **stats** for #5.
 
 Indexes are mainly used in `WHERE`, `JOIN`, `ORDER BY` and `GROUP BY`.
-
 ###### Let's start for `WHERE`.
 We can create index like this
-```
+```sql
 	CREATE INDEX ON users(email)
 ```
 and if we use email to query like
@@ -58,12 +57,12 @@ Let's try to join user with order
 	JOIN users
 	ON users.id = orders.user_id
 ```
-Now let's look from the point of common sense. We know that PK is already indexed. so `users.id` is indexed but is `orders.user_id` indexed ? Well no, So it goes like this : `For each users, DB will search for users again and again`. 
+Now let's look from the point of common sense. We know that PK is already indexed. so `users.id` is indexed but is `orders.user_id` indexed ? Well no, So it goes like this : `For each order, DB will search for users.id again and again`. 
 But what if we create Index in `user_id`.
 ```sql
 CREATE INDEX idx_orders_user_id ON orders(user_id);
 ```
-Now DB have escaped sequential scan and can `directly find the matching user for each order`.
+Now DB can often avoid sequential scans and use more efficient plans but it still don't mean that DB will escape sequential scan. 
 ###### Let's look at `ORDER BY`
 Let us have a query
 ```sql
@@ -1126,3 +1125,4 @@ Example:
 `CREATE INDEX idx_users_email ON users(email);`
 
 Bad indexing = slow DB even with good SQL.
+### Indexing with Trees

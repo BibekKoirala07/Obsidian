@@ -1,7 +1,7 @@
 There are different kinds of messaging available. Synchronous and Asynchronous messaging. 
 # Synchronous messaging
 In synchronous messaging, It is all about waiting for the message. The sender waits for the receiver to respond before proceeding
-Some of the examples are HTTP Call, gRPC call, Database Query, etc. 
+Some of the examples are HTTP Call, gRPC call,Some Database Query, etc. 
 # Asynchronous messaging
 Here sender sends the messages and move on. 
 There are different things here. Some of them are Message Queues, Event Streams and Pub/Sub System. Like leaving the voicemail so that other can listen later. 
