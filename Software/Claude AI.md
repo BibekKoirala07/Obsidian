@@ -313,7 +313,7 @@ LLMs are trained on static data and hallucinate when they don't know something. 
 
 User Query ↓ Query Processing (optional: rewriting, expansion) ↓ Embedding Model (convert query to vector) ↓ Vector Database (semantic search) ↓ Retrieved Documents (top K results) ↓ Reranking (optional: improve relevance) ↓ Context Assembly (format for LLM) ↓ LLM (generate answer with context) ↓ Response (with citations)
 
-````
+```
 
 ## Key Concepts
 

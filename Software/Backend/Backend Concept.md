@@ -5,11 +5,6 @@ User → Network → Server → Code → Data → Scale → Failure → Security
 Your folders should mirror this flow.
 
 
-
-
-
-
-
 Great question. What you’re realizing now is **exactly how strong engineers organize knowledge**: by **fundamentals**, not by frameworks.
 
 Yes — you should build **language-agnostic “master notes”** around core concepts. Here’s a clean **roadmap for note-making** that will help you in US interviews and long-term growth.
@@ -2323,7 +2318,7 @@ This is what interviewers **actually test**.
     
 - Async vs Threads
     
-- Monolith vs Microservices
+- Monolith vs Micro services
     
 - Sync vs Async APIs
     

@@ -1,21 +1,23 @@
-Graphiql
+### Rest API
+### Graphql
+Graphql
 understand relay and relay spec
 It is a Query Language. It is not a database, rather a query language.
 
 Microservice graphql is the greatest thing that has happened in an enterprise context. Consistency, robustness, responsibility.
 
-|   |   |
-|---|---|
-|**sign around endpoints**|➤ Design around **types and data relationships**|
-|2. **One route = one job**|➤ One query can fetch multiple related types at once (`user`, `posts`, `comments`)|
-|3. **Return `{ success, message, data }`**|➤ Return just `data` (or add custom wrappers if needed)|
-|4. **Use HTTP status codes for logic**|➤ GraphQL always returns `200 OK` — errors go in the `errors` array|
-|5. **Paginate with offset/limit**|➤ Prefer cursor-based pagination (`first`, `after`)|
-|6. **Separate endpoints for nested resources**|➤ Use **nested queries** (`user.posts.comments`)|
-|7. **Manually shape response objects**|➤ The **client decides** what fields it wants from the schema|
-|8. **Controller-centric thinking**|➤ Move toward **resolver-per-type-field** or at least **resolver-per-root-field**|
-|9. **Stateless "actions" (e.g., login, resetPwd)**|➤ Still use mutations, but often better as **typed inputs + typed outputs**|
-|10. **Think in verbs: `/getUser` or `/createUser`**|➤ GraphQL is about **declaring shape**, not actions: `query { user(id:1) { ... } }`|
+|                                                     |                                                                                     |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **sign around endpoints**                           | ➤ Design around **types and data relationships**                                    |
+| 2. **One route = one job**                          | ➤ One query can fetch multiple related types at once (`user`, `posts`, `comments`)  |
+| 3. **Return `{ success, message, data }`**          | ➤ Return just `data` (or add custom wrappers if needed)                             |
+| 4. **Use HTTP status codes for logic**              | ➤ GraphQL always returns `200 OK` — errors go in the `errors` array                 |
+| 5. **Paginate with offset/limit**                   | ➤ Prefer cursor-based pagination (`first`, `after`)                                 |
+| 6. **Separate endpoints for nested resources**      | ➤ Use **nested queries** (`user.posts.comments`)                                    |
+| 7. **Manually shape response objects**              | ➤ The **client decides** what fields it wants from the schema                       |
+| 8. **Controller-centric thinking**                  | ➤ Move toward **resolver-per-type-field** or at least **resolver-per-root-field**   |
+| 9. **Stateless "actions" (e.g., login, resetPwd)**  | ➤ Still use mutations, but often better as **typed inputs + typed outputs**         |
+| 10. **Think in verbs: `/getUser` or `/createUser`** | ➤ GraphQL is about **declaring shape**, not actions: `query { user(id:1) { ... } }` |
 
 - **Edge-node**
     
@@ -28,7 +30,8 @@ Microservice graphql is the greatest thing that has happened in an enterprise co
     
 - **Real production stuff**
 - Lazy Loading and Eager Loading
-### ✅ Stage 1: Must-Have Features (Core)
+### ✅ Stage 1: Must
+-Have Features (Core)
 
 |Feature|Why it matters|
 |---|---|
@@ -69,3 +72,9 @@ Microservice graphql is the greatest thing that has happened in an enterprise co
 - Query depth limiting
     
 - Federation (for microservices)
+### Webhooks
+### Web sockets
+### gRPC
+### RPC
+### webRTC
+
