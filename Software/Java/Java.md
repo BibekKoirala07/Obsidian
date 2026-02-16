@@ -1,4 +1,3 @@
-
 ![[Pasted image 20250408192021.png]]
 
 ### Statements

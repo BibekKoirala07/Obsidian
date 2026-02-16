@@ -8,7 +8,7 @@ Code gen
 |**TypeORM / MikroORM CLI**|DB models → migrations & types|
 |**Hasura**|Database → GraphQL API automatically|
 |**Supabase**|Postgres → instant APIs + types|
-# 🛠 4. Build / Dev Tooling — Automate the boring stuff
+### 🛠 4. Build / Dev Tooling — Automate the boring stuff
 
 These tools don’t generate app code, but **save you effort**:
 

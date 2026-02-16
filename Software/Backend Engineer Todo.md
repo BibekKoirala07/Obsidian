@@ -873,8 +873,6 @@ Used when:
 - WebSocket
     
 
----
-
 ### 4️⃣ Consistent Hashing (Advanced)
 
 Route based on:
