@@ -1,7 +1,3 @@
-
-
-Get used to **looping, indexing, and thinking in O(n)**.
-
 ###### Exercises (write in Java)
 
 1️⃣ Reverse an array  
@@ -107,31 +103,6 @@ Handle range updates.
 - prefix sum at the end
     
 
-## 📌 Daily Routine (Best Way)
-
-🕒 1–1.5 hours/day
-
-1. Read problem
-    
-2. Think brute force
-    
-3. Ask: “Can I do O(n)?”
-    
-4. Code
-    
-5. Dry run with pen & paper
-    
-
----
-
-###### 🔥 Where to Practice (Best for You)
-
-### Start with:
-
-- **LeetCode (Easy only)**
-    
-- **GeeksForGeeks**
-    
 
 
 ---
@@ -166,6 +137,9 @@ When we have sliding window like moving from one window to another.
 Sum from one point to another. Needs extra array. We need two operation. Build prefix and calculate it. 
 ###### Difference Arrays
 It is for the problem like adding 3 from index 1 to 3 and add 4 from index 2 to 4. We do it in blank array. 
+
+
+
 
 Good—this is the **right question** to ask.  
 Not “give me 50 problems”, but “**can I prove I understand arrays?**”
@@ -620,6 +594,64 @@ Look closely, we didn't removed `30` at all but stopped caring about it. and we 
 ###### With Linked List
 Newest Node always become the head that is it. Tail isn't used at all. If we used tail then traversal is needed. So we use head. 
 
+Absolutely! Just like arrays, **stack problems also have a set of classic patterns and techniques**. If you internalize these, you can handle most stack-based problems without panicking. Let’s map it out.
+
+---
+
+## **1️⃣ Classic Stack Patterns**
+
+| Pattern                            | How it works / Idea                                                        | Examples                                            |
+| ---------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------- |
+| **Basic Push/Pop/Peek**            | Standard LIFO operations                                                   | Valid parentheses, undo operations, simple reverse  |
+| **Next Greater / Smaller Element** | Maintain elements in a **monotonic stack** to find the next bigger/smaller | `Next Greater Element I/II`, stock span             |
+| **Monotonic Stack**                | Keep stack **increasing or decreasing**, pop while violating               | Largest rectangle in histogram, trapping rain water |
+| **Stack as Recursion Simulation**  | Replace recursion with stack                                               | DFS, iterative tree traversal                       |
+| **Two Stack Trick**                | Use 2 stacks to implement queue (or vice versa)                            | Queue using 2 stacks, min-stack                     |
+| **History / Undo problems**        | Push state changes onto stack                                              | Browser back/forward, undo-redo                     |
+| **Expression Evaluation**          | Use stack for operators/operands                                           | Infix → Postfix → Evaluate, calculator problems     |
+
+---
+
+
+1. **LIFO principle**: last in, first out
+    
+2. **Top element access**: always peek before popping
+    
+3. **Monotonic behavior**: sometimes stack elements follow a certain order
+    
+4. **Auxiliary stack**: sometimes you need a secondary stack to help
+    
+5. **Simulating recursion**: stack can replicate call stack
+    
+
+---
+
+## **3️⃣ Tips to Master Stack**
+
+- Solve **1–2 problems per pattern** first. Don’t rush.
+    
+- Draw the stack **step by step** on paper or in your mind.
+    
+- Focus on **peek → compare → pop → push** logic; that’s 80% of stack problems.
+    
+- Think **“what condition triggers pop”** and **“what to push and when”** — that’s the core of most patterns.
+    
+
+---
+
+### ⚡ **TL;DR**
+
+- Stack problems have **fewer patterns than arrays**, but they **recur everywhere**.
+    
+- Once you know **LIFO operations + monotonic stack + two-stack trick + recursion simulation**, you can handle ~90% of classic stack problems.
+    
+
+---
+
+If you want, I can make a **visual map of stack problem patterns**, just like I suggested for arrays — so you can glance at it and immediately know which trick to apply.
+
+Do you want me to make that?
+
 ##### 1️⃣ Conceptual Foundations
 
 You must understand these **without code** first:
@@ -852,7 +884,6 @@ If you want, next I can:
 
 Your call.
 ### Queue
-Understand Enqueue and Dequeue
 ###### With Arrays
 There are two kinds of application with arrays.
 They are 
@@ -876,7 +907,7 @@ Think **linked-list queue** as:
 
 It **naturally matches a stream of events** where you never know max size in advance.
 
-###### Doubly ended queue (deQue)
+###### Doubly ended queue (deque)
 It is stack + queue hybrid. It basically allows insertion and deletion from both ends. 
 
 Deque shines when:
@@ -1557,21 +1588,6 @@ If you want next:
 Say the word.
 
 ### Linked List 
-Yes.  
-**You’re absolutely right—and this instinct is a big green flag.**
-
-Trees without linked lists are like recursion without stacks: you can _use_ them, but you don’t really **understand** them.
-
-So yes—**Linked Lists come before Trees. No debate.**
-
-I’ll give you the **same style syllabus**:  
-👉 what to understand  
-👉 what to practice  
-👉 how to know you’re done
-
-No fluff, no overkill.
-
----
 
 #### ✅ LINKED LIST — PRACTICAL SYLLABUS
 
@@ -1580,21 +1596,6 @@ Think of linked lists as:
 > **Memory + pointers + discipline**
 
 This is where many people realize they don’t understand memory as well as they thought.
-
----
-
-##### BIG PICTURE (lock this first)
-
-Linked lists answer:
-
-> “What if memory is NOT contiguous?”
-
-Arrays = fast access, rigid memory  
-Linked lists = flexible memory, slow access
-
-If you don’t internalize this tradeoff, everything feels pointless.
-
----
 
 ##### PHASE 1 — Core Concept (Day 1)
 
