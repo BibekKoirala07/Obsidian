@@ -376,7 +376,7 @@ Ignore:
 Those are for OS kernel designers.
 
 You are building servers, not kernels.
-### Thread based | Single Process, Multiple threads
+### Thread based | Single Process, Multiple threads(OS managed concurrency)
 The core idea of Thread based concurrency is that our server run one process and it spawns multiple OS level threads on the basis of per request or from the thread pool managed by engines(JVM). But modern server have the capacity to use a thread pool which means runtime creates a pool of OS threads in advance and incoming request are assigned to available threads.
 And those each threads are independently scheduled by OS, can run independently and parallel(if multiple cores exists and OS schedules them on different cores), including blocking I/O.
 
@@ -413,9 +413,9 @@ But doing this we are achieving parallelism for blocking task. And each thread c
 
 But it has its own downsides. What if there are more request ? Each threads has its own stack(which is 1 MB in many OS). OS switches between threads -> expensive if threads are numerous. It will have lots of race condition/synchronization needed. and what about scalability ? Do you think you will create a thousands of concurrent connection/threads is efficient. One of the thing is here, race condition must be avoided. We must synchronize shared memory. 
 
-One question is if single process, single thread looks/sounds better, then why do enterprise choose this thread based concurrency model ? 
+One question is if single process, single thread looks/sounds better, then why do enterprise choose this thread based concurrency model ? cuz 
 
-Cuz it looks familiar. It makes sense. Back then there was no concept of async at all. Tooling was weak, debugging async was pain in the ass. Developers standardized this model early. enterprises built millions of lines of code on top of it. Companies don't rewrite easily. There is lot of blocking code in enterprise as they are old. Real enterprises have lot of synchronous drivers, ERP systems, file systems, which most of them are blocking and it sounds good at that time as it was predictable, was debug gable, supportable. Async just make debugging difficult, complex stack traces, subtle bugs, steeper learning curve. Hardware is cheap, engineer are expensive. Instead of rewriting in async, just add 5 more machines.  So it is just common sense that banks, government and hospitals choose Java. And guess what most enterprise servers don't create infinite thread. They use pools. Like this
+Cuz it looks familiar. It makes sense. Everything has their own purpose. Back then there was no concept of async at all. Tooling was weak, debugging async was pain in the ass. Developers standardized this model early. enterprises built millions of lines of code on top of it. Companies don't rewrite easily. There is lot of blocking code in enterprise as they are old. Real enterprises have lot of synchronous drivers, ERP systems, file systems, which most of them are blocking and it sounds good at that time as it was predictable, was debug gable, supportable. Async just make debugging difficult, complex stack traces, subtle bugs, steeper learning curve. Hardware is cheap, engineer are expensive. Instead of rewriting in async, just add 5 more machines.  So it is just common sense that banks, government and hospitals choose Java. And guess what most enterprise servers don't create infinite thread. They use pools. Like this
 ```
 Max threads = 200
 Queue = 1000 # means that after 1200 request, it will backpressure. 
@@ -424,11 +424,88 @@ This creates predictable memory, stability and back pressure(means when system i
 
 However more modern companies are using async more. Why ? cuz async nowadays is cloud native, there are async DB drivers. There is strong dev ops reason for async also. 
 
-So, in Summary. ==One request = one thread==. 
-### Event-loop based | Single Process, Single thread
+So, in Summary. ==One request = one borrowed thread from pool==. 
+
+###### 💬 Now let me challenge you
+
+If:
+
+- Thread model is expensive at 10k connections
+    
+- Async is complex
+    
+- CPU cores are limited anyway
+    
+
+What do you think modern high-performance JVM frameworks are doing now?
+
+(Hint: It’s not purely one or the other.)
+
+If you're going to US remote backend interviews, you need to understand that hybrid evolution.
+
+###### Things to consider
+Nowadays, threads can by async, and it doesn't have to always run blocking code. A thread can run a event loop, use a non blocking I/O and park itself while waiting I/O. So Java is running high
+### Process based | Multiple pre-forked processes(1 request per worker)
+The key idea is the server starts many processes in advance, and each preforked process handle one request at a time. No event loop. No async scheduling, no shared execution. (They were added later)
+
+Plain and simple. ==Each request = one preforked worker process==.
+```
+Master Process
+   ├── Worker Process 1 → handles Request A
+   ├── Worker Process 2 → handles Request B
+   ├── Worker Process 3 → handles Request C
+   └── Worker Process N
+```
+At startup, server creates a workers, and it start 
+```php
+	Start 20 worker processes
+	Wait for requests
+```
+and when the request arrive
+```python
+	Request A → Worker 1
+	Request B → Worker 2
+	Request C → Worker 3
+```
+And when there is blocking code, it only block itself, other workers can continue. `await` didn't existed at first in this model(It did existed at OS level but It wasn't used by language and language didn't exposed it cleanly also). Thus making this medium is very safe. Crash, Memory leak and infinite loop are isolated and if it happens, only that worker is affected. Later, for each process, Event Loop was added thus adding `await` also. 
+
+Is is very simple. It provides excellent isolation. Bugs don't spread. Works with any blocking code. Easy debugging. 
+
+However the negatives are that, It consumes heavy memory, Each process have heap, stack, libraries and interpreter, 
+```python
+	1 PHP worker ≈ 30–50 MB
+	100 workers ≈ 3–5 GB RAM # not universally applicable
+	# somethimes python workers consume much more depending on app size
+```
+Frequent Forking process is expensive. Wasted resources. However forking at startup isn't that expensive. However processes duplicate memory spaces and are heavier than threads. Since forking just happens at start time, we care more about memory footprint that spikes. 
+
+And for the caution that process count don't spikes. PHP has 
+```php
+MAX_PROCESS_POOL = something(let's say 50) # crossing this will create backpressure
+```
+
+PHP Ecosystem is the poster child of this model. We also have Python WSGI Servers in Process Mode. Ruby on Rails also use this. Low level system(C/C++) often use this pre fork one. Almost all cheap/shared hosting uses process model. 
+
+Attention. 
+Modern server can support 1 worker process with event loop inside each process. That worker can handle many concurrent async requests. The above one is only true for pure synchronous pre-fork models. Async wasn't possible in this model in classic Server like Apache pre-fork, PHP-FPM but Modern python server, guvicorn with uvicorn workers support 1 worker process with event loop inside it. Process level isolation with async inside
+
+Another important concept is IPC.
+Processes don't share memory, must communicate via sockets, pipes, shared memory,message queues, redis etc. This makes state sharing much much difficult. Thread model made sharing state easier (but much dangerous) while process model make sharing state difficult(but much more safer).
+
+| Processes | Threads | Event Loop |
+| --------- | ------- | ---------- |
+| 1         | 1       | Yes        |
+| 1         | Many    | No         |
+| Many      | 1       | No         |
+| Many      | 1       | Yes        |
+| Many      | Many    | Yes        |
+###### Need of Async
+We know that all the drivers, and other things were blocking at first. Both threads model and process model was made for blocking code. But 90% of web is blocking I/O. And guess what ? threads waste memory while waiting. Why allocate OS threads just to wait ? same for process and they are more heavier. So we need async 
+### Event-loop/Co routine based | Single Process, Single thread( Co operative Multi-tasking )
 Our Server run one process and inside it, one thread handles all the requests. Each request is handled top - to - bottom sequentially. 
 
-So let's say we have this function
+Let's start with synchronous behavior. 
+So let's say we have this function.
 ```python
 def handle_request(request):
 	result = db.query("Some db query"); # It is blocking query
@@ -437,7 +514,7 @@ def handle_request(request):
 
 While previous request hit the db query, it waits for database to respond. During this time, no other request can be processed by this thread. Only after db.query finished and previous server respond, the thread can start handling the next request.
 
-Internally it looks like this
+Internally it looks like this(for synchronous requests).
 ```python
 While True:
 	request = accept_new_request()
@@ -458,7 +535,7 @@ Time 2s:  Request C arrives → waits
 Time 3s:  A finishes → B starts
 Time 6s:  B finishes → C starts
 ```
-Waiting request usually sit in web server queue(Uvicorn, Gunicorn keep pending requests). OS also holds incoming connection. If that queue is full, you get 
+Waiting request usually sit in web server queue(Uvicorn, Guvicorn keep pending requests). OS also holds incoming connection. If that queue is full, you get 
 ```python
 	503 Service Unavailable or timeout
 ```
@@ -468,13 +545,42 @@ Le't say DB call takes 500 ms and You get 100 users at once. Then ? total will t
 
 This model is easy to reason, No race condition and terrible in modern world. Nowadays API call include, File reads, redis, dB call and what not. So it kills performance. 
 
-Here enter async abilities. 
-With async 
+Here enter async abilities. But before knowing that, We need to know about Co-routines
+###### Co-routines
+Co-routines is just a resumable function. That is it. At the time of writing this note, I was finding it hard to comprehend. It runs until it hits something that takes/yield control like `await sleep yeild` and things like that. It pauses itself and local state is saved off before giving the control. Later scheduler/EL can resume that function later. 
+Let's say we have this python code. 
+```js
+async function handleRequest() {
+    await dbQuery();      // pause here
+    await fetchApi();     // pause here
+    return "ok";
+}
+```
+and in python
+```python
+async def handle_request():
+    await db.query()
+    await http_call()
+    return "ok"
+```
+
+Here `handle_request` and `handleRequest` are both co-routines. The `await` keyword are the point in which this function can pause and gives control. 
+So 
+```
+co-routine = pausable function
+pause points = the points where the function can pause. 
+```
+The function is co-routines and stop points are called yield points. 
+
+Python(Co-routines) and Node.js(async function) do differ in implementation but conceptually they are same. Event loop decides which co-routines to run next and co routines decides when it can pause. 
+
+
+With co routine
 ```python
 async def handle_request():
 	await db.query()
 ```
-Even now we have single process, single thread. But when the code hits `await`. The thread is freed. Next request runs.
+Even now we have single process, single thread. But when the code hits `await`. The thread is returned to the Event loop to run other co-routines. Next request runs.
 
 One thing to remember is ==that nothing is truly forced to stop==. When two request(previous and next) request are running and previous request is in the time of doing it's DB query(I/O bound tasks) and next request is running. And when previous request get's its DB query back, it doesn't directly run its code in thread. It have to wait for its turn. It will get its turn when next request hits `await` and previous request is in next line in Event loop. 
 
@@ -521,7 +627,7 @@ One thing to remember is that nobody is forcibly paused. Only when the code hits
 
 If the code doesn't await -> it blocks. In async, CPU is used efficiency in compared to other system. While one request waits for something, it(thread) can handle other requests(tasks, co-routines). 
 
-Coroutines -> A unit of async execution. It is normally a function that pause and resume. 
+Co-routines -> A unit of async execution. It is normally a function that pause and resume. 
 ```python
 async def handle():
     await db.query()
@@ -529,11 +635,9 @@ async def handle():
 ```
 this function is co routine function. 
 
-Task = A scheduled co routine
-
 ==Two tasks never finish at a same time==. It is just not possible. 
 
-In Fastapi, unless we add something,  ==we have One process.  One thread + One Event Loop handling many tasks(requests)===
+In Fast api, unless we add something,  ==we have One process.  One thread + One Event Loop handling many tasks(requests)===
 ```python
 1 OS process
   └── 1 main thread
@@ -551,7 +655,7 @@ Each process is tied to the core. If you have 8 cores, you device can run 8 proc
 And Fastapi often run multiple processes(workers)
 Let's say there are 4 processes. What will happen if we do that ? well process corruption might not stop our entire server. If one process(thread) can serve 100 request(for CPU-bound tasks), then 4 process/thread can do 400 request. So it is awesome. And they all have independent event loop. 
 
-==Now the biggest question is why does FastAPI and Node.js prefers async(one process, one thread, one event loop) over One process, many thread==. 
+==Now the biggest question is why does Uvicorn workers and Node.js and Netty based servers prefers async(one process, one thread, one event loop) over One process, many thread==. 
 Cuz Web API's mostly are I/O bounds. async lets single thread handle thousands of request efficiently. Since One threads can handle 1000+ requests; creating many threads would be just inefficient and heavy. It helps in predictable scaling and makes it easy to reason about concurrency. And if you need CPU bounds scaling -> add workers. And FastAPI is built on Starlette + Event loop task switching(co-routine switching) is cheap. It is memory efficient. It don't need to manage hundreds of threads. Just because new request arrive, async don't make new thread at all. The thread is never idle even with thousands of waiting requests. 
 
 One process, many threads is classic multi-threaded server, memory heavy and less efficient. It is inherently not less scalable than event loop based concurrency but imagine the wasted resources. It may be necessary for blocking tasks like accessing sync DB and sync file. It is also easy to reason about as threads are independent. It works well for blocking code. But threads consume memory(stack space per thread). Context switching is nightmare and expensive if there are hundreds of stacks. Does it scale for thousand of concurrent requests ? This is exactly how traditional web server like Apache with threads or Django with WSGI + threaded worker work.  
@@ -565,64 +669,263 @@ So basically Async means
 ```
 co operative multi tasking using an event loop
 ```
-### Process based | Multiple pre-forked processes(1 request per worker)
-The key idea is the server starts many processes in advance, and each process handle one request at a time. No event loop. No async scheduling, no shared execution. 
 
-Plain and simple. ==Each request = one worker process==.
-```
-Master Process
-   ├── Worker Process 1 → handles Request A
-   ├── Worker Process 2 → handles Request B
-   ├── Worker Process 3 → handles Request C
-   └── Worker Process N
-```
-At startup, server creates a workers, and it start 
-```
-Start 20 worker processes
-Wait for requests
-```
-and when the request arrive
-```
-Request A → Worker 1
-Request B → Worker 2
-Request C → Worker 3
-```
-And when there is blocking code, it only block itself, other workers can continue. No `await` exists at all. This medium is very safe. Crash, Memory leak and infinite loop are isolated and if it happens, only that worker is affected. 
+Ah — now we’re in the weeds, and this is where almost everyone gets confused. Let’s slow down and untangle **Node.js vs FastAPI**, **await**, and **coroutines**. I’ll make this crystal clear.
 
-Is is very simple. It provides excellent isolation. Bugs don't spread. Works with any blocking code. Easy debugging. 
+---
 
-However the negatives are that, It consumes heavy memory, Each process have heap, stack, libraries and interpreter, 
+## 1️⃣ What a coroutine **really is**
+
+A **coroutine** is **a resumable function**. That’s it.
+
+- It **runs until it hits something that yields control** (`await`, `yield`, `sleep`, etc.)
+    
+- It **pauses itself**, and its state (local variables, where it left off) is saved
+    
+- Later, the **scheduler/event loop** resumes it
+    
+
+Think of a coroutine as:
+
+```
+A function that says: "I can pause myself and resume later."
+```
+
+Everything else is just tooling around it.
+
+---
+
+###### 2️⃣ In Python / FastAPI
+
+Example:
+
 ```python
-1 PHP worker ≈ 30–50 MB
-100 workers ≈ 3–5 GB RAM # not universally applicable
-# somethimes pyton workers consume much more depending on app size
-```
-Frequent Forking process is expensive. Wasted resources. However forking at startup isn't that expensive. However processes duplicate memory spaces and are heavier than threads. 
-
-And for the caution that process count don't spikes. PHP has 
-```php
-MAX_PROCESS_POOL = something(let's say 50) # crossing this will create backpressure
+async def handle_request():
+    await db.query()
+    await http_call()
+    return "ok"
 ```
 
-PHP Ecosystem is the poster child of this model. We also have Python WSGI Servers in Process Mode. Ruby on Rails also use this. Low level system(C/C++) often use this pre fork one. Almost all cheap/shared hosting uses process model. 
+- `handle_request` **itself is a coroutine**
+    
+- The **await expressions inside** (`db.query()`, `http_call()`) are **points where this coroutine can pause**
+    
 
-Attention. 
-Modern server can support 1 worker process with event loop inside each process. That worker can handle many concurrent async requests. The above one is only true for pure synchronous pre-fork models. Async wasn't possible in this model in classic Server like Apache pre-fork, PHP-FPM but Modern python server, guvicorn with uvicorn workers support 1 worker process with event loop inside it
+So:
 
-Another important concept is IPC.
-Processes don't share memory, must communicate via sockets, pipes, shared memory, etc. This makes state sharing much much difficult. 
+```
+Coroutine = entire function
+Pause points = await statements inside
+```
 
-|Processes|Threads|Event Loop|
+**Key point:**
+
+> The function is the coroutine, not the individual `await`s. The `await`s are “yield points” inside the coroutine.
+
+---
+
+### What happens internally
+
+1. Request hits FastAPI → `handle_request()` is called → **coroutine object created**
+    
+2. Coroutine runs until first `await` → pauses itself
+    
+3. Control returns to **event loop** → event loop can run another coroutine
+    
+4. When the awaited operation finishes → event loop **resumes the coroutine** from where it left off
+    
+
+---
+
+## 3️⃣ In Node.js
+
+Example:
+
+```javascript
+async function handleRequest() {
+    await dbQuery();
+    await fetchApi();
+    return "ok";
+}
+```
+
+- `handleRequest` = coroutine (Node calls them “async functions”)
+    
+- `await dbQuery()` = yield point
+    
+- `await fetchApi()` = another yield point
+    
+
+Node.js and FastAPI differ in **implementation details**, but conceptually:
+
+> async function = coroutine  
+> await inside = points where coroutine yields
+
+---
+
+## 4️⃣ So “coroutine” vs “await” clarified
+
+|Concept|FastAPI / Python|Node.js / JS|
 |---|---|---|
-|1|1|Yes|
-|1|Many|No|
-|Many|1|No|
-|Many|1|Yes|
-|Many|Many|Yes|
+|Coroutine|`async def handle_request()`|`async function handleRequest()`|
+|Yield points|`await db.query()`, `await http_call()`|`await dbQuery()`, `await fetchApi()`|
+|Scheduler|asyncio event loop|libuv event loop|
+|Thread usage|Single thread can run many coroutines|Single thread can run many async functions|
+
+✅ **TL;DR:** Coroutine = the **whole async function**  
+✅ `await` = the **pause/resume points inside the coroutine**
+
+---
+
+## 5️⃣ Event loop + coroutine relationship
+
+```
+1 OS process
+  └── 1 thread
+        └── Event loop (scheduler)
+              ├── Coroutine A (function for Request A)
+              │       ├── await db.query()  # pause
+              │       └── await http_call() # pause
+              ├── Coroutine B (function for Request B)
+              │       └── await something()
+              └── Coroutine C ...
+```
+
+- Event loop decides **which coroutine runs next**
+    
+- Coroutine itself decides **when to pause** (via `await`)
+    
+
+---
+
+## 6️⃣ Analogy
+
+- **Coroutine** = a worker who can pause their work
+    
+- **Await** = the worker says: “I’m waiting for something, you can give my tools to someone else”
+    
+- **Event loop** = manager who hands the tools to the next worker ready to run
+    
+
+---
+
+## ✅ Key takeaway for your notes
+
+- **Do not confuse `await` with coroutine**
+    
+- **The function marked `async` is the coroutine**
+    
+- **`await` just tells the coroutine to pause at that point**
+    
+- Event loop schedules many coroutines on **the same thread**
+    
+
+---
+
+If you want, I can redraw **your FastAPI / Node.js examples** in a **single clean diagram showing event loop + coroutines + await lines**. That usually makes it click in the brain.
+
+Do you want me to do that?
+
+Yes — absolutely, coroutines **exist in Node.js**, but they’re called **async functions / promises**, and yes, the **event loop concept is basically the same**, though implementation details differ. Let me break it down clearly:
+
+---
+
+## 1️⃣ Coroutines in Node.js?
+
+- In Python: `async def func()` → coroutine
+    
+- In Node.js: `async function func()` → coroutine (also called _async function_)
+    
+
+Example:
+
+```javascript
+async function handleRequest() {
+    await dbQuery();      // pause here
+    await fetchApi();     // pause here
+    return "ok";
+}
+```
+
+- `handleRequest` is a **coroutine**
+    
+- Each `await` is a **pause/yield point**
+    
+- Node creates a **promise** behind the scenes that represents the future result of the coroutine
+    
+
+✅ So yes, Node.js has coroutines — just under different names (async functions / promises).
+
+---
+
+### Key difference vs Python:
+
+|Aspect|Python|Node.js / JS|
+|---|---|---|
+|Coroutine|`async def function()`|`async function()`|
+|Await mechanism|`await something()`|`await something()`|
+|Scheduler|asyncio event loop|libuv event loop|
+|Implementation style|generator-based + tasks + event loop|callbacks/promises + event loop|
+|Thread usage|Usually 1 thread per event loop|Usually 1 thread per event loop|
+
+---
+
+## 2️⃣ Event loop: same idea, different engine
+
+- **Python (asyncio / FastAPI)**:
+    
+    - Written in pure Python + C extensions
+        
+    - Event loop schedules **coroutines**
+        
+    - Supports multiple event loops (1 per thread / process)
+        
+- **Node.js (libuv)**:
+    
+    - Written in C under the hood
+        
+    - Event loop schedules **async functions / callbacks**
+        
+    - Handles timers, I/O, networking, file ops
+        
+
+💡 Conceptually:
+
+> Event loop = “scheduler that decides which paused/resumable tasks run next”
+
+Difference is mainly **implementation**: Python exposes explicit `await` + coroutine objects; Node wraps everything in **promises and callbacks**. But in essence, they are the same concurrency pattern.
+
+---
+
+### Summary
+
+- ✅ Node.js has coroutines → `async function`s are coroutines
+- ✅ Event loop exists in both → same concept, slightly different implementations
+- ✅ Await lines are **yield points**, coroutine is the **entire async function**
+If you want, I can now draw that **diagram showing FastAPI + Node.js coroutines + event loop + await lines**, so you can finally “see” the full picture.
+
+Do you want me to do that next?
 ### Co-routine based | Co operative multitasking/co-routines
 The core idea of Instead of OS switching threads(Preemptive multitasking), We have functions that voluntarily pause themselves and scheduler(Event Loop) decides what run next. Nothing is forcefully interrupted. A co-routine must yield control explicitly. 
 
-When looking at this note, you may find what the heck is co-routines ? We know that Event Loop is scheduler. Co-routines is the unit of work that the scheduler runs. That is it. And it is just a function that can pause itself and resume later. 
+When looking at this note, you may find what the heck is co-routines ? We know that Event Loop is scheduler. Co-routines is the unit of work that the scheduler runs. That is it. And it is just a function that can pause itself and resume later. A unit of execution that can pause and resume.
+
+Its job:
+- Do work
+- Voluntarily yield (`await`)
+- Resume later
+Think of it as
+
+The Event loop schedules co-routines. 
+
+- FastAPI → coroutines + asyncio event loop
+- Node.js → promises (coroutine-like) + event loop
+- Uvicorn → event loop + async tasks
+
+```
+Event loop = scheduler
+Coroutine = scheduled unit
+```
 ### Actor Based 
 ### Distributed consensus
 ### Scheduling algorithms
