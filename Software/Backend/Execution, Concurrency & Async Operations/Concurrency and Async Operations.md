@@ -377,17 +377,18 @@ Those are for OS kernel designers.
 
 You are building servers, not kernels.
 ### Thread based | Single Process, Multiple threads
-The core idea of Thread based concurrency is that our server run one process and it spawns multiple OS level threads on the basis of request done by engines(JVM). But modern server have the capacity to use a thread pool which means runtime creates a pool of OS threads in advance and incoming request are assigned to available threads.
-And those each threads are independently scheduled by OS, can run independently(if multiple cores exists and OS schedules them on different cores), including blocking I/O.
+The core idea of Thread based concurrency is that our server run one process and it spawns multiple OS level threads on the basis of per request or from the thread pool managed by engines(JVM). But modern server have the capacity to use a thread pool which means runtime creates a pool of OS threads in advance and incoming request are assigned to available threads.
+And those each threads are independently scheduled by OS, can run independently and parallel(if multiple cores exists and OS schedules them on different cores), including blocking I/O.
 
 Because all the threads belong to same process, they share the same memory space, which makes data sharing easy but requires careful synchronization. 
 
 ```java
-1 OS process
-  ├── Thread 1 → handles requests / tasks
-  ├── Thread 2 → handles requests / tasks
-  ├── Thread 3 → handles requests / tasks
-  └── ... up to N threads
+1 OS Process
+  ├── Thread Pool (N threads)
+  │     ├── Thread 1 → handles requests / tasks
+  │     ├── Thread 2 → handles requests / tasks
+  │     └── ...
+
 ```
 
 To fully understand let's simulate with synchronous function. 
