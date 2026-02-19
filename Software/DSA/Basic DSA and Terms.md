@@ -1,7 +1,3 @@
-
-
-Get used to **looping, indexing, and thinking in O(n)**.
-
 ###### Exercises (write in Java)
 
 1️⃣ Reverse an array  
@@ -13,11 +9,8 @@ Get used to **looping, indexing, and thinking in O(n)**.
 📌 Focus:
 
 - loops
-    
 - indexes
-    
 - Big O = O(n)
-    
 
 ---
 
@@ -38,9 +31,7 @@ Learn to avoid nested loops.
 📌 Focus:
 
 - left / right movement
-    
 - single pass logic
-    
 
 ---
 
@@ -60,9 +51,7 @@ Handle **subarrays** efficiently.
 📌 Focus:
 
 - window expand / shrink
-    
 - add right, remove left
-    
 
 ---
 
@@ -82,9 +71,7 @@ Answer range queries fast.
 📌 Focus:
 
 - prefix array logic
-    
 - math, not loops
-    
 
 ---
 
@@ -103,24 +90,7 @@ Handle range updates.
 📌 Focus:
 
 - marking start & end
-    
 - prefix sum at the end
-    
-
-## 📌 Daily Routine (Best Way)
-
-🕒 1–1.5 hours/day
-
-1. Read problem
-    
-2. Think brute force
-    
-3. Ask: “Can I do O(n)?”
-    
-4. Code
-    
-5. Dry run with pen & paper
-    
 
 ###### 🎯 Your NEXT TASK (Do This Now)
 
@@ -135,23 +105,35 @@ When you’re done (or stuck), paste your code here and I’ll review it **line 
 You’re doing this the _right_ way — slow, correct, and solid.
 
 ### Basic Terms
-TC  is about how runtime grow when input size grows. And how algorithms scales. It is about growth, not speed. 
+
+TC is about how runtime grow when input size grows. And how algorithms scales. It is about growth, not speed.
+
 ### Arrays
+
 There are two kinds of Array. They are
+
 1. Static Arrays
 2. Dynamic Arrays
 
 Normally Arrays have O(1) access and O(n) traversals
 
 The DSA problem of these are
+
 ###### Two pointers
+
 When we have two pointers doing same thing
+
 ###### Sliding Window
-When we have sliding window like moving from one window to another. 
+
+When we have sliding window like moving from one window to another.
+
 ###### Prefix sum
-Sum from one point to another. Needs extra array. We need two operation. Build prefix and calculate it. 
+
+Sum from one point to another. Needs extra array. We need two operation. Build prefix and calculate it.
+
 ###### Difference Arrays
-It is for the problem like adding 3 from index 1 to 3 and add 4 from index 2 to 4. We do it in blank array. 
+
+It is for the problem like adding 3 from index 1 to 3 and add 4 from index 2 to 4. We do it in blank array.
 
 Good—this is the **right question** to ask.  
 Not “give me 50 problems”, but “**can I prove I understand arrays?**”
@@ -207,9 +189,7 @@ Can you store an array of integers?
 **Q8.** Why does prefix sum fail when:
 
 - Updates are frequent?
-    
 - Values are floating point?
-    
 
 **Q9.** Explain **Subarray Sum = K** without code.  
 → Why does a hashmap suddenly become necessary?
@@ -274,13 +254,9 @@ If you can answer **most of them cleanly**:
 ##### ❌ Do NOT jump to:
 
 - Graphs
-    
 - Dynamic Programming
-    
 - Segment Trees
-    
 - “Hard” problems
-    
 
 That’s how people burn out.
 
@@ -295,11 +271,8 @@ Because arrays + hashing = 60% of interview problems.
 You must master:
 
 - Frequency counting
-    
 - Prefix sum + hashmap
-    
 - Set-based reasoning
-    
 
 ---
 
@@ -308,20 +281,14 @@ You must master:
 Because stacks teach:
 
 - Constraint-based thinking
-    
 - Monotonic logic
-    
 - Hidden state management
-    
 
 This unlocks:
 
 - Next greater element
-    
 - Valid parentheses
-    
 - Histogram problems
-    
 
 ---
 
@@ -330,9 +297,7 @@ This unlocks:
 Because this connects arrays to:
 
 - Sliding window max/min
-    
 - BFS intuition later
-    
 
 Deque is **criminally underrated**.
 
@@ -351,13 +316,12 @@ Then move forward without looking back.
 If you want, next I can:
 
 - Turn these into **mock interview drills**
-    
 - Or give you **hashing questions that expose fake understanding**
-    
 
 Say the word.
 
 ### Hashing
+
 Good—this is the **right question** to ask.  
 Not “give me 50 problems”, but “**can I prove I understand arrays?**”
 
@@ -412,9 +376,7 @@ Can you store an array of integers?
 **Q8.** Why does prefix sum fail when:
 
 - Updates are frequent?
-    
 - Values are floating point?
-    
 
 **Q9.** Explain **Subarray Sum = K** without code.  
 → Why does a hashmap suddenly become necessary?
@@ -479,13 +441,9 @@ If you can answer **most of them cleanly**:
 ##### ❌ Do NOT jump to:
 
 - Graphs
-    
 - Dynamic Programming
-    
 - Segment Trees
-    
 - “Hard” problems
-    
 
 That’s how people burn out.
 
@@ -500,11 +458,8 @@ Because arrays + hashing = 60% of interview problems.
 You must master:
 
 - Frequency counting
-    
 - Prefix sum + hashmap
-    
 - Set-based reasoning
-    
 
 ---
 
@@ -513,20 +468,14 @@ You must master:
 Because stacks teach:
 
 - Constraint-based thinking
-    
 - Monotonic logic
-    
 - Hidden state management
-    
 
 This unlocks:
 
 - Next greater element
-    
 - Valid parentheses
-    
 - Histogram problems
-    
 
 ---
 
@@ -535,9 +484,7 @@ This unlocks:
 Because this connects arrays to:
 
 - Sliding window max/min
-    
 - BFS intuition later
-    
 
 Deque is **criminally underrated**.
 
@@ -556,14 +503,14 @@ Then move forward without looking back.
 If you want, next I can:
 
 - Turn these into **mock interview drills**
-    
 - Or give you **hashing questions that expose fake understanding**
-    
 
 Say the word.
+
 ### Strings
 
 ### Stacks
+
 Stacks is used for Function calls, Undo, redo and Bracket and expression checking and reversing. Stack isn't a data container(It may feel like it but it is not a data container at all).
 
 Stack are extremely bad at random access, searching fast and flexibility
@@ -573,49 +520,100 @@ You must understand this sentence deeply:
 > **A stack is about controlling _context_**, not storing data.
 
 - Call stack → execution context
-    
 - Undo → action context
-    
 - Expression parsing → evaluation context
-    
 
 Once this clicks, stacks stop being “containers”.
 
 ###### With Array
+
 Let's say we initialize the array with this
+
 ```java
 [ _, _, _, _, _ ]
 top = -1 (it needs to be something at first)
 ```
+
 And we push some value
+
 ```java
 [ 10, _, _, _, _ ]
 top = 0
 ```
+
 And let's say we add two different value again
+
 ```java
 [ 10, 20, 30, _, _ ]
 top = 2
 ```
+
 And we remove one value `30`
+
 ```java
 [ 10, 20, 30, _, _ ]
 top = 1
 ```
-Look closely, we didn't removed `30` at all but stopped caring about it. and we decreased the value of `top`. This is how stacks works in real life. 
+
+Look closely, we didn't removed `30` at all but stopped caring about it. and we decreased the value of `top`. This is how stacks works in real life.
+
 ###### With Linked List
-Newest Node always become the head that is it. Tail isn't used at all. If we used tail then traversal is needed. So we use head. 
+
+Newest Node always become the head that is it. Tail isn't used at all. If we used tail then traversal is needed. So we use head.
+
+Absolutely! Just like arrays, **stack problems also have a set of classic patterns and techniques**. If you internalize these, you can handle most stack-based problems without panicking. Let’s map it out.
+
+---
+
+## **1️⃣ Classic Stack Patterns**
+
+| Pattern                            | How it works / Idea                                                        | Examples                                            |
+| ---------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------- |
+| **Basic Push/Pop/Peek**            | Standard LIFO operations                                                   | Valid parentheses, undo operations, simple reverse  |
+| **Next Greater / Smaller Element** | Maintain elements in a **monotonic stack** to find the next bigger/smaller | `Next Greater Element I/II`, stock span             |
+| **Monotonic Stack**                | Keep stack **increasing or decreasing**, pop while violating               | Largest rectangle in histogram, trapping rain water |
+| **Stack as Recursion Simulation**  | Replace recursion with stack                                               | DFS, iterative tree traversal                       |
+| **Two Stack Trick**                | Use 2 stacks to implement queue (or vice versa)                            | Queue using 2 stacks, min-stack                     |
+| **History / Undo problems**        | Push state changes onto stack                                              | Browser back/forward, undo-redo                     |
+| **Expression Evaluation**          | Use stack for operators/operands                                           | Infix → Postfix → Evaluate, calculator problems     |
+
+---
+
+1. **LIFO principle**: last in, first out
+2. **Top element access**: always peek before popping
+3. **Monotonic behavior**: sometimes stack elements follow a certain order
+4. **Auxiliary stack**: sometimes you need a secondary stack to help
+5. **Simulating recursion**: stack can replicate call stack
+
+---
+
+## **3️⃣ Tips to Master Stack**
+
+- Solve **1–2 problems per pattern** first. Don’t rush.
+- Draw the stack **step by step** on paper or in your mind.
+- Focus on **peek → compare → pop → push** logic; that’s 80% of stack problems.
+- Think **“what condition triggers pop”** and **“what to push and when”** — that’s the core of most patterns.
+
+---
+
+### ⚡ **TL;DR**
+
+- Stack problems have **fewer patterns than arrays**, but they **recur everywhere**.
+- Once you know **LIFO operations + monotonic stack + two-stack trick + recursion simulation**, you can handle ~90% of classic stack problems.
+
+---
+
+If you want, I can make a **visual map of stack problem patterns**, just like I suggested for arrays — so you can glance at it and immediately know which trick to apply.
+
+Do you want me to make that?
 
 ##### 1️⃣ Conceptual Foundations
 
 You must understand these **without code** first:
 
 - What _LIFO_ actually models (control flow, nesting, undo)
-    
 - Why stack access is restricted by design
-    
 - Why stack is _not_ just a “data container” but a **constraint enforcer**
-    
 
 If you explain stack only in terms of push/pop → incomplete.
 
@@ -626,18 +624,13 @@ If you explain stack only in terms of push/pop → incomplete.
 You should know:
 
 - `push`, `pop`, `peek`
-    
 - Why each is **O(1)**
-    
 - Why stack size matters (overflow)
-    
 - Why pop does not immediately “delete” memory
-    
 
 Also:
 
 - Difference between **logical removal** and **physical memory reuse**
-    
 
 This matters later for queues and deques.
 
@@ -650,20 +643,14 @@ You must understand **both**, even if you code only one:
 ###### 🔹 Array-based stack
 
 - Fixed vs dynamic size
-    
 - Resizing strategy
-    
 - Amortized O(1) push
-    
 
 ###### 🔹 Linked-list-based stack
 
 - Why no resizing
-    
 - Why worse cache locality
-    
 - Why it’s rarely used in practice
-    
 
 If “amortized” still feels hand-wavy → stop.
 
@@ -674,13 +661,9 @@ If “amortized” still feels hand-wavy → stop.
 You should recognize and explain these patterns:
 
 - Matching (parentheses, tags)
-    
 - Reversal
-    
 - Backtracking
-    
 - Deferred decisions
-    
 
 If you can’t _name_ the pattern when you see it, you’re not ready.
 
@@ -691,20 +674,14 @@ If you can’t _name_ the pattern when you see it, you’re not ready.
 You should be able to explain the **why**, not just the how:
 
 - Valid parentheses
-    
 - Reverse string / array
-    
 - Next greater element
-    
 - Min stack
-    
 
 Especially:
 
 - Why NGE uses a stack
-    
 - Why Min Stack needs auxiliary storage
-    
 
 ---
 
@@ -715,13 +692,9 @@ This is the **gatekeeper topic**.
 You must understand:
 
 - Increasing vs decreasing stacks
-    
 - When and why elements are popped
-    
 - Why each element is pushed & popped at most once
-    
 - Why total time is still O(n)
-    
 
 If monotonic stack feels like a trick → you’re not done.
 
@@ -732,13 +705,9 @@ If monotonic stack feels like a trick → you’re not done.
 You must conceptually know:
 
 - Call stack structure
-    
 - Stack frame contents
-    
 - Base case = stop growing stack
-    
 - Why stack overflow happens
-    
 
 You should be able to answer:
 
@@ -751,15 +720,10 @@ You should be able to answer:
 You should know:
 
 - Why stack is bad for:
-    
-    - Random access
-        
-    - FIFO problems
-        
-    - Sliding windows
-        
+  - Random access
+  - FIFO problems
+  - Sliding windows
 - Why stack depth is dangerous in production systems
-    
 
 Knowing limits = maturity.
 
@@ -770,13 +734,9 @@ Knowing limits = maturity.
 Stacks should naturally map to:
 
 - Function calls
-    
 - Undo/redo
-    
 - Expression evaluation
-    
 - Backtracking algorithms
-    
 
 If you have to _force_ the mapping, rethink.
 
@@ -792,84 +752,70 @@ Then yes—you’re ready for queues.
 
 ---
 
-
 That mental shift is huge.
 
 Queues introduce:
 
 - Fairness
-    
 - Scheduling
-    
 - Level-order thinking
-    
 - Systems design relevance
-    
 
 ### Queue
-Understand Enqueue and Dequeue
+
 ###### With Arrays
+
 There are two kinds of application with arrays.
-They are 
+They are
+
 - Naive Queue
 - Circular Queue
-With Arrays, Queue have two pointer. They are `front` and `rear`.
+  With Arrays, Queue have two pointer. They are `front` and `rear`.
 
 ==There are circular queue also==
+
 - Very common in real systems (OS, networking, task schedulers)
 - Common in messaging systems (RabbitMQ, Kafka), event loops, network buffers
+
 ###### With Linked List
 
 Think **linked-list queue** as:
 
 - Job queue in Node.js
-    
 - Task scheduler in threads
-    
 - Print spooler / network buffer
-    
 
 It **naturally matches a stream of events** where you never know max size in advance.
 
-###### Doubly ended queue (deQue)
-It is stack + queue hybrid. It basically allows insertion and deletion from both ends. 
+###### Doubly ended queue (deque)
+
+It is stack + queue hybrid. It basically allows insertion and deletion from both ends.
 
 Deque shines when:
 
 - You need **flexible order**
-    
 - You want **fast access to both ends**
-    
 - Real-world examples:
-    
-    - Browser history: go back (pop front) or forward (push rear)
-        
-    - Sliding window problems in algorithms
-        
-    - Task scheduling where urgent tasks may be inserted at front
-
+  - Browser history: go back (pop front) or forward (push rear)
+  - Sliding window problems in algorithms
+  - Task scheduling where urgent tasks may be inserted at front
 
 ###### Types of deque
 
 1. **Input-restricted deque**
-    
-    - Insert **only at one end**, remove from **both ends**
-        
+   - Insert **only at one end**, remove from **both ends**
+
 2. **Output-restricted deque**
-    
-    - Insert **both ends**, remove from **only one end**
+   - Insert **both ends**, remove from **only one end**
+
 ##### 4️⃣ Mental picture
 
 `Front                    Rear   ↓                        ↓ [10] <-> [20] <-> [30] <-> [40]`
 
 - Push front → adds before 10
-    
 - Push rear → adds after 40
-    
 - Pop front → removes 10
-    
 - Pop rear → removes 40
-    
 
 This is just like having **two stacks glued together at their ends**, but way more efficient.
 
@@ -894,9 +840,7 @@ Front/rear pointers → O(1) insertion/deletion
 ###### 6️⃣ Why it’s important
 
 - Many algorithms use deque for **sliding window max/min**, **shortest path**, etc.
-    
 - It’s basically the **ultimate linear structure** before moving to trees.
-    
 - If you understand stack + queue + deque → almost every linear problem in interviews is easy.
 
 8️⃣ Real-world relevance (backend mindset)
@@ -910,22 +854,10 @@ Undo/Redo with flexible history → deque
 Browser forward/back navigation → deque
 
 Basically, once you understand stack → queue → deque, all linear structures click.
+
 ###### Deque using Linked List
+
 ###### Deque using Array
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Good—now you’re asking in **syllabus terms**, not vibes. That’s how you avoid wandering.
 
@@ -947,11 +879,8 @@ Think of this as a **checklist**, not a to-do list.
 You must understand these **without code** first:
 
 - What _LIFO_ actually models (control flow, nesting, undo)
-    
 - Why stack access is restricted by design
-    
 - Why stack is _not_ just a “data container” but a **constraint enforcer**
-    
 
 If you explain stack only in terms of push/pop → incomplete.
 
@@ -962,18 +891,13 @@ If you explain stack only in terms of push/pop → incomplete.
 You should know:
 
 - `push`, `pop`, `peek`
-    
 - Why each is **O(1)**
-    
 - Why stack size matters (overflow)
-    
 - Why pop does not immediately “delete” memory
-    
 
 Also:
 
 - Difference between **logical removal** and **physical memory reuse**
-    
 
 This matters later for queues and deques.
 
@@ -986,20 +910,14 @@ You must understand **both**, even if you code only one:
 ###### 🔹 Array-based stack
 
 - Fixed vs dynamic size
-    
 - Resizing strategy
-    
 - Amortized O(1) push
-    
 
 ###### 🔹 Linked-list-based stack
 
 - Why no resizing
-    
 - Why worse cache locality
-    
 - Why it’s rarely used in practice
-    
 
 If “amortized” still feels hand-wavy → stop.
 
@@ -1010,13 +928,9 @@ If “amortized” still feels hand-wavy → stop.
 You should recognize and explain these patterns:
 
 - Matching (parentheses, tags)
-    
 - Reversal
-    
 - Backtracking
-    
 - Deferred decisions
-    
 
 If you can’t _name_ the pattern when you see it, you’re not ready.
 
@@ -1027,20 +941,14 @@ If you can’t _name_ the pattern when you see it, you’re not ready.
 You should be able to explain the **why**, not just the how:
 
 - Valid parentheses
-    
 - Reverse string / array
-    
 - Next greater element
-    
 - Min stack
-    
 
 Especially:
 
 - Why NGE uses a stack
-    
 - Why Min Stack needs auxiliary storage
-    
 
 ---
 
@@ -1051,13 +959,9 @@ This is the **gatekeeper topic**.
 You must understand:
 
 - Increasing vs decreasing stacks
-    
 - When and why elements are popped
-    
 - Why each element is pushed & popped at most once
-    
 - Why total time is still O(n)
-    
 
 If monotonic stack feels like a trick → you’re not done.
 
@@ -1068,13 +972,9 @@ If monotonic stack feels like a trick → you’re not done.
 You must conceptually know:
 
 - Call stack structure
-    
 - Stack frame contents
-    
 - Base case = stop growing stack
-    
 - Why stack overflow happens
-    
 
 You should be able to answer:
 
@@ -1087,15 +987,10 @@ You should be able to answer:
 You should know:
 
 - Why stack is bad for:
-    
-    - Random access
-        
-    - FIFO problems
-        
-    - Sliding windows
-        
+  - Random access
+  - FIFO problems
+  - Sliding windows
 - Why stack depth is dangerous in production systems
-    
 
 Knowing limits = maturity.
 
@@ -1106,13 +1001,9 @@ Knowing limits = maturity.
 Stacks should naturally map to:
 
 - Function calls
-    
 - Undo/redo
-    
 - Expression evaluation
-    
 - Backtracking algorithms
-    
 
 If you have to _force_ the mapping, rethink.
 
@@ -1133,25 +1024,19 @@ Then yes—you’re ready for queues.
 Stacks teach:
 
 - **Last unresolved thing first**
-    
 
 Queues teach:
 
 - **First unresolved thing first**
-    
 
 That mental shift is huge.
 
 Queues introduce:
 
 - Fairness
-    
 - Scheduling
-    
 - Level-order thinking
-    
 - Systems design relevance
-    
 
 If you jump early, queues feel boring and pointless.
 
@@ -1168,13 +1053,12 @@ Skip parts → confusion later.
 If you want, next I can:
 
 - Give you the **queue syllabus**
-    
 - Or a **self-test** to prove you’re stack-ready
-    
 
 Your call.
 
 ### Hashing + Queue
+
 Good choice.  
 **Hashing + Queue is where DSA stops feeling academic and starts feeling like real engineering.**  
 This combo shows up everywhere—in backend systems, not just interviews.
@@ -1202,13 +1086,9 @@ Queue answers:
 Together they solve:
 
 - Fast lookup
-    
 - Fair processing
-    
 - Bounded memory
-    
 - Order preservation
-    
 
 If you don’t keep this mental model, everything will feel random.
 
@@ -1223,20 +1103,14 @@ You must understand why **hashing alone is insufficient**.
 Example:
 
 - HashMap gives fast access
-    
 - But has **no sense of time or order**
-    
 
 Queue adds:
 
 - Recency
-    
 - Fairness
-    
 - Aging
-    
 - Eviction order
-    
 
 ###### 🔹 Think-through Question
 
@@ -1259,40 +1133,31 @@ Not “oldest inserted”—**recently used**.
 ###### 🔹 Data Structures Used
 
 - **HashMap** → key → node
-    
 - **Deque (or doubly linked list)** → usage order
-    
 
 Why:
 
 - HashMap → O(1) lookup
-    
 - Deque → O(1) move-to-front & remove-last
-    
 
 ###### 🔹 Exercises
 
 1. Explain LRU cache **without code**
-    
 2. Dry-run:
-    
-    ```
-    put(1)
-    put(2)
-    get(1)
-    put(3)
-    ```
-    
-    → Which key is evicted and why?
-    
+
+   ```
+   put(1)
+   put(2)
+   get(1)
+   put(3)
+   ```
+
+   → Which key is evicted and why?
+
 3. Answer:
-    
-    - Why singly linked list fails
-        
-    - Why array fails
-        
-    - Why both structures are required
-        
+   - Why singly linked list fails
+   - Why array fails
+   - Why both structures are required
 
 If LRU feels “clever” instead of **obvious**, redo it.
 
@@ -1305,16 +1170,12 @@ If LRU feels “clever” instead of **obvious**, redo it.
 Examples:
 
 - First non-repeating character in a stream
-    
 - Top-K frequent elements (simplified version)
-    
 
 ###### 🔹 Typical Setup
 
 - HashMap → frequency
-    
 - Queue → order of arrival
-    
 
 ###### 🔹 Exercise
 
@@ -1325,9 +1186,7 @@ Input stream:
 You should track:
 
 - HashMap (counts)
-    
 - Queue (candidates)
-    
 
 Key question:
 
@@ -1348,27 +1207,19 @@ This is where interviewers get impressed.
 ###### 🔹 Structure
 
 - HashMap → userId → queue of timestamps
-    
 - Queue → request times
-    
 
 ###### 🔹 Logic
 
 1. Remove timestamps older than 60s
-    
 2. Check queue size
-    
 3. Accept or reject
-    
 
 ###### 🔹 Exercises
 
 - Why queue, not stack?
-    
 - Why timestamps, not counters?
-    
 - What breaks if system clock changes?
-    
 
 This is **real production thinking**.
 
@@ -1383,16 +1234,12 @@ Window + uniqueness / frequency constraints.
 Examples:
 
 - Longest substring without repeating characters
-    
 - Sliding window with at most K distinct elements
-    
 
 ###### 🔹 Data Structures
 
 - HashMap → counts
-    
 - Queue/Deque → window boundaries
-    
 
 ###### 🔹 Exercise
 
@@ -1409,18 +1256,13 @@ If you can reason this cleanly, you’re leveling up.
 ###### 🔹 Scenario
 
 - Tasks arrive
-    
 - Some tasks repeat
-    
 - Some must wait (cooldown)
-    
 
 ###### 🔹 Structures
 
 - HashMap → task → next allowed time
-    
 - Queue → execution order
-    
 
 ###### 🔹 Think Question
 
@@ -1435,13 +1277,9 @@ This introduces scheduling intuition.
 You must understand:
 
 - What happens when queues grow unbounded
-    
 - Why backpressure exists
-    
 - Why HashMap memory leaks are dangerous
-    
 - Why eviction strategies matter
-    
 
 ###### 🔹 Exercise
 
@@ -1456,15 +1294,10 @@ If your answer doesn’t mention **memory blow-up**, redo.
 You are **done with Hashing + Queue** if you can explain:
 
 1. Why LRU cache needs **two** structures
-    
 2. Why FIFO matters in rate limiting
-    
 3. Why hashing alone is insufficient for temporal logic
-    
 4. When deque > queue
-    
 5. One real backend system using this combo
-    
 
 If yes → move on.
 
@@ -1479,11 +1312,8 @@ After **Hashing + Queue**, the correct next step is:
 Specifically:
 
 - Binary trees
-    
 - Traversals
-    
 - BFS/DFS intuition (already primed)
-    
 
 Do **NOT** jump to DP or graphs yet.
 
@@ -1494,39 +1324,19 @@ Do **NOT** jump to DP or graphs yet.
 Hashing + Queue is the line where:
 
 - Juniors memorize
-    
 - Engineers **design**
-    
 
 If you master this combo, interviews stop feeling like riddles and start feeling like conversations.
 
 If you want next:
 
 - A **step-by-step LRU cache walkthrough**
-    
 - Or **interview questions that force Hash + Queue**
-    
 - Or **backend design problems using these ideas**
-    
 
 Say the word.
 
-### Linked List 
-Yes.  
-**You’re absolutely right—and this instinct is a big green flag.**
-
-Trees without linked lists are like recursion without stacks: you can _use_ them, but you don’t really **understand** them.
-
-So yes—**Linked Lists come before Trees. No debate.**
-
-I’ll give you the **same style syllabus**:  
-👉 what to understand  
-👉 what to practice  
-👉 how to know you’re done
-
-No fluff, no overkill.
-
----
+### Linked List
 
 #### ✅ LINKED LIST — PRACTICAL SYLLABUS
 
@@ -1536,33 +1346,14 @@ Think of linked lists as:
 
 This is where many people realize they don’t understand memory as well as they thought.
 
----
-
-##### BIG PICTURE (lock this first)
-
-Linked lists answer:
-
-> “What if memory is NOT contiguous?”
-
-Arrays = fast access, rigid memory  
-Linked lists = flexible memory, slow access
-
-If you don’t internalize this tradeoff, everything feels pointless.
-
----
-
 ##### PHASE 1 — Core Concept (Day 1)
 
 ##### 🔹 Must Understand
 
 - Node = data + reference
-    
 - Why elements are NOT contiguous
-    
 - Why random access is O(n)
-    
 - Why insertion/deletion can be O(1)
-    
 
 ###### 🔹 Think Question
 
@@ -1577,35 +1368,24 @@ If your answer doesn’t mention **shifting**, revisit arrays.
 ###### 🔹 Operations (conceptually first)
 
 - Insert at head
-    
 - Insert at tail
-    
 - Delete at head
-    
 - Delete by value
-    
 - Search
-    
 
 ###### 🔹 Pointer Discipline (VERY IMPORTANT)
 
 You must be able to:
 
 - Move `current`
-    
 - Update `next`
-    
 - Not lose the list
-    
 
 ###### 🔹 Exercises
 
 - Reverse a linked list
-    
 - Find middle element
-    
 - Detect loop (Floyd’s cycle)
-    
 
 If you lose track of pointers on paper → slow down.
 
@@ -1616,11 +1396,8 @@ If you lose track of pointers on paper → slow down.
 ###### 🔹 Understand
 
 - Why linked list is bad for cache locality
-    
 - Why traversal dominates performance
-    
 - Why memory overhead is high
-    
 
 ###### 🔹 Think Question
 
@@ -1635,18 +1412,13 @@ This tests maturity.
 ###### 🔹 Must Understand
 
 - `prev` and `next`
-    
 - Why backward traversal exists
-    
 - Why extra memory is the tradeoff
-    
 
 ###### 🔹 Exercise
 
 - Insert & delete in middle
-    
 - Explain why LRU cache needs DLL, not singly LL
-    
 
 If this clicks, trees will feel natural later.
 
@@ -1659,25 +1431,18 @@ These appear constantly in interviews.
 ###### 🔹 Fast & Slow Pointer
 
 - Find middle
-    
 - Detect cycle
-    
 - Remove cycle
-    
 
 ###### 🔹 Two Pointer (list version)
 
 - Intersection of two lists
-    
 - Nth node from end
-    
 
 ###### 🔹 Dummy Node Technique
 
 - Simplifies head deletion
-    
 - Prevents edge-case hell
-    
 
 If these feel hacky → you’re missing the pattern.
 
@@ -1688,11 +1453,8 @@ If these feel hacky → you’re missing the pattern.
 ###### 🔹 Must Be Comfortable With
 
 - Reverse in groups (k nodes)
-    
 - Merge two sorted lists
-    
 - Reorder list
-    
 
 ###### 🔹 Key Question
 
@@ -1707,13 +1469,9 @@ This matters later in trees.
 You must understand:
 
 - Why linked lists are bad for indexing
-    
 - Why they fragment memory
-    
 - Why they are hard to debug
-    
 - Why concurrency is painful
-    
 
 Linked lists teach **discipline**, not convenience.
 
@@ -1756,10 +1514,7 @@ Finish this properly, and Trees will feel _logical_, not mystical.
 If you want next:
 
 - A **daily Linked List practice plan**
-    
 - Or **interview questions that expose weak LL understanding**
-    
 - Or **how LL concepts map directly to Trees**
-    
 
 Say the word.

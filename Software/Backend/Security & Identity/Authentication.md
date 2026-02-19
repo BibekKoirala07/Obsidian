@@ -26,7 +26,7 @@ Also know:
 
 ---
 
-## 2. Passwords (this is a trap area 🔥)
+## 2. Passwords ( this is a trap area 🔥 )
 
 Interviewers love this because many devs screw it up.
 
