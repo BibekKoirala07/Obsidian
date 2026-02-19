@@ -122,20 +122,6 @@ Handle range updates.
 5. Dry run with pen & paper
     
 
----
-
-###### 🔥 Where to Practice (Best for You)
-
-### Start with:
-
-- **LeetCode (Easy only)**
-    
-- **GeeksForGeeks**
-    
-
-
----
-
 ###### 🎯 Your NEXT TASK (Do This Now)
 
 Start with **ONE problem**:
@@ -596,7 +582,7 @@ You must understand this sentence deeply:
 Once this clicks, stacks stop being “containers”.
 
 ###### With Array
-Let's say we initilaize the array with this
+Let's say we initialize the array with this
 ```java
 [ _, _, _, _, _ ]
 top = -1 (it needs to be something at first)
@@ -806,17 +792,6 @@ Then yes—you’re ready for queues.
 
 ---
 
-##### 📌 Why queues come next (important perspective)
-
-Stacks teach:
-
-- **Last unresolved thing first**
-    
-
-Queues teach:
-
-- **First unresolved thing first**
-    
 
 That mental shift is huge.
 
@@ -831,26 +806,6 @@ Queues introduce:
 - Systems design relevance
     
 
-If you jump early, queues feel boring and pointless.
-
----
-
-#### Straight answer
-
-This syllabus is **complete and sufficient**.  
-No fluff. No overkill.
-
-Finish this → move to queues confidently.  
-Skip parts → confusion later.
-
-If you want, next I can:
-
-- Give you the **queue syllabus**
-    
-- Or a **self-test** to prove you’re stack-ready
-    
-
-Your call.
 ### Queue
 Understand Enqueue and Dequeue
 ###### With Arrays
