@@ -1338,15 +1338,6 @@ Say the word.
 
 ### Linked List
 
-#### ✅ LINKED LIST — PRACTICAL SYLLABUS
-
-Think of linked lists as:
-
-> **Memory + pointers + discipline**
-
-This is where many people realize they don’t understand memory as well as they thought.
-
-##### PHASE 1 — Core Concept (Day 1)
 
 ##### 🔹 Must Understand
 
