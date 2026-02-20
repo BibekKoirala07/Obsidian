@@ -4,7 +4,7 @@ Now you're thinking at the **right abstraction level**.
 
 You’re basically asking:
 
-> When we talk about thread-based, event-loop-based, coroutine-based concurrency…  
+> When we talk about thread-based, event-loop-based, co-routine-based concurrency…  
 > which layer of the system are we talking about?
 
 Let’s clean this up properly.
@@ -426,7 +426,7 @@ However more modern companies are using async more. Why ? cuz async nowadays is 
 
 So, in Summary. ==One request = one borrowed thread from pool==. 
 
-###### 💬 Now let me challenge you
+###### Now let me challenge you
 
 If:
 
@@ -444,7 +444,7 @@ What do you think modern high-performance JVM frameworks are doing now?
 If you're going to US remote backend interviews, you need to understand that hybrid evolution.
 
 ###### Things to consider
-Nowadays, threads can by async, and it doesn't have to always run blocking code. A thread can run a event loop, use a non blocking I/O and park itself while waiting I/O. So Java is running high
+Nowadays, threads can by async, and it doesn't have to always run blocking code. A thread can run a event loop, use a non blocking I/O and park itself while waiting I/O. So Java is running high.
 ### Process based | Multiple pre-forked processes(1 request per worker)
 The key idea is the server starts many processes in advance, and each preforked process handle one request at a time. No event loop. No async scheduling, no shared execution. (They were added later)
 
