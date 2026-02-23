@@ -1,3 +1,34 @@
+
+### 📌 Subtopics
+
+- Indexes
+    
+- B-Trees
+    
+- Query Planner
+    
+- Transactions
+    
+- ACID
+    
+- Isolation Levels
+    
+- Locks
+    
+- Deadlocks
+    
+- Normalization
+    
+- Replication
+    
+- Sharding
+    
+- OLTP vs OLAP
+    
+
+This transfers across:  
+Postgres, MySQL, MongoDB, etc.
+
 Yes. This is a very good systems-thinking question.
 
 Short answer first:

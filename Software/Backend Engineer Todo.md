@@ -70,28 +70,6 @@ If you know this → you’re ahead of many.
 
 ---
 
-# 🟢 3. Backend Frameworks & Architecture
-
-Not just “using NestJS”.
-
-### Understand
-
-- MVC / Clean Architecture
-    
-- Layered architecture
-    
-- Dependency Injection
-    
-- Modular design
-    
-- Monorepos
-    
-- Microservices vs Monolith
-    
-
-You’re already strong here (NestJS work 💪).
-
----
 
 # 🟢 4. Databases & Data Modeling (Career Maker)
 

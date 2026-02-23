@@ -2,7 +2,6 @@
 redirect("/")
 ```
 is kind of error. remember to not put this in try catch. as it will be considered as error and not as redirect. Next treats redirect as error(special kind of error).
-
 #### Full Route Caching
 why we build the next app `npm run build`. next decides whether the route is static or dynamic, if the page is static, then page is rendered and result is stored. It happens in build time means at time when we put page in vercel or any other things.so, so, data at that time is shown ad exact file is shown to every one. in production, users are given this result.
 

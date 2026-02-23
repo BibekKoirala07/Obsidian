@@ -100,64 +100,6 @@ It is a type of programming which automates the other tasks rather than solving 
 
 ## SOLID Principles
 ## HTTP Exception
-1. **BadRequestException (400)**  
-    The request is malformed or contains invalid parameters.  
-    _Example_: Missing required fields in a request payload.
-2. **UnauthorizedException (401)**  
-    Authentication is required but not provided or invalid.  
-    _Example_: Missing or invalid token for protected routes.
-3. **ForbiddenException (403)**  
-    The user is authenticated but does not have permission to access the resource.  
-    _Example_: Attempting to access admin-only endpoints.
-4. **NotFoundException (404)**  
-    The requested resource does not exist.  
-    _Example_: Accessing a nonexistent endpoint or record.
-5. **MethodNotAllowedException (405)**  
-    The HTTP method used (e.g., GET, POST) is not allowed for the resource.  
-    _Example_: Sending a POST request to a GET-only endpoint.
-6. **NotAcceptableException (406)**  
-    The requested format or media type is not supported.  
-    _Example_: Requesting XML format when only JSON is supported.
-7. **RequestTimeoutException (408)**  
-    The server timed out waiting for the client to send a request.  
-    _Example_: Slow internet connection causes a timeout.
-8. **ConflictException (409)**  
-    The request conflicts with the current state of the resource.  
-    _Example_: Attempting to create a user with a duplicate email.
-9. **GoneException (410)**  
-    The requested resource is no longer available and has been permanently removed.  
-    _Example_: Accessing deprecated API endpoints.
-10. **PayloadTooLargeException (413)**  
-    The request payload exceeds the server's allowed limit.  
-    _Example_: Uploading a file larger than the server's maximum size.
-11. **UnsupportedMediaTypeException (415)**  
-    The server does not support the request's media type.  
-    _Example_: Sending data in XML when only JSON is supported.
-12. **UnprocessableEntityException (422)**  
-    The request is well-formed but semantically invalid.  
-    _Example_: Providing an invalid email format during user registration.
-13. **PreconditionFailedException (412)**  
-    One or more conditions specified in the request headers are not met.  
-    _Example_: Conditional requests using `If-Match` headers fail.
----
-14. **InternalServerErrorException (500)**  
-    A generic error occurs on the server.  
-    _Example_: Database crashes or unhandled exceptions.
-15. **NotImplementedException (501)**  
-    The server does not recognize or support the requested method.  
-    _Example_: Calling a feature that hasn't been implemented yet.
-16. **BadGatewayException (502)**  
-    The server received an invalid response from an upstream server.  
-    _Example_: API gateway returns an error from a backend service.
-17. **ServiceUnavailableException (503)**  
-    The server is temporarily unavailable due to maintenance or overload.  
-    _Example_: Scheduled downtime for upgrades.
-18. **GatewayTimeoutException (504)**  
-    The server did not receive a timely response from an upstream server.  
-    _Example_: Backend service takes too long to respond.
-19. **HttpVersionNotSupportedException (505)**  
-    The server does not support the HTTP version used in the request.  
-    _Example_: Using an outdated HTTP protocol version.
 ## Level of Programming Language 
 ###### Machine Level
 it is the lowest we can go. It just denotes zeroes and ones and sometimes Hexadecimal. and every type of processor or CPU or microprocessors accept its own type of language. Manufacturer write the manual about how those processor accept the commands. Some of those processor are x86, ARM, e.t.c
