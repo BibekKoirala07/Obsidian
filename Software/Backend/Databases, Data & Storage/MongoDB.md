@@ -26,9 +26,7 @@ await session.endSession();
 ```
 
 The writes allowed per transaction are `insert`, `update` and `delete`. However, `createIndex` isn't allowed.
-
 ## Indexing
-
 just a special data structure that MongoDB uses to quickly locate data without scanning every docs in the collections. Instead of flipping through every page to find a term, we just jump straight to it.
 
 It helps prevent collection scan. We can make index for whatever field is we need to query. Index for db collection is just like index for a book. It lists out everything we need to look up and it tells us where to find.

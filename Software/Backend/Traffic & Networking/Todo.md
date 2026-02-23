@@ -1,4 +1,5 @@
 
+> “How does a request physically travel?”
 
 
 ### 📌 Subtopics
@@ -24,3 +25,5 @@
 
 Think:  
 “How does data move from client → server → DB → back?”
+
+If it answers **how data moves between machines** → here.

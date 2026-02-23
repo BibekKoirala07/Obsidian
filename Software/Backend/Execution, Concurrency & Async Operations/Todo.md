@@ -1,3 +1,5 @@
+> “What is executing, where, and when?”
+
 ### 📌 Subtopics
 
 - Process vs Thread
@@ -19,4 +21,7 @@
 - Backpressure
     
 - Context Switching
+
+
+If it explains **why async exists** → it belongs here.
 

@@ -13,8 +13,6 @@ Interviewers constantly ask:
 
 This is _not_ just “architecture”.
 
----
-
 ### ❌ Missing #2: **Failure & Resilience (Reality Layer)**
 
 Most candidates design systems that work **only when nothing goes wrong**.
@@ -76,150 +74,21 @@ Everything fits into **7 invariant axes**:
 
 ## 1️⃣ `01_execution_concurrency` (How Code Runs)
 
-> “What is executing, where, and when?”
 
-Include:
-
-- Process vs Thread
-    
-- Event Loop
-    
-- Sync vs Async
-    
-- Blocking vs Non-blocking
-    
-- Concurrency vs Parallelism
-    
-- Thread Pools
-    
-- Worker Processes
-    
-- CPU-bound vs I/O-bound
-    
-- Context Switching
-    
-- Backpressure
-    
-
-If it explains **why async exists** → it belongs here.
-
----
 
 ## 2️⃣ `02_networking_communication` (How Bytes Move)
 
-> “How does a request physically travel?”
 
-Include:
-
-- TCP vs UDP
-    
-- HTTP 1.1 / 2 / 3
-    
-- TLS / HTTPS
-    
-- DNS
-    
-- WebSockets
-    
-- gRPC
-    
-- Proxies / Reverse Proxies
-    
-- CDN
-    
-
-If it answers **how data moves between machines** → here.
-
----
 
 ## 3️⃣ `03_api_and_data_flow` 🔥 (BIG missing piece)
 
-> “How systems expose and consume capabilities”
 
-Include:
-
-- REST vs GraphQL vs RPC
-    
-- API Design Principles
-    
-- Request / Response Modeling
-    
-- Idempotency
-    
-- Pagination & Filtering
-    
-- Versioning Strategies
-    
-- Contract Compatibility
-    
-- Serialization (JSON, Protobuf)
-    
-
-This is where **clean backend thinking** shows up.
 
 ---
 
 ## 4️⃣ `04_data_and_storage` (State & Truth)
 
-> “Where truth lives and how it’s protected”
-
-Include:
-
-- Indexes
-    
-- B-Trees
-    
-- Query Planner
-    
-- Transactions
-    
-- ACID
-    
-- Isolation Levels
-    
-- Locks & Deadlocks
-    
-- Normalization
-    
-- Replication
-    
-- Sharding
-    
-- OLTP vs OLAP
-    
-
-No ORM syntax. Ever.
-
----
-
 ## 5️⃣ `05_scalability_and_system_design`
-
-> “How do we grow without dying?”
-
-Include:
-
-- Load Balancers
-    
-- Horizontal vs Vertical Scaling
-    
-- Caching (Redis, CDN)
-    
-- Rate Limiting
-    
-- Partitioning
-    
-- Replication
-    
-- High Availability
-    
-- Microservices vs Monolith
-    
-- Message Queues
-    
-
-This is **where money interviews live**.
-
----
 
 ## 6️⃣ `06_failure_and_resilience` 🔥 (Very Important)
 
