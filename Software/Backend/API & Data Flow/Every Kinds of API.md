@@ -33,15 +33,13 @@ Microservice graphql is the greatest thing that has happened in an enterprise co
 ###### ✅ Stage 1: Must
 -Have Features (Core)
 
-|Feature|Why it matters|
-|---|---|
-|🔐 **Authentication**|So only logged-in users can perform actions|
-|🧪 **Validation**|To avoid bad inputs (name too short, etc.)|
-|⚠️ **Error Handling**|Centralized structure like `success, message`|
-|🔁 **Pagination**|Especially cursor-based for `posts`, `users`|
-|🎯 **Input Types**|Cleanly typed `input {}` instead of raw args|
-
----
+| Feature               | Why it matters                                |
+| --------------------- | --------------------------------------------- |
+| 🔐 **Authentication** | So only logged-in users can perform actions   |
+| 🧪 **Validation**     | To avoid bad inputs (name too short, etc.)    |
+| ⚠️ **Error Handling** | Centralized structure like `success, message` |
+| 🔁 **Pagination**     | Especially cursor-based for `posts`, `users`  |
+| 🎯 **Input Types**    | Cleanly typed `input {}` instead of raw args  |
 
 ###### ✅ Stage 2: Important for Real Apps
 
@@ -52,16 +50,14 @@ Microservice graphql is the greatest thing that has happened in an enterprise co
 | ⛔ **Rate limiting / throttling**       | Prevent abuse                             |
 | 🔍 **Filtering & sorting**             | e.g., `posts(filter: { tag: "graphql" })` |
 
----
-
 ##### ✅ Stage 3: Nice-to-Have for Production Polish
 
-|Feature|Why it matters|
-|---|---|
-|🛠️ **Custom Scalars** (e.g. `DateTime`)|Avoid using plain strings for dates|
-|📊 **GraphQL Depth Limit / Complexity Limit**|Prevent DoS via deeply nested queries|
-|📈 **Logging & Monitoring**|Trace slow queries|
-|📦 **Modular Context** (e.g. current user, services)|Cleaner resolvers|
+| Feature                                              | Why it matters                        |
+| ---------------------------------------------------- | ------------------------------------- |
+| 🛠️ **Custom Scalars** (e.g. `DateTime`)             | Avoid using plain strings for dates   |
+| 📊 **GraphQL Depth Limit / Complexity Limit**        | Prevent DoS via deeply nested queries |
+| 📈 **Logging & Monitoring**                          | Trace slow queries                    |
+| 📦 **Modular Context** (e.g. current user, services) | Cleaner resolvers                     |
 
 - Cursor-based pagination
     
@@ -72,6 +68,16 @@ Microservice graphql is the greatest thing that has happened in an enterprise co
 - Query depth limiting
     
 - Federation (for microservices)
+
+###### Resolve Fields
+###### Data Loaders - Request-scoped loaders (no shared cache bugs)
+###### Auth inside field resolvers
+###### Paginations
+
+- **Make loader request-scoped (important)**
+- **Inject S3Service properly (NestJS style)**
+- **Add caching TTL if needed**
+- - Request-scoped loaders (no shared cache bugs)
 ### Web hooks
 ### Web sockets
 ### gRPC
