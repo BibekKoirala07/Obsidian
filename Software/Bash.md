@@ -1,3 +1,49 @@
+ls -a
+touch file.txt
+rm -i file-*.txt
+mv onefile anotherfile -> renaming (move)
+alias rm -> we can put alias of rm -> rm -i to make our work better
+history
+touch .file.txt -> . means hidden
+cd - -> means last directory
+
+Searching
+grep C1 -i your-text file -> grep "^bibek$" file
+echo hello >> file.txt
+
+cat file.txt | grep bibek
+
+pager
+less file       / to search and N and Ctrl + N to move forward. 
+more
+
+manual
+man ls -> already comes with pager which is less
+
+find should be used. 
+
+bash arguments
+
+History is built in bash not an external command. You can use which history you will get nothing at all but you will get for which ls. Instead of using man history, you should use bash way of getting docs about history. help is man equivalent for man for built in commands. 
+
+type -a history, type -a ls
+
+Some commands like echo are both external command and bash command. echo in bash is more feature complete than echo in system. 
+
+compgen -b -> it gives all the things built in bash. But some commands are both built in and external commands. like kill. They behave differently. 
+
+file is also external command. (executable program) 
+
+uname -a
+
+you can do thing=$(uname -a)
+
+Path resolution in bash. 
+all caps variable are already defined. We can change but don't want to 
+name=dave. here we created variable. 
+
+echo $PATH | tr : "\n"
+
 Bash scripting still matters a lot—even in the age of AI—but _what_ you need to know has changed.
 
 You no longer need to memorize every obscure Bash trick, because AI can help generate and explain scripts. What matters more is knowing enough to:
