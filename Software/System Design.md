@@ -1,5 +1,8 @@
 Always take the baby steps. Always have the thorough understanding of the problem. 
 
+Take baby steps. 
+Understand the problem statement. 
+
 break down the problem into components(essential)
 Note: do not create components for the sake of it. create component that you know are must. 
 Like for designing facebook, we need to have auth, notification, feed, gamitication. 
@@ -23,7 +26,119 @@ Whenever new things comes in computer, it always finds its place in financial do
 
 There is ACID property. 
 
+Need to see more. 
 
+### Scalling Database
+
+### Sharding and Partition
+Sharding is about database while Partition is about data.
+
+minimize the cross shard data. 
+
+### Non relation database 
+Most non relational database shard out of the box. 
+###### Documents DB 
+is good with partial value update. 
+###### Graph DB
+![[Pasted image 20260511201606.png]]
+###### Key Value DB
+![[Pasted image 20260511201419.png]]
+
+### Database to pick
+Db creator creates a DB thinking one problem very well. Whenever DB is conceptualize, it is conceptualize to solve one problem very well. They pick a small niche. 
+
+Like For Relation DB don't let someone add post if the user isn't available. can't create child without parent existing. but mongo DB can. 
+
+But they don't work if the data resides in two different DB. right ? One huge point of DBMS gone. As non DB don't offer those thing so obviously it would scale.
+
+IN NoSQL, Data is modeled to be shared. which means split across different nodes. (cuz Nosql assumes that data is distributed across nodes. so no cross shard queries)
+
+![[Pasted image 20260513203348.png]]
+
+DynamoDB has a property of storing data in very sharded manner. 
+
+You select the Database in System Design in last day. 
+
+The main question is How to select Data ? 
+How much data. 
+
+
+If the data needs to be correct(extremem correctness), can be stored in single node, needs strong consistency and needs complex queries. 
+
+If can't stored in single node. and can do manual sharding(I will create the API server to connect to the required DB) and have expertise in SQL -> Drop the constrainst and go for SQL
+
+can't stored in single node and simple KV based access. -> MongoDB, DDB
+
+Not stored in single node and No specific requirements -> Go for MongoDB
+
+### Caching
+Caches(places where we store data) -> normally RAM(not always. )
+saves Network I/O
+saves Disk I/O and computation. 
+
+Like profile information, specific line from file or some complex joining. 
+
+Caches are just glorified Hash table
+
+### Populates and Scalling the cache
+Lazy cache populating -> just means get from DB -> put it in cache and send it to client. (most popular).
+And of course while putting in cache, you always put expiry in it. 
+
+Eager Population. There are two types. 
+1. Writes go to both databases and cache in the same request call(while creation, write to both DB and redis)
+2. Proactively push to cache(proactively pushing to cache like yt recommendation system shows some videos and yt has already cached that video as most people will hit it. )
+
+Scaling is similar to Regular Database.
+Vertical Scaling -> make cache bigger
+Horizontal Scaling(Read Replica) -> 
+![[Pasted image 20260513211304.png]]
+![[Pasted image 20260513211459.png]]
+
+Database Scaling is same as cache scaling. 
+### Cache at different levels
+The main problem of caching is staleness and invalidation. 
+Like While sending money. You send your friend some money but cache may store that you haven't sent it. Like that something can't be stored in cache at all. 
+
+Client side caching -> images, logo, js files (huge performance boost) Like in Amazon prime (last point where you left video)
+
+CDN -> set of server distributed across the world. -> request always goes to nearest CDN server. It is used for caching like images and files. (cache information's that isn't changing). Origin Server isn't used to get it. 
+
+We also have Remote cache. The un intuitive thing is that it can be used by multiple servers.
+
+Database caching (Relational Database) - storing the total number of posts by storing in pre computed way. it is not black magic. 
+
+### Message Brokers and Queues
+Most interaction we do on web is synchronous
+
+One asynchronous is spinning up a VM (EC2).
+![[Pasted image 20260513213438.png]]
+Client tell that he want to spin up AWS EC2 instance. api get's it. it put some flag in Db and tell broker what client want to do. that is what happens. 
+
+Message Queues
+
+video processing in YouTube is classic example of asynchronous message.
+
+There are some features of message brokers. 
+Acts as a buffer for a message(consumers can process message as their own pace).
+Brokers has some sort of expiration like 14 days(like SQS)
+Brokers can reque the messages if not deleted. (What if consumer went down while processing the message ? Every brokers gives you API that you can call after task is completed) But there is classic case here. What if task was processed but while calling API consumer went down ? in that case task will be done twice (This is the philosophy of more than once). Sometimes it happens. Our business logic should handle that. But this is still the edge case. 
+![[Pasted image 20260513214844.png]]
+Process to gethe subtitle. That above video is S3. 
+
+### Message Streams
+The semantics of "Write to one" and "read to many".
+
+The difference to message brokers is that you can have multiple types of consumers which are reading the same message. 
+
+![[Pasted image 20260513215735.png]]
+You can see here counter and search both can read it right ? Two kinds of consumer reading same message. 
+
+Message lie in Kafka forever. (Of course you can make configuration but still. )
+![[Pasted image 20260513220953.png]]
+In MQ, the messages are pulled by consumer as one by one. IN MS, each consumer can loop all the message in broker. And message aren't deleted at all. In fact you can add new service and it can also loop over all the message present in MS. 
+
+
+![[Pasted image 20260513221222.png]]
 ### All the System Design Concepts
 ###### Client
 ###### Load Balancer

@@ -1,17 +1,3 @@
-### API - Authentication
-###### App Login
-###### Resend Verification code
-###### Verify user registration
-### API- User Settings
-###### Logout
-For both mobile-api and web-api
-###### Change Password
-###### Participant unique link
-###### Appointment List and History
-### API Therapist/Support Wire frame journey
-###### Access level selection
-###### Certification and qualification setup
-###### Add/edit availability
 ### API - Therapist Profile Builder
 ###### Upload Images
 Where is working with children check ? Oh it is therapist qualification which accpets pdf. This is for settings/qualification for therapists. 
@@ -23,20 +9,9 @@ Not needed
 ###### Upload and Create Client
 ###### Participant List and Search
 exists for SC, SW and T
-![[Pasted image 20260324214130.png]]
+
 ###### View Participant profile
 Exists for SC, SW and T
-![[Pasted image 20260324214245.png]]
-### API - Profile Setup
-###### Update Profile
-This is probably 
-###### List Interest Area
-Not needed
-###### List role type
-Not needed
-###### List Participants
-exists  T you can see it in 
-![[Pasted image 20260324220613.png]]
 ###### Show profile
 This is probably my account in user profile. 
 ### RFC1 - Buffer Time
