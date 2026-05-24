@@ -1,13 +1,31 @@
-This are complex MongoDB things. MongoDB is basically a whole cloud system pretending to be "just a database".
-## Aggregation Pipelines Stages
-## Transactions
+## Architecture
 
-Basically How to execute multiple operations atomically. A sequence of read and write operations that are treated as single atomic unit. It helps to upheld ACID principles.
-It is extremely useful in things related to finance, inventory deduction, order creations etc.
+## Authentication & Security
+
+Role based access, Field-level redaction (`$redact`), encrypted fields
+LDAP Authentication, Kerberos Authentication, x.509 Certificate Authentication
+
+- LDAP, Kerberos, x.509 Certificate Authentication
+- MongoDB internal auth (SCRAM)
+
+- Custom roles
+- Built-in roles
+- Fine-grained access control per DB/collection
+
+- Authentication mechanisms — SCRAM, x.509
+- Role-based access control (RBAC)
+- Field-level encryption
+- Network isolation best practices
+## Transactions
+ACID principles
+
+Limit for transaction is 60 second. 
 
 Requirement for using Transactions: Replica set or sharded cluster. And also driver support like Mongoose, native Node.js driver etc.
 
-There are two types of transaction. Single-document(enforced by default in MongoDB) and Multi-document transactions(explicitly started using sessions)
+Types 
+- Single document (by default)
+- multi document (have to be done)
 
 For transactions we need sessions and sessions means all the request are grouped together
 logically and behind the scene store in a constant.
@@ -16,13 +34,38 @@ logically and behind the scene store in a constant.
 // THIS IS FOR DEFAULT NODE.JS DRIVER AND NOT MONGOOSE
 const session = db.getMongo().startSession();
 session.startTranaction();
-
 await session.abortTransaction();
-
 await session.endSession();
 ```
 
 The writes allowed per transaction are `insert`, `update` and `delete`. However, `createIndex` isn't allowed.
+
+**Rule of thumb:** Transactions should be **fast and tight**:  only DB operations, no external API calls, no user input waiting, no heavy computation inside. 
+
+==transactions have ~2–3x write overhead== extremely important statement. So don't use transaction everywhere(- High-throughput, low-latency paths)). Only in necessary. 
+
+8. Read Concern & Write Concern (You'll Hear These in Code Reviews)
+
+- **`readConcern: "snapshot"`** — inside a transaction, you see a consistent snapshot of data as of transaction start. No dirty reads.
+- **`writeConcern: { w: "majority" }`** — the commit is acknowledged only after the majority of replica set members confirm it. Default for transactions.
+
+You usually don't set these manually — MongoDB defaults are sane — but you need to know what they mean when a senior dev asks.
+
+9. Sharded Clusters (Senior-Level Awareness)
+
+On a sharded cluster, transactions that touch **multiple shards** (cross-shard transactions) are supported but significantly more expensive. If your team is on a sharded cluster, a common optimization is to **design shard keys so related data lives on the same shard**, avoiding cross-shard transactions.
+
+ Your Learning Roadmap
+
+This one chat covers **~80% of what you'll need day-to-day.** Here's what to go deeper on next:
+
+| Priority  | Topic                            | Why                                                                                         |
+| --------- | -------------------------------- | ------------------------------------------------------------------------------------------- |
+| 🔴 High   | **Schema design for atomicity**  | Often you can avoid transactions entirely with good embedding                               |
+| 🔴 High   | **Error handling & retry logic** | `TransientTransactionError` and `UnknownTransactionCommitResult` are labels you must handle |
+| 🟡 Medium | **Read/Write concerns in depth** | Comes up in performance tuning and data consistency debates                                 |
+| 🟡 Medium | **Transactions in Mongoose**     | If your team uses Mongoose ORM, the session API is slightly different                       |
+| 🟢 Later  | **Sharding & shard key design**  | Only relevant when you scale to that level                                                  |
 ## Indexing
 just a special data structure that MongoDB uses to quickly locate data without scanning every docs in the collections. Instead of flipping through every page to find a term, we just jump straight to it.
 
@@ -32,18 +75,16 @@ Index is the list of values of certain field in our document.
 
 ==If there is a field that we do lot of searching and we don't do that much updates, then index is necessary==.
 
-###### Single field indexes
+==Always index high cardinality field only ==
 
+#### Single field indexes
 create index for single field in document. that is it.
 So lets understand it fully.
 Lets make index.
-
 ```js
-db.users.createIndex({ email: 1 });
+db.users.createIndex({ email: 1 }, { unique: true }); // enforces uniqueness on db level. 
 ```
-
 let's say we have `users` collections that looks like this.
-
 ```js
 [
   { _id: 1, name: "Alice", email: "a@a.com" },
@@ -51,63 +92,60 @@ let's say we have `users` collections that looks like this.
   { _id: 3, name: "Charlie", email: "c@c.com" },
 ];
 ```
-
 MongoDB reads every document in `users`. For each document, it extracts the value of `email` field. and `_id` of the document. It build the intermediate structure.
-
 ```js
    email  -> id
 "a@a.com"  -> 1
 "b@b.com"  -> 2
 "c@c.com"  -> 3
 ```
-
 After that MongoDB builds a B-tree(sorted from `A` to `Z`).
 MongoDB stores this data in B-tree data structure(which is self-balancing).
-
 ```js
 			b@b.com
 
 	a@a.com              c@c.com
 ```
-
-The email value is stored in each node. and a pointer to the document's \_id. MongoDB keeps this B-tree sorted for fast binary-style searching.
-
+The email value is stored in each node. and a pointer to the document's` _id`. MongoDB keeps this B-tree sorted for fast binary-style searching.
 MongoDB saves this index on disk as a separate index file on disk alongside your data collection files.
-
 So, when we hit query like
-
-```js
+```ts
 	db.users.find({ email: "c@c.com" })'
 ```
-
 Instead of scanning all the document. it directly compare whether is is ahead or behind in that B+ tree. compares it, takes direction and when the collection is found, it is pointed using `_id` for a document. like if we find `c@c.com` then it points to it's id.
 
-It is great for `sort({ email: 1 })` as it is already available but not for `sort({ email: -1 })` as it needs to be reversed. So, if we already know we need descending data, then doing `createIndex({ email: -1 })` is better as data is already done in reversed/descending order.
+MongoDB can traverse the B-tree in both directions, so `{ email: 1 }` index supports both `sort({ email: 1 })`  and  `sort({ email: -1 })`. Direction only truly matters in compound indexes.
 
-so `1` and `-1` is about how does B-tree is built and how it can support sorting, nothing more. if it is index `-1`.
+So, if we already know we need descending data, then doing `createIndex({ email: -1 })` is better as data is already done in reversed/descending order.
 
-In short, whatever is indexed field in B+-tree becomes key and MongoDB build an index file like this. Each key points to one or more document IDs that have value.
+so `1` and `-1` is about how does B plus tree is built and how it can support sorting, nothing more. if it is index `-1`.
 
+In short, whatever is indexed field in B+ tree becomes key and MongoDB build an index file like this. Each key points to one or more document IDs that have value.
 ```js
 age: 12 -> [_id: 1,_id: 3, _id:5],
 age: 30 -> [_id: 3],
 age: 34 -> [_id: 4]
 ```
+a pointer, usually `_id` so what database can look what those `_id` are. Remember the value in B-tree isn't entire document but rather the pointer which in most case is `_id` and database later goes to those field to look for those. In case of ranges(like find from this to this range), it starts a some key `25` and walk the tree like `25 -> 26 -> 27 -> 28` and may be to some parts whatever the query has like may be queries has `$gte: , $lte: `. And It collects all the `_id`(value) found under those keys and fetch those docs from collection via `_id`.
 
-a pointer, usually `_id` so what database can look what those `_id` are. Remember the value in B-tree isn't entire document but rather the pointer which in most case is `_id` and database later goes to those field to look for those. In case of ranges, it starts a some key `25` and walk the tree like `25 -> 26 -> 27 -> 28` and may be to some parts whatever the query has like may be queries has `$gte: , $lte: `. And It collects all the `_id`(value) found under those keys and fetch those docs from collection via `_id`.
+Like I mention that that in B-tree there is the pointer which is mostly `-id` ? What if entire document is kept in that place ? Well, MongoDB don't need to fetch the document from collections right ? This type of queries is called covered queries. The query simply didn't touched the collection. (If we want to get fields that are indexed fields). It may sound cool but is used barely. Cuz the situation like this simply don't exists that much. Suppose you are indexing using `age` and `email` then your query also just use projection and get only 3 fields which is `_id`. So just not used that much. 
 
-###### Compound indexes
-
-let's start with an example
-
+We also need to check if the index is being used or not right ? Sometimes index can exists but it may not be used. So we need to check in most cases(You can force it in mongo actually, using `$hint`)
+```js
+	db.users.find({ email: "abc@gmail.com" }).explain("executionStats")
+```
+It gives a object with necessary keys to know if the index is being used or not. Main are `IXSCAN` and `COLLSCAN`.
+Sometime single field indexes aren't enough. Like if there are 10000 users of age 25, then sorting by name, then we need another indexes called Compound indexes. We will explore it later.  
+#### Compound indexes
+let's start with an example.
 ```js
 db.users.createIndex({ age: 1, name: 1 });
 ```
-
 This means first sort/index by `age`(primary sort) and for same `age`, by `name`. "Index by age, and for each age bucket, index by name".
 
-For example
+Order's matter here in sorting for asc/desc ` { email: -1, or email: 1 } `. 
 
+For example,
 ```js
 [
   { _id: 1, age: 25, name: "Alice" },
@@ -117,10 +155,8 @@ For example
   { _id: 5, age: 35, name: "Eve" },
 ];
 ```
-
 and let's say compound index was created.
 B+-tree will look like this
-
 ```js
 [
   { key: { age: 25, name: "Alice" }, value: ObjectId("1") },
@@ -130,40 +166,29 @@ B+-tree will look like this
   { key: { age: 35, name: "Eve" }, value: ObjectId("5") },
 ];
 ```
-
 Now we can easily locate users with age = 25, all users with age = 30 and name = "Daniel", all users with age in a range and names sorted.
-
 The best case is when the query match exactly. like
-
 ```js
 db.users.find({ age: 25, name: "Bob" });
 ```
-
 Here index was used fully thus making it blazing fast.
-
 Also
-
 ```js
 db.users.find({ age: 25 });
 ```
-
 Here, matches first field in index. It is still fast(uses index for `age`, then scans matching names. )
-
-But here Index can't be used as age is missing
-
+But here Index can't be used as age is missings
 ```js
-db.users.find({ age: "Bob" });
+db.users.find({ name: "Bob" });
 ```
 
 It is like skipping the first column of a book index
-
 Like if we imagine we need to know the person with city and name, if we don't know city, then we can't use anything to find them. but if we know city, then we can actually find that person but little bit late.
-
 In case of sorting,Here also we can't skip age.
 
 ```js
 	.find().sort({age: 1, name: 1})
-	.find({age: 30}) .sort({name: 1}) // supported
+	.find({age: 30}).sort({name: 1}) // supported
 
 	.find().sort({name: 1}) //  not supported as skips age
 ```
@@ -173,17 +198,41 @@ Also order will matter, as MongoDB will always index by the first field, then by
 ==Always include first field for index to work and order matters==.
 sorting is supported if order matches index field.
 
-###### Text Indexes
+Another thing to kept in mind is mixed direction
+```js
+	.sort({ age: 1, name: 1 })   // ✅ 
+	.sort({ age: -1, name: -1 }) // ✅ full reverse is fine
+	.sort({ age: 1, name: -1 })  // ❌ mixed — needs createIndex({ age: 1, name: -1 })
+```
 
+While creating indexes, there is a rule that need to be kept in mind. It is called ==ESR==. Equality first, Sort second and Range third. Mongo traverses from left to right, so it quickly removes huge amount of collection using Equality, preserves the sort order(which already is sorted) and then applies range scan efficiently. 
+```ts
+db.users.createIndex({
+  status: 1,
+  country: 1 // can use multiple Equality, and their order doesn't matter.  
+  createdAt: -1,
+  age: 1
+})
+// for 
+db.users.find({
+  status: "active",
+  age: { $gt: 20 }
+}).sort({ createdAt: -1 })
+
+// Bad example
+db.users.createIndex({
+  age: 1, // here range is done first so indexing is of no use
+  status: 1,
+  createdAt: -1
+})
+```
+#### Text Indexes
 Let us search for words or phrases inside string fields in docs, like a search engine
-
 ```js
 db.articles.createIndex({ content: "text" });
 ```
-
 So, there is a reason why we don't use normal index.
 let's say we have
-
 ```js
 {
   title: "Introuction to MongoDB";
@@ -191,30 +240,28 @@ let's say we have
 
 db.articles.find({ title: "MongoDB" }); // doesn't work
 ```
-
 Regular indexes only match exact field values, not partial words or text inside strings. To find anything that contains `MongoDB`, we need a text index.
 
-###### Partial Indexes
+MongoDB only allows one Text Index per collection. 
 
-###### TTL Indexes
+#### Partial & Sparse Indexes
+This index is used when we need to index on the basis of only one condition. Like suppose we need to just query for only active users, or not deleted products and things like that. You can also include for only document in which that field exists. and or exclude certain field or you need to query certain fields. so. Like you may just need to do query 
+```js
+	db.users.find({ status: "ACTIVE" })
+```
+In this case partial index can be useful as it preserves spaces. Don't forget to use `explain`
+ to see if it is working or not. 
+#### TTL Indexes
+The main goal is to delete doc after certain time. May be used for logs or session or OTPs.
+#### Multi Key indexes
+The principle is to index fields inside array. Be careful while doing it though. You can do for permissions. 
+
+You can view Information about indexes using 
+```ts
+	db.getIndexes()
+```
 
 ## Data Modeling
-
-#### Embedding vs Referencing
-
-Embedding should be done for tightly coupled data. Embedding has faster reads. It is complex when updating. Can hit 16 MB BSON limit. changes are atomic also. While in multi-document operations need transactions. We need to embed when data is always needed to access together. Data isn't shared. and data rarely changes. and remember that sub documents can't be independently indexed.
-
-For referencing, one-many or many-many one is preferred. For frequent updates. Slower reads(requires `$lookup`, don't use populate). May be atomicity can't be achieved(need transactions).
-
-#### Schema Design Patterns
-
-###### Approximation
-
-When expensive calculations are done frequently and precision of those calculations isn't highest priority. Like in number of likes, number of comments, etc.
-
-###### Attribute
-
-What if some fields can store key-value pairs dynamically as attribute. Instead of creating a fixed schema for every possible property, we store attributes as embedded key-value pairs inside the document. Or when attributes are not known upfront or can vary widely.
 
 ###### Bucket
 
@@ -388,60 +435,9 @@ But what about social network where user follow users, friends of friends, music
 
 Rollback, Oplog replay, Resyncing replicas manualy, Disaster recovery strategies
 
-## Performance
-
-#### Capped Collection
-
-It just means that we can only have certain amount of document in a collection. Means when creating a database, we can say that only this amount of document should be in database. and whenever we try to push the document when the cap is full then it automatically deletes the most previous doc. Like if 3 was cap, we can't push more than 3 docs.
-
-####
-
-## Security Basics
-
-#### RABC
-
-Role based access, Field-level redaction (`$redact`), encrypted fields
-
-## Security
-
-LDAP Authentication, Kerberos Authentication, x.509 Certificate Authentication
-
-###### Aggregation Pipelines Stages
-
-1. `$match`
-2. `$project`
-3. `$group`
-4. `$sort`
-5. `$limit`
-6. `$skip`
-7. `$unwind`
-8. `$lookup`
-9. `$facet`
-10. `$bucket`
-11. `$bucketAuto`
-12. `$replaceRoot`
-13. `$replaceWith`
-14. `$graphLookup`(recursive self-joins - like finding tree structures)
-15. `$densify`(fill missing time series data automatically)
-16. `$setWindowFields`(window functions, like SQL Over() - running totals, ranking)
-
-###### Data processing operators
-
-1. `$sum $avg $min $max $first $last`
-2. `$push $addToSet $set $unset $mergeObjects`
-
-##### Array Operators
-
-1. `$arrayElemAt`
-2. `$filter`
-3. `$map $filter`
-
 ## Performance Optimization
-
-`.explain`, covered queries, aggregation pipeline optimization(stage ordering), `$merge`, Hot vs cold data handling
-Understand query plans (IXSCAN, COLLSCAN)
+`$merge`, Hot vs cold data handling
 Query Planner deep dive(how mongoDB chooses indexes)
-Use of `$hint` to manually force index use
 WiredTiger storage engine internals(How Mongodb actually stores on disk)
 
 ###### Admin Stuff
@@ -463,53 +459,18 @@ index cardinality and covered queries.
 - Index intersection?
 - Index design strategies?
 
-These are must-know skills for any developer using MongoDB.
-
-### 1. Data Modeling
-
-- Embedding vs Referencing
-- Schema design best practices
-- One-to-many, many-to-many in NoSQL
-- Handling large arrays (bucket pattern, etc.)
-
-### 2. CRUD Operations
-
-- `insertOne`, `find`, `updateOne`, `deleteOne`
-- Query operators (`$in`, `$regex`, `$gte`, etc.)
-- Projection, sorting, pagination (`limit`, `skip`)
-
-### 3. Indexing
-
-- Single field, compound indexes
-- Index usage via `.explain()`
-- Unique and sparse indexes
-
-### 4. Aggregation Framework
-
-- `$match`, `$group`, `$project`, `$sort`, `$limit`
-- Pipeline optimization
-- Lookup (joins)
-- `$facet`, `$bucket`, `$redact`
-
----
 
 ## 🟡 LEVEL 2 — Production-Ready Developer
 
-This level ensures you can work safely in live environments.
-
 ### 1. Performance
-
 - Read/write patterns
 - Avoiding unbounded queries
 - Covered queries
 - Query profiling with `db.collection.explain()`
-
 ### 2. Schema Versioning & Migrations
-
 - Evolving documents over time
 - Using `updateMany`/`bulkWrite` for migrations
 - Mongoose or native driver migration strategies
-
 ### 3. Security Basics
 
 - Role-Based Access Control (RBAC)
@@ -524,8 +485,6 @@ This level ensures you can work safely in live environments.
 ---
 
 ## 🟠 LEVEL 3 — Tech Lead Basics (Infrastructure-Aware)
-
-This is where you move into leadership territory.
 
 ### 1. Replication
 
@@ -555,22 +514,7 @@ This is where you move into leadership territory.
 - TTL indexes
 - Text and Geospatial indexes
 
----
-
 ## 🔴 LEVEL 4 — Enterprise-Ready MongoDB
-
-This is often DevOps or advanced backend territory — but you should **understand** it.
-
-### 1. Authentication
-
-- LDAP, Kerberos, x.509 Certificate Authentication
-- MongoDB internal auth (SCRAM)
-
-### 2. Authorization
-
-- Custom roles
-- Built-in roles
-- Fine-grained access control per DB/collection
 
 ### 3. Backup and Restore
 
@@ -578,18 +522,12 @@ This is often DevOps or advanced backend territory — but you should **understa
 - `mongoexport` / `mongoimport`
 - Point-in-time recovery with replica sets
 - Atlas snapshots
-
 ### 4. Resilient Architecture
-
 - Multi-region deployments
 - Write retries, failover awareness
 - Retryable writes and idempotency
 
----
-
 ## 🟣 LEVEL 5 — MongoDB Architect / Tech Lead Mastery
-
-This is **strategic decision-making** and leadership.
 
 ### 1. Schema Design at Scale
 
@@ -618,17 +556,3 @@ This is **strategic decision-making** and leadership.
 - Educating team on anti-patterns
 - Setting up proper staging/prod environments
 - Creating MongoDB usage guidelines/playbooks
-
----
-
-## ✅ How to Use This
-
-You can think of it like this:
-
-| Level | Role Target           | Focus                            |
-| ----- | --------------------- | -------------------------------- |
-| 1     | Junior/Mid Dev        | Fundamentals                     |
-| 2     | Senior Dev            | Production safety & performance  |
-| 3     | Tech Lead             | Architecture + cluster awareness |
-| 4     | Lead / DevOps         | Security, reliability            |
-| 5     | Principal / Architect | Strategic leadership             |

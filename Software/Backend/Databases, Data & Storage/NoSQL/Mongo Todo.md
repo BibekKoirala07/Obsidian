@@ -28,12 +28,10 @@ You're not missing _knowledge_ — you're missing **operational and architectura
 - Session management
 
 **Change Streams**
-
 - What they are (real-time event stream off the oplog)
 - Practical uses — event-driven architecture, cache invalidation, audit logs
 
 **Performance in depth**
-
 - Query planner internals — how MongoDB picks an index
 - `explain()` output — actually reading `executionStats` and `queryPlanner` stages
 - Index intersection, partial indexes, sparse indexes, TTL indexes
@@ -105,13 +103,6 @@ Yes, understood completely. No aggregation, no query syntax. Pure **architecture
 - Cache and the working set concept — why RAM is everything
 - Journaling and crash recovery
 - Checkpoints
-
-**7. Security**
-
-- Authentication mechanisms — SCRAM, x.509
-- Role-based access control (RBAC)
-- Field-level encryption
-- Network isolation best practices
 
 **8. Schema Design at Scale** _(beyond patterns)_
 

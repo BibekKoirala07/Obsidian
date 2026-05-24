@@ -44,22 +44,6 @@ Let’s structure it.
 
 # 🧠 1. Think in “Database Problems”, Not “Database Types”
 
-All databases — Postgres, MySQL, MongoDB, Cassandra, DynamoDB — face the same problems:
-
-1. Too much data
-    
-2. Too many users
-    
-3. Too many reads
-    
-4. Too many writes
-    
-5. Failures
-    
-6. Latency
-    
-
-So they all invent similar solutions.
 
 ---
 
@@ -272,14 +256,14 @@ But CAP applies to both.
 
 Here’s the honest difference.
 
-|Area|SQL|NoSQL|
-|---|---|---|
-|Schema|Fixed|Flexible|
-|Joins|Yes|Rare|
-|Sharding|Hard|Easy|
-|Consistency|Strong|Configurable|
-|Transactions|Strong|Limited (varies)|
-|Scaling|Vertical first|Horizontal first|
+| Area         | SQL            | NoSQL            |
+| ------------ | -------------- | ---------------- |
+| Schema       | Fixed          | Flexible         |
+| Joins        | Yes            | Rare             |
+| Sharding     | Hard           | Easy             |
+| Consistency  | Strong         | Configurable     |
+| Transactions | Strong         | Limited (varies) |
+| Scaling      | Vertical first | Horizontal first |
 
 But concepts are same.
 
@@ -391,8 +375,6 @@ Good answer:
 
 That’s senior answer.
 
----
-
 # 🌱 9. Why This Matters for You
 
 You’re building:
@@ -403,9 +385,6 @@ Not “Mongo tricks” or “Postgres tricks”.
 
 That’s why you’re progressing.
 
----
-
-If you want, next I can explain:
 
 👉 **How sharding actually works internally (with rebalancing & failures)**  
 or  

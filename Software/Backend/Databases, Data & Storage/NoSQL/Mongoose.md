@@ -1,8 +1,5 @@
 ### Typing
-
-
 but never learn:
-
 - what a hydrated document actually is
 - how generics flow
 - why `_id` typing breaks
@@ -11,7 +8,6 @@ but never learn:
 - where `lean()` changes types
 - how plugins mutate schemas/types
 # The mental model you need
-
 Mongoose has **3 separate worlds**:
 
 |Layer|What it represents|
@@ -182,42 +178,6 @@ That’s why this exists:
 import { HydratedDocument } from 'mongoose';
 ```
 
-This is foundational.
-
----
-
-# Step 4 — Stop using `extends Document`
-
-Old tutorials do this:
-
-```ts
-interface User extends Document {
-  name: string;
-}
-```
-
-This is outdated and causes type nightmares.
-
-Modern Mongoose recommends:
-
-```ts
-interface User {
-  name: string;
-}
-```
-
-Then:
-
-```ts
-type UserDocument = HydratedDocument<User>;
-```
-
-Huge difference.
-
-Docs:  
-[Mongoose TypeScript Guide](https://mongoosejs.com/docs/typescript.html?utm_source=chatgpt.com)
-
----
 
 # Step 5 — Learn Mongoose generics properly
 
@@ -251,16 +211,13 @@ Now TypeScript can infer model types.
 
 This is the biggest typing concept in Mongoose:
 
-|Type|Meaning|
-|---|---|
-|IUser|Plain object shape|
-|HydratedDocument|Full mongoose document|
-|LeanDocument|Plain JSON object from `.lean()`|
-|Model|Query/model API|
+| Type             | Meaning                          |
+| ---------------- | -------------------------------- |
+| IUser            | Plain object shape               |
+| HydratedDocument | Full mongoose document           |
+| LeanDocument     | Plain JSON object from `.lean()` |
+| Model            | Query/model API                  |
 
-You need to know exactly which one you’re handling.
-
----
 
 # Step 7 — Understand `.lean()` deeply
 
@@ -452,7 +409,6 @@ Mongoose gives:
 
 Understanding these internally helps typing make sense.
 
----
 
 # Critical thing most devs never realize
 
@@ -479,8 +435,6 @@ schemas
 
 Keeping those synchronized is the entire challenge.
 
----
-
 # My recommendation for mastering it
 
 Study in this order:
@@ -504,30 +458,6 @@ Study in this order:
 9. Schema inference internals
     
 10. Source code
-    
-
----
-
-# Best resources
-
-### Official Docs
-
-- [Mongoose Docs](https://mongoosejs.com/docs/?utm_source=chatgpt.com)
-    
-- [Mongoose TypeScript Docs](https://mongoosejs.com/docs/typescript.html?utm_source=chatgpt.com)
-    
-
-### Deep TypeScript
-
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/?utm_source=chatgpt.com)
-    
-
-### Read source code
-
-- [Mongoose GitHub Repository](https://github.com/Automattic/mongoose?utm_source=chatgpt.com)
-    
-
----
 
 # The fastest path to deep understanding
 

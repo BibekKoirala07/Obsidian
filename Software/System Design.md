@@ -135,10 +135,114 @@ You can see here counter and search both can read it right ? Two kinds of consum
 
 Message lie in Kafka forever. (Of course you can make configuration but still. )
 ![[Pasted image 20260513220953.png]]
-In MQ, the messages are pulled by consumer as one by one. IN MS, each consumer can loop all the message in broker. And message aren't deleted at all. In fact you can add new service and it can also loop over all the message present in MS. 
+In MQ, the messages are pulled by consumer as one by one. IN MS, each consumer can loop all the message in broker. And message aren't deleted at all. In fact, you can add new service and it can also loop over all the message present in MS. The same set of messages are iterated by different services. 
 
 
 ![[Pasted image 20260513221222.png]]
+
+
+Essentials. 
+Apache Kafka is the most popular Apache Project. 
+In Kafka whenever you are pushing the particular message, you are pushing for a topic. 
+Each topic in kafka has a partition. 
+
+Hash function is used to know in which parition does the messages goes. One partition can handle about 300 thousands users. 
+
+Learn about Hash based partition. 
+All the message realted to one topic will be handled by its set of partition. 
+Within partition messages are ordered. But no gurantees across partition.
+
+![[Pasted image 20260516113814.png]]
+
+### Real Time pub/sub
+MS and MQ is pull by consumer. but this is push. 
+![[Pasted image 20260516114226.png]]
+![[Pasted image 20260516114245.png]]
+### Load Balancers
+When one service want to communicate to other. It also users LB. Not direct request. ok. 
+![[Pasted image 20260516115228.png]]
+![[Pasted image 20260516115539.png]]
+Hash based routing is important. Hash functions result are sticky(means for same input they give same output). Now what if we hash let's say using IP address, userId or other things or even role ? Then the user will always have routed to same service right ? 
+### Circuit Breakers
+Prevent Cascading failures(means failure in one service makes failures in second service. )
+![[Pasted image 20260516120131.png]]
+
+![[Pasted image 20260516120158.png]]
+You see to get feed, we get from trending, which gets from posts and profile and things like that. 
+
+Every machines has a limit the no of TCP connection that its machine can handle. 
+
+the main goal is to make call to other service if and only if that service is healthy. 
+![[Pasted image 20260516120605.png]]
+
+![[Pasted image 20260516120758.png]]
+
+![[Pasted image 20260516120927.png]]
+
+![[Pasted image 20260516121049.png]]
+
+### Data Redundancy and Recovery
+![[Pasted image 20260516121213.png]]
+
+![[Pasted image 20260516121307.png]]
+
+![[Pasted image 20260516121456.png]]
+### Leader Election for Automatic Recovery
+![[Pasted image 20260516122007.png]]
+There is a orchestra-tor. It is like " hey if one of the machine goes down, then I will spin up server in another machine and will connect to LB ". But what if that orchestrator goes down ? Who will keep and eye on that ? So it keeps on going. So we Leader election is a way. 
+
+So we have Leader Follower Setup
+![[Pasted image 20260516122255.png]]
+The system is auto recoverable. It is the one example of recursion. 
+### Client Server Model
+![[Pasted image 20260516123127.png]]
+
+![[Pasted image 20260516124345.png]]
+
+We may think that HTTP is so common but Redis doesn't use it. It has made its own protocol on the top of TCP. A lot of Databases also do this. But that also means you need to have your own client to do that(this is critical to understand)
+
+![[Pasted image 20260516124715.png]]
+
+![[Pasted image 20260516124813.png]]
+
+![[Pasted image 20260516125233.png]]
+
+![[Pasted image 20260516125300.png]]
+
+### Blob Storage
+Binary large object(everything that can be represented in binary)
+
+S3 is just network attached infinitely scalable file system. 
+
+Read in S3 are slows. It is not full flegded file system(You need to use aws client to work with S3).
+
+![[Pasted image 20260516130726.png]]
+### Bloom Filters
+used by recommendation systems. 
+It is a approximate Data structure. 
+
+![[Pasted image 20260517112851.png]]
+Created by researcher called Bloom.
+
+![[Pasted image 20260517113042.png]]
+
+![[Pasted image 20260517113430.png]]
+
+![[Pasted image 20260517113522.png]]
+
+Bloom filter are extremely efficient. We can't store those huge information in set so We just use Bloom filter to make things easy. So Bloom Filter >> Set. 
+
+![[Pasted image 20260517113714.png]]
+
+![[Pasted image 20260517113930.png]]
+
+![[Pasted image 20260517114056.png]]
+
+### Consistent Hashing
+Answers one question ? "Who owns this data ? "
+
+![[Pasted image 20260517114525.png]]
+
 ### All the System Design Concepts
 ###### Client
 ###### Load Balancer
