@@ -239,10 +239,18 @@ Bloom filter are extremely efficient. We can't store those huge information in s
 ![[Pasted image 20260517114056.png]]
 
 ### Consistent Hashing
-Answers one question ? "Who owns this data ? "
+Answers one question ? "Who owns this data ? " and nothing else. 
 
 ![[Pasted image 20260517114525.png]]
 
+hash based routing. 
+It happens in load balancer. 
+
+The implementation is just 2 array and binary search
+
+### Big Data Processing
+### System Design example
+Setup Read Replication. and have read operation from read replica having. 
 ### All the System Design Concepts
 ###### Client
 ###### Load Balancer
