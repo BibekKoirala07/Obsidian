@@ -708,11 +708,7 @@ Put static files in `resources/static` in main folder.
 
 ModelAndView
 Model is for Data. 
-
-
 ###### Need for Model Attribute.
-
-
 ### Exploring Web MVC without Spring Boot
 Didn't we talked about Spring MVC ? Basically we talked about Spring Boot MVC not Spring MVC.
 
