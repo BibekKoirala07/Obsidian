@@ -358,7 +358,9 @@ Stream can be used only once.
 ### Parallel Stream
 
 ### Mavens
-It is a project management tools. Helps with version management. Lets say we . When we build a project we need to do this ![[Pasted image 20250312114229.png]]normally we can do the upper described things with IDEs. 
+It is a project management tools. Helps with version management. Lets say we . When we build a 
+
+project we need to do this ![[Pasted image 20250312114229.png]]normally we can do the upper described things with IDEs. 
 
 We may need external libraries. In java, libraries normally means `jar` files. Know about transitive dependency.
 
