@@ -1,3 +1,40 @@
+Java needs to perform arithmetic on primitives.
+Objects are immutables. 
+Integer caching. 
+
+== is extremely tricky, when two values of different types(primitive vs reference types) are computed
+
+parseInt and valueOf
+
+primitive widening, 
+
+overloading with primitive and reference types
+
+method overloading
+```
+exact match
+widening primitive conversion
+widening reference conversion
+boxing/unboxing
+varargs
+```
+
+And underneath that are deeper concepts you'll encounter later:
+
+- primitive vs reference semantics
+- immutable objects
+- object identity vs value equality
+- Integer caching
+- generics
+- type erasure
+- overload resolution
+- widening/narrowing conversions
+- `null`
+- `NullPointerException`
+- performance/allocation
+- collections
+
+
 ![[Pasted image 20250408192021.png]]
 
 ### Statements

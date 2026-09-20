@@ -1,11 +1,34 @@
-Process(Application) means unit of execution and has its own memory space. 
-Each Application has it's own memory space known as Heap. 
-If we start two java application(process), then first app can't access heap of second app at all. 
 
-thread is a single unit of execution within the process. Each process can have multiple threads. 
-Each app atleast has one thread called main thread. Our code runs of main thread which is create automatically by java program. 
+### Phase 1: `Thread`
 
-thread also have thread stack. 
+Don't move yet until you understand:
+
+- [ ]  What is a process?
+- [ ]  What is a thread?
+- [ ]  Main thread
+- [ ]  `Thread.currentThread()`
+- [ ]  Creating a class extending `Thread`
+- [ ]  Overriding `run()`
+- [ ]  Difference between `run()` and `start()`
+- [ ]  Why output order is unpredictable
+- [ ]  `Thread.sleep()`
+- [ ]  Thread states
+- [ ]  `isAlive()`
+- [ ]  `join()`
+- [ ]  `interrupt()`
+- [ ]  What `InterruptedException` means
+- [ ]  Why `Thread.currentThread().interrupt()` is commonly used
+
+**Do NOT move to `Runnable` yet.** First master `Thread` itself: lifecycle, `start()`, `run()`, scheduling, sleep, join, interruption, states, daemon threads, synchronization basics, etc.
+
+Answer these questions:
+
+1. Why does `run()` execute on `main` when called directly?
+2. Why does `start()` execute on another thread?
+3. Does `start()` immediately guarantee execution?
+4. Who decides when the new thread actually gets CPU time? // audaina
+
+start doesn't gurantees immediate exection. 
 
 ### Stage 1 — raw `Thread`
 
@@ -696,3 +719,5 @@ virtual-thread programming
 And honestly, given how you're approaching this, I'd make each section **experimental**: write a 10–20 line program, predict the output/state, run it, then explain why. That's much better for threads than reading 40 pages of API documentation.
 
 **For where you are right now, the immediate next thing is not `Runnable`: it's `Thread` lifecycle and `Thread.State`.** We can stay there until `NEW → RUNNABLE → TIMED_WAITING → TERMINATED` is completely intuitive.
+
+
