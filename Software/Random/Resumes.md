@@ -1,0 +1,19 @@
+As someone who interviews mid level engineers there’s not much a project can do, unless you’re going for entry level or junior level positions. If that’s the case that’s nothing to be ashamed of I just don’t know your experience level. If you are entry or junior one thing you can do to stand out to someone like me is use some sort of IaC and even a cicd pipeline. Doesn’t have to be crazy code, a crud api is only so impressive. If you actually hook it up to real cloud provider and have automated deployments with testing, THAT will stand out for sure. Serverless Framework, CDK or terraform is what I recommend. You can do this all in free tier aws (not sure about gcp or azure as I don’t use them but I’m sure they have free tiers too)
+
+Be honest and upfront about who you are and where you are in your career. Say you are ready to get work experience after investing time in learning and successfully completing a few projects (only if this is true).
+
+Assume nobody cares about who you are. You'll get a chance to show off your personality during the interviews, but resumes should be solely about demonstrating business value. If I have a stack of resumes in front of me, I need to select the candidate with the most potential, not the one who enjoys computers as an enthusiast.
+
+There must be a reason why you chose to study economics. If you have an honest interest in that field, maybe you can use that to your advantage. If you still have the time and interest to work on projects, then this could be reinforced by working on a project on that subject.
+
+The cold, hard truth is that Spanish is rarely going to be an advantage in a software job, and English is a bare minimum requirement. Spanish matters only for client-facing roles at international companies, but nobody is going to put the new guy in front of clients, so it's irrelevant. Millions of people are bilingual in Spanish and English, so that's not special, which makes your high school irrelevant. It's ok to have a list of soft skills such as years of customer service experience and being bilingual, but keep this section as compact as possible and only mention factual verifiable skills, not things like "problem solver" or "detail oriented".
+
+Your sentence structure is a little weird and sometimes redundant. Either "product management" and "editing products" are redundant, or you need to communicate the difference more effectively. The simpler, the better. A simpler sentence would be "Created admin panel to allow administrators to manage products and ban users."
+
+It makes me lose trust in a candidate when they over-inflate their experience. If you are listing the projects you worked on (and you should!), then be sure to label them accurately as "Learning Projects" or "Personal Project Experience."
+
+As other people mentioned already, get rid of redundant lists of skills in the individual projects. Just incorporate the skills used in the sentences describing your project.
+
+Mentioning scrum in a low-stake, single-person project is like celebrating successfully tying your own shoelaces. If you are merely a participant in scrum ceremonies, then your resume should reflect that and not take credit for implementing it (unless it was your idea and your execution).
+
+Programming is about problem-solving. You solve technical problems, you solve business problems, or sometimes you just have a non-monetizeable project to solve covenience problems. The first line of the project description should be the business problem or the user problem you solved, and the rest of the lines should be the technical problems you solved.

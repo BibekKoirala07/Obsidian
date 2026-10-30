@@ -571,10 +571,9 @@ Say the word.
 ### Strings
 
 ### Stacks
-
 Stacks is used for Function calls, Undo, redo and Bracket and expression checking and reversing. Stack isn't a data container(It may feel like it but it is not a data container at all).
 
-Stack are extremely bad at random access, searching fast and flexibility
+Stack are extremely bad at random access, searching fast and flexibility.
 
 You must understand this sentence deeply:
 

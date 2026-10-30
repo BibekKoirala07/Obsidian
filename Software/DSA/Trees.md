@@ -11,8 +11,6 @@ File management system
 ```
 HTML DOM
 Database Indexes
-
-
 ## Fundamentals
 For tree we need to know about Node, Root, Parent/Child, Siblings, Leaf Node, Internal Node, Height, Depth, Level, Degree, Sub tree, Ancestor/Descendant.
 
@@ -48,13 +46,9 @@ For root level, if you want zero ambiguity then
 for depth, count edges
 for level, count nodes
 
-
 ==Each node can be seen as root of smaller tree. This is very important.
 
 Now comes the main thing.
-
-
-
 
 There are many types of Trees. They are : 
 ```js
@@ -391,35 +385,6 @@ A **B+ Tree** is a **variant of a B-Tree** with some important differences:
 - For system design or databases: **B-Tree and B+ Tree** knowledge is critical.
     
 - For algorithmic contests: Segment Trees, Tries, Fenwick Trees are useful.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
