@@ -28,3 +28,12 @@ abc-shoes.myshopify.com
 
 it is the store connect and not the organization connect, Each store will have access token. 
 Each store will have it's own access token
+
+In Shopify there is organization
+
+## Organization
+have one owner and team of users. many apps can be created and also many stores can be created. 
+#### Apps
+
+#### Stores
+Each store can't have more than one owners. 

@@ -1,0 +1,1 @@
+Yes, webhooks are store-specific. Each Lightspeed store (domain prefix) has its own webhook list, and you create them with that store’s access token. So a merchant with 3 stores needs 3 × 2 webhooks, and each store’s events go to its own URL. That is why the URL should carry the integration ID: `/lightspeed/webhook/<integrationId>`.
