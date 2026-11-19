@@ -1,26 +1,6 @@
 ## nano and gedit
-#### Overview of Text Editors in Linux
-There are spectrum of choices.
-As with most things in Linux, you're spoiled for choice — from minimalist editors to highly customizable powerhouses. Some of the most commonly used include:
-- **`nano`**: A beginner-friendly, command-line editor. Very simple and intuitive for quick edits, especially for those new to the terminal.
-- **`gedit`**: A graphical editor for GNOME-based environments. Easy to use, clean interface, and good for editing simple scripts or notes.
-- **`vi`/`vim`**: A modal, terminal-based editor. Steep learning curve but extremely powerful once mastered. Commonly installed on nearly all Unix-like systems by default.
-- **`emacs`**: A highly extensible and programmable editor. More than just an editor — it can function as a file manager, terminal emulator, debugger, and more.
-![[Pasted image 20250621222316.png]]
-#### Creating Files Without Using an Editor
-```bash
-	$ echo line one > myfile
-	$ echo line two >> myfile
-	$ echo line three >> myfile
-```
-```bash
-	cat << EOF > myfile
-	> line one
-	> line two 
-	> line three
-	>> EOF
-	$ 
-```
+
+
 #### nano and gedit
 gedit is part of the GNOME desktop system(kwrite is associated with KDE). The gedit and kwrite editors are easy to use and are extremely capable. They are also very configurable. 
 ## More advanced Editors: vi and emacs

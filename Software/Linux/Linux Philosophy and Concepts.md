@@ -4,11 +4,6 @@ Linux releases kernel every 3 months. Linux is just operating system. At is core
 But remember that just kernel doesn't make operating system. Kernel is the one that talks directly to the computer hardware. It manages resources, runs programs, handles files and controls everything at the lowest level. We also need System libraries and tools(to interact with kernel easily), user programs(like file managers, text editors, web browsers), shells and command line tools(to type commands), Graphical interface(optional, but to see windows and icons) and also different utilities for networking, printing and other hardware support tools also and then it becomes full Operating System. For linux, it comes from GNU project. 
 
 Linux borrows heavily from the well-established family of UNIX operating system. like files are stored in a hierarchical file system with top node of the system being the **root** or simple "/". Whenever possible, Linux makes it components available via files or objects that look like files. things like processes, devices and network sockets are all represented by file like objects and can often be worked with using the same utilities used for regular files. Linux is a fully multitasking( multiple threads of execution are performed simultaneously), multi user operating system with built-in networking and service processes known as daemons in the UNIX world. 
-
-
-> [!NOTE] Thing to remember
-> Linux isn't UNIX. It is inspired by UNIX
-
 #### Linux Terminologies
 ###### Kernel
 It is the brain of Linux OS. It controls the hardware and makes the hardware interact with the applications. An example is Linux Kernel. 
