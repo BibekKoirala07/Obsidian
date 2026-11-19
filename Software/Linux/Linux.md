@@ -31,5 +31,19 @@ Features
 - It uses the DPKG-bases APT package manger(using apt, apt-get, apt-cache, etc.), to install update and remove packages in the system.
 - kernel version 5.19 is used in Ubuntu 22.04 LTS. 
 
+## Philosophy
+Unix is all about doing small task correctly. 
+## Architecture
+## Process
+## File Management
+## Identity & Permissions
+## Shell and Bash
+## Networking
+## Package Management
+## Services
+## Logs
+## Disks and Memory Management
+## Text Editors
+
 
 

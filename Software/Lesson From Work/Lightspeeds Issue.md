@@ -63,3 +63,79 @@ Affected fields on API entities
     - custom_field_(1-4)
 - Sale
     - note
+
+
+
+## **What I meant by "all merchant subscription tiers"**
+
+Lightspeed charges merchants for using its retail POS software. Different merchants may have different Lightspeed plans.
+
+For example:
+
+- Merchant A has a basic Lightspeed subscription.
+    
+- Merchant B has a higher-tier subscription.
+    
+- Merchant C has an older or custom Lightspeed subscription.
+    
+
+Your concern is whether **all three merchants can connect their Lightspeed X-Series accounts to Nimbus**, regardless of their subscription.
+
+
+Hello Lightspeed Developer Support,
+
+We are developing Nimbus, a transaction aggregation platform that allows merchants to connect their existing Lightspeed Retail X-Series accounts through OAuth 2.0.
+
+Nimbus is a read-only integration. We retrieve authorized merchant customer records, sales, and embedded payment information to display transaction history in our merchant web application and securely matched purchase history in our customer mobile application.
+
+Could you please confirm:
+
+1. Can merchants on all active Lightspeed Retail X-Series subscription plans authorize our OAuth application?
+    
+2. Are there any API access fees, per-request charges, or per-connected-merchant fees?
+    
+3. Is partner approval or a commercial agreement required to launch this integration publicly?
+    
+4. Are there any restrictions on storing and displaying authorized sales, payment, and customer data in Nimbus?
+    
+5. What is the process for obtaining approval to connect more than 30 retailer accounts?
+    
+
+Thank you.
+
+
+So your concern is strictly about **moving from testing to production and connecting real merchants who already pay for Lightspeed**.
+
+You want to know whether:
+
+1. Real merchants can connect their existing Lightspeed X-Series stores without upgrading their subscription.
+    
+2. Lightspeed will charge Nimbus for connecting those merchants or making API requests.
+    
+3. Your existing OAuth application needs production approval.
+    
+4. Anything will stop working when you move from test stores to real stores.
+
+
+**### **Your actual production situation**
+
+Suppose Nimbus launches with the same OAuth application you're using for testing.
+
+- **First 10 real stores:** Within the documented 30-store limit, assuming no other connected stores consume the allowance.
+    
+- **At 30 connected stores:** You've reached the unapproved application's documented limit.
+    
+- **Store 31:** You need Lightspeed approval to expand beyond the limit.
+    
+
+Lightspeed's documentation doesn't clearly establish whether existing test-store connections count differently, so don't assume you have 30 additional production slots.
+
+### **What you should do now**
+
+Since your implementation is finished, I would focus on three things before launching:
+
+1. **Check the Lightspeed developer dashboard.** Is your Nimbus application marked `Approved` or `Not Approved`?
+    
+2. **Request production approval.** Explain that Nimbus is a read-only application fetching authorized customer, sale, and payment records.
+    
+3. **Confirm commercial terms.** Ask whether approval, production API access, or merchant connections incur any charges. No published per-request price is not the same as a guarantee of zero fees.**
