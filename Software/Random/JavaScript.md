@@ -56,10 +56,6 @@ LOOPING
 
 Function
 	
-	
-	
-	
-	
 	** Arrow functions
 	- Arrow functions are another form of function expression
 
