@@ -39,6 +39,7 @@ Unix is all about doing small task correctly.
 ## Identity & Permissions
 ## Shell and Bash
 ## Networking
+`ip`, `ping`, `ss`, `dig`, `curl`, `traceroute`, `tcpdump`
 ## Package Management
 ## Services
 ## Logs
