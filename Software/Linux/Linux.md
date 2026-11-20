@@ -37,7 +37,232 @@ Unix is all about doing small task correctly.
 ## Process
 ## File Management
 ## Identity & Permissions
+## Bash
+Bash find the command and Linux Kernel helps execute it. Bash uses an environment variable called `PATH` to find external commands. when we do 
+```
+echo $PATH
+```
+we get list of directories that is seperated by :. 
+
+`$PATH` is mainly for locating external commands.
 ## Shell and Bash
+When we are communicating with keyboard in our computer, we aren't directly talking to linux. First the level is Terminal emulator like GNOME terminal , Konsole and things like that. 
+After that it is usually bash in ubuntu. 
+after that it is program and system calls. command execution and request for OS services. 
+After that is it linux kernel like process, memory, file system, scheduling I/O.
+After that is it level. 
+
+However. Programs and the shell both interact with the kernel; the layers aren't a strict one-way chain
+
+Terminal Emulator. 
+It doesn't interpret the command, It is just an interface between us and the program running inside terminal session. 
+
+Shell
+Bash identifies the command name `ls` and its arguments, resolves what `ls` refers to, and arranges its execution.
+For an external program, the shell typically creates a child process and starts the executable.
+For a shell builtin such as `cd`, the shell handles the operation itself.
+This difference is extremely important.
+
+Linux Kernel
+The kernel is the core of the operating system.
+It manages the resources that running programs need, including:
+- Processes and CPU scheduling.
+- Virtual memory.
+- Files and directories.
+- File permissions.
+- Network sockets.
+- Devices and I/O.
+A shell cannot directly read arbitrary disk hardware or allocate its own physical memory however it wants. Instead, it asks the kernel to perform operations through an interface called **system calls (syscalls)**.
+
+#### **2. What happens when you type** `ls -la` **and press Enter?**
+
+Let's use this command:
+
+```
+ls -la
+```
+
+Assume you are in `/home/ubuntu/projects`.
+
+Here is the execution sequence at a high level.
+
+1. **Keyboard input reaches the terminal session.**
+    
+    The terminal passes your input through the PTY to the shell, subject to terminal input handling.
+    
+2. **Bash reads and parses the command.**
+    
+    It recognizes `ls` as the command name and `-la` as an argument.
+    
+3. **Bash resolves** `ls`**.**
+    
+    It typically searches directories in `$PATH` and finds `/usr/bin/ls`.
+    
+4. **Bash creates a child process.**
+    
+    Typically using `fork()`, which creates a new process based on the shell.
+    
+5. **The child starts the executable.**
+    
+    Through `execve()`, the child becomes the `ls` program.
+    
+6. `ls` **requests directory information.**
+    
+    It makes filesystem-related system calls, handled by the kernel.
+    
+7. `ls` **writes its output.**
+    
+    The output passes through its stdout file descriptor into the terminal session.
+    
+8. **The process exits.**
+    
+    Bash collects its exit status and returns to displaying the prompt.
+
+#### How does Bash actually understand your command?**
+
+Consider this:
+
+```
+ls -la /home/ubuntu/projects
+```
+
+When you press Enter, Bash doesn't simply send that entire string to the kernel.
+
+**Bash is an interpreter.** It has its own grammar, variables, expansions, command resolution rules, and execution mechanisms.
+
+It processes the command before any external executable starts.\
+
+#### **Step 1: Reading and parsing**
+
+Bash reads your input and parses it according to shell syntax.
+
+For this command:
+
+```
+ls -la /home/ubuntu/projects
+```
+
+It identifies three words:
+
+```
+ls
+-la
+/home/ubuntu/projects
+```
+
+There is no special Linux kernel mechanism that recognizes `-la` as an option.
+
+To Bash, `-la` is simply an argument. The `ls` application decides that `-l` means long listing and `-a` means include hidden entries.
+
+This distinction matters:
+
+```
+node --inspect server.js
+```
+
+The shell doesn't know what `--inspect` means. Node.js knows.
+
+Similarly:
+
+```
+npm run start
+```
+
+Bash doesn't know what `run` or `start` means. Those are arguments passed to `npm`, which interprets them.
+
+Bash determines whether `node` is an alias, function, builtin, or executable
+
+Running:
+
+```
+/opt/mytools/bin/mycli
+```
+
+uses an explicit pathname and bypasses the normal `PATH` search.
+
+```
+Bash built in command like cd
+```
+
+Every process has a current working directory(CWD). so `cd` is different from `ls`.
+
+Unlike `ls`, `cd` is normally a Bash builtin.
+
+It executes within the Bash process itself.
+
+Why?
+
+Because **the current working directory is part of a process's operating-system state.**
+
+When a program opens a relative pathname like:
+
+```
+config.json
+```
+
+the kernel resolves it relative to that process's current working directory, unless the program uses another directory as its reference.
+
+Suppose your shell has:
+
+```
+PID: 3000
+CWD: /home/alex
+```
+
+When you type:
+
+```
+cd /var/log
+```
+
+Bash invokes the kernel operation:
+
+```
+chdir("/var/log");
+```
+
+The kernel checks whether the target directory is accessible and whether the operation is valid.
+
+If successful, the shell process's CWD changes.
+
+```
+Before:
+Bash PID 3000
+CWD /home/alex
+
+After:
+Bash PID 3000
+CWD /var/log
+```
+
+Bash may also update shell variables such as `PWD` and `OLDPWD`.
+
+The process is still Bash, with the same PID.
+
+#### **Why can't an ordinary external executable change your shell's directory?**
+
+Imagine Bash launches a child process:
+
+```
+Bash PID 3000
+  └── Child PID 3001
+```
+
+The child inherits the parent's working directory initially.
+
+If the child calls:
+
+```
+chdir("/var/log");
+```
+
+it changes **its own** current working directory.
+
+It doesn't change its parent's current working directory.
+
+So after the child exits, Bash is still in its original directory.
+
+That's why `cd` must run in the current shell context if its effect is supposed to persist.
 ## Networking
 `ip`, `ping`, `ss`, `dig`, `curl`, `traceroute`, `tcpdump`
 ## Package Management

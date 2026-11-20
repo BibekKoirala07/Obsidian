@@ -144,3 +144,11 @@ Inventory, payouts and staff data aren't relevant unless you plan analytics or a
 - Your `PosProvider` enum and the `PosIntegration` model already support multiple providers. I'd keep one shared normalized shape (customer, order with line items, payment) and write a small mapper per provider, rather than separate collections per POS.
 
 If you'd like, I can sketch that normalized receipt model, or update your Square `upsert` to extract line items and refunds.
+
+
+
+So the fix is on the frontend and in config, not in the backend:
+
+1. Add a frontend page, e.g. `/square/callback`, which reads `code` and `state` and calls `connectSquare`.
+2. In the Square dashboard, update the Sandbox Redirect URL to `https://dev-web.nimbusreceipt.com.au/square/callback`.
+3. Set `SQUARE_REDIRECT_URL` in `.env` to exactly the same value, and restart the backend.
