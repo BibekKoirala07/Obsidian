@@ -83,6 +83,7 @@ Money entering the account
 - `transfer`
     
 - `loan-repayment`
+  
 	  "account": "d3de1ca1", // it is particular bank account, could be saving also.
       "institution": "AU00000", // bank
       "connection": "d3de1ca1", // a linked banking connection
